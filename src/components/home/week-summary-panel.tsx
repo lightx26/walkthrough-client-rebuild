@@ -3,25 +3,20 @@ import { cn } from "@/lib/utils";
 import type { RecentlyReviewedWalkthrough } from "@/types/walkthrough";
 
 interface WeekSummaryPanelProps {
-  week: number;
   walkthroughCount: number;
   recentlyReviewed: RecentlyReviewedWalkthrough[];
 }
 
 export function WeekSummaryPanel({
-  week,
   walkthroughCount,
   recentlyReviewed,
 }: WeekSummaryPanelProps) {
   return (
-    <aside className="w-[280px] shrink-0 border-l border-gray-200 bg-white overflow-y-auto px-5 py-5">
+    <aside className="w-70 shrink-0 border-l border-gray-200 bg-white overflow-y-auto px-5 py-5">
       {/* this week */}
       <div className="mb-7">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-gray-900 text-sm">This week</h3>
-          <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-            Week {week}
-          </span>
         </div>
         <div className="grid grid-cols-2 gap-2.5">
           {[

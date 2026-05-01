@@ -13,23 +13,12 @@ import {
   WeekSummaryPanel,
 } from "@/components/home";
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
-
 function getGreeting(name: string) {
   const h = new Date().getHours();
   if (h < 12) return `Good morning, ${name} 👋`;
   if (h < 17) return `Good afternoon, ${name} 👋`;
   return `Good evening, ${name} 👋`;
 }
-
-function getWeekNumber(d: Date) {
-  const start = new Date(d.getFullYear(), 0, 1);
-  return Math.ceil(
-    ((d.getTime() - start.getTime()) / 86400000 + start.getDay() + 1) / 7,
-  );
-}
-
-// ─── page ─────────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
   const user = useCurrentUser();
@@ -50,7 +39,6 @@ export default function HomePage() {
   const recentlyReviewed = reviewedData?.data?.items ?? [];
 
   const now = new Date();
-  const week = getWeekNumber(now);
   const dateStr = now.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -74,7 +62,7 @@ export default function HomePage() {
           </h1>
           <div className="flex items-center gap-3 flex-wrap">
             <p className="text-sm text-gray-400">
-              {dateStr} · Week {week}
+              {dateStr}
             </p>
             <div className="flex items-center gap-2 flex-wrap">
               {draftCount > 0 && (
@@ -106,7 +94,6 @@ export default function HomePage() {
       </main>
 
       <WeekSummaryPanel
-        week={week}
         walkthroughCount={walkthroughs.length}
         recentlyReviewed={recentlyReviewed}
       />

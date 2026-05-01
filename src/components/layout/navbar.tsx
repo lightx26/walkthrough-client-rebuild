@@ -2,19 +2,11 @@
 
 import { Bell, LogOut, Search } from "lucide-react";
 import { useCurrentUser, useLogout } from "@/hooks/use-auth";
+import { UserAvatar } from "@/components/ui/user-avatar";
 
 export function Navbar() {
   const user = useCurrentUser();
   const logout = useLogout();
-
-  const initials = user?.displayName
-    ? user.displayName
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
-    : "QN";
 
   return (
     <header className="flex items-center gap-3 px-6 py-3 border-b border-gray-200 bg-white shrink-0">
@@ -40,12 +32,14 @@ export function Navbar() {
         <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
       </button>
       <div className="flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-full bg-violet-600 flex items-center justify-center text-white text-xs font-semibold shrink-0">
-          {initials}
-        </div>
+        <UserAvatar
+          src={user?.avatarUrl}
+          displayName={user?.displayName}
+          username={user?.username}
+        />
         <div className="text-sm leading-tight">
           <p className="font-semibold text-gray-900">
-            {user?.displayName ?? "Quang Nguyen"}
+            {user?.displayName || user?.username}
           </p>
           <p className="text-gray-400 text-xs">@{user?.username}</p>
         </div>

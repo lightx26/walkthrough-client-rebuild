@@ -88,16 +88,29 @@ export function Sidebar() {
             Workspace
           </p>
           <div className="space-y-0.5">
-            {workspaceNav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-              >
-                <item.icon className="w-4 h-4 shrink-0 text-gray-400" />
-                <span>{item.label}</span>
-              </Link>
-            ))}
+            {workspaceNav.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors",
+                    isActive
+                      ? "bg-violet-50 text-violet-700 font-bold"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                  )}
+                >
+                  <item.icon
+                    className={cn(
+                      "w-4 h-4 shrink-0",
+                      isActive ? "text-violet-600 stroke-2" : "text-gray-400",
+                    )}
+                  />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
 
