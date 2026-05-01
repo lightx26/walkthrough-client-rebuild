@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ChevronRight, GitBranch, GitFork, Globe, Lock, Star } from "lucide-react";
 import type { Repository } from "@/types/github";
 import { languageColor } from "@/utils/language-color";
@@ -5,7 +6,10 @@ import { formatRelativeTime } from "@/utils/date-diff";
 
 export function RepoCard({ repo }: { repo: Repository }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl px-6 py-5 flex items-center gap-5 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer group">
+    <Link
+      href={`/repos/${repo.owner.login}/${repo.name}`}
+      className="bg-white border border-gray-200 rounded-xl px-6 py-5 flex items-center gap-5 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer group block"
+    >
       <div className="shrink-0">
         <div className="bg-[#EEF2FF] flex items-center justify-center w-9 h-9 rounded-lg">
           <GitBranch className="text-violet-600 size-4" strokeWidth={2} />
@@ -66,6 +70,6 @@ export function RepoCard({ repo }: { repo: Repository }) {
         </div>
         <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-400 transition-colors" />
       </div>
-    </div>
+    </Link>
   );
 }

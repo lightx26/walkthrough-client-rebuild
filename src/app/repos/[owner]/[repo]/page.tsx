@@ -1,0 +1,133 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowLeft, GitBranch, GitFork, Star } from "lucide-react";
+import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PrList } from "@/components/repos";
+import { githubService } from "@/services/github.service";
+import { languageColor } from "@/utils/language-color";
+import { formatRelativeTime } from "@/utils/date-diff";
+
+function RepoHeaderSkeleton() {
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl px-8 py-6 flex items-center gap-6">
+      <Skeleton className="w-12 h-12 rounded-xl shrink-0" />
+      <div className="flex-1 space-y-2">
+        <Skeleton className="h-5 w-48" />
+        <Skeleton className="h-4 w-80" />
+        <Skeleton className="h-3 w-56" />
+      </div>
+      <div className="flex items-center gap-12 shrink-0">
+        <div className="text-center space-y-1.5">
+          <Skeleton className="h-7 w-8 mx-auto" />
+          <Skeleton className="h-3 w-16" />
+        </div>
+        <div className="text-center space-y-1.5">
+          <Skeleton className="h-7 w-8 mx-auto" />
+          <Skeleton className="h-3 w-20" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function RepoDetailsPage() {
+  const params = useParams<{ owner: string; repo: string }>();
+  const owner = params.owner;
+  const repo = params.repo;
+
+  const { data: repoData, isLoading: repoLoading } = useQuery({
+    queryKey: ["repo", owner, repo],
+    queryFn: () => githubService.getRepository(owner, repo),
+    enabled: !!owner && !!repo,
+  });
+
+  const { data: prsData, isLoading: prsLoading } = useQuery({
+    queryKey: ["repo-pulls", owner, repo],
+    queryFn: () => githubService.getRepositoryPullRequests(owner, repo),
+    enabled: !!owner && !!repo,
+  });
+
+  const repoDetails = repoData?.data;
+  const prs = prsData?.data?.items ?? [];
+
+  return (
+    <DashboardLayout>
+      <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
+        <div className="mb-6">
+          <div className="flex items-center gap-1.5 text-sm text-gray-400 mb-5">
+            <Link
+              href="/repos"
+              className="flex items-center gap-1 hover:text-gray-600 transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Repositories
+            </Link>
+            <span>/</span>
+            <span className="text-gray-700 font-medium">{repo}</span>
+          </div>
+
+          {repoLoading ? (
+            <RepoHeaderSkeleton />
+          ) : repoDetails ? (
+            <div className="bg-white border border-gray-200 rounded-xl px-8 py-6 flex items-center gap-6">
+              <div className="bg-[#EEF2FF] flex items-center justify-center w-12 h-12 rounded-xl shrink-0">
+                <GitBranch className="text-violet-600 w-5 h-5" strokeWidth={2} />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <h1 className="text-xl font-bold text-gray-900 mb-1">
+                  {repoDetails.name}
+                </h1>
+                {repoDetails.description && (
+                  <p className="text-sm text-gray-500 mb-2 truncate">
+                    {repoDetails.description}
+                  </p>
+                )}
+                <div className="flex items-center gap-3 text-xs text-gray-400 flex-wrap">
+                  {repoDetails.language && (
+                    <span className="flex items-center gap-1.5">
+                      <span
+                        className={`w-2.5 h-2.5 rounded-full shrink-0 ${languageColor(repoDetails.language)}`}
+                      />
+                      {repoDetails.language}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1">
+                    <Star className="w-3 h-3" />
+                    {repoDetails.stargazersCount}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <GitFork className="w-3 h-3" />
+                    {repoDetails.forksCount}
+                  </span>
+                  <span>Updated {formatRelativeTime(repoDetails.updatedAt)}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-12 shrink-0">
+                <div className="text-center">
+                  <p className="text-2xl font-bold text-gray-900">
+                    {repoDetails.openPrsCount}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-0.5">open PRs</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-2xl font-bold text-gray-900">
+                    {repoDetails.walkthroughsCount}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-0.5">walkthroughs</p>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        <PrList prs={prs} isLoading={prsLoading} />
+      </main>
+    </DashboardLayout>
+  );
+}

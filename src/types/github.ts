@@ -20,3 +20,37 @@ export interface Repository {
   updatedAt: string;
   owner: RepositoryOwner;
 }
+
+export type PullRequestState = "open" | "draft" | "merged" | "closed";
+
+export interface PullRequestAuthor {
+  id: number;
+  login: string;
+  avatarUrl: string | null;
+}
+
+export interface BranchRef {
+  label: string;
+  ref: string;
+  sha: string;
+}
+
+export interface PullRequest {
+  id: number;
+  number: number;
+  title: string;
+  state: PullRequestState;
+  body: string | null;
+  htmlUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  mergedAt: string | null;
+  changedFiles: number;
+  additions: number;
+  deletions: number;
+  commits: number;
+  author: PullRequestAuthor;
+  head: BranchRef;
+  base: BranchRef;
+  walkthroughsCount: number;
+}
