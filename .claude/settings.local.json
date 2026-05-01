@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npx shadcn-ui@latest *)",
+      "Bash(npx shadcn@latest *)",
+      "Bash(npm list *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s http://localhost:3001/)",
+      "Bash(curl -s http://localhost:3001/login)",
+      "Bash(node -e \"const l = require\\('lucide-react'\\); console.log\\(Object.keys\\(l\\).filter\\(k => /git/i.test\\(k\\)\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(node *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/login)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/auth/callback)"
+    ]
+  }
+}
