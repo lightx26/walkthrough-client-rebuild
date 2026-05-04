@@ -24,6 +24,7 @@ import { githubService } from "@/services/github.service";
 import { walkthroughService } from "@/services/walkthrough.service";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { cn } from "@/lib/utils";
+import { useAppSelector } from "@/store";
 import type { PullRequestState } from "@/types/github";
 import type { WalkthroughStatus, WalkthroughSummary } from "@/types/walkthrough";
 
@@ -178,6 +179,7 @@ export default function PrDetailPage() {
   const repo = params.repo;
   const prNumber = Number(params.prNumber);
 
+  const currentUser = useAppSelector((state) => state.auth.user);
   const [activeTab, setActiveTab] = useState<TabKey>("all");
 
   const { data: prData, isLoading: prLoading } = useQuery({
@@ -194,25 +196,36 @@ export default function PrDetailPage() {
 
   const pr = prData?.data;
   const walkthroughs = walkthroughsData?.data?.items ?? [];
+  const isOwner =
+    !!currentUser && !!pr && currentUser.username.toLowerCase() === pr.author.login.toLowerCase();
+
+  const publishedWalkthroughs = walkthroughs.filter((w) => w.status === "PUBLISHED");
+  const draftWalkthroughs = walkthroughs.filter((w) => w.status === "DRAFT");
 
   const counts = {
-    all: walkthroughs.length,
-    published: walkthroughs.filter((w) => w.status === "PUBLISHED").length,
-    draft: walkthroughs.filter((w) => w.status === "DRAFT").length,
+    all: isOwner ? walkthroughs.length : publishedWalkthroughs.length,
+    published: publishedWalkthroughs.length,
+    draft: draftWalkthroughs.length,
   };
 
-  const tabs: { label: string; key: TabKey }[] = [
-    { label: "All", key: "all" },
-    { label: "Published", key: "published" },
-    { label: "Draft", key: "draft" },
-  ];
+  const tabs: { label: string; key: TabKey }[] = isOwner
+    ? [
+        { label: "All", key: "all" },
+        { label: "Published", key: "published" },
+        { label: "Draft", key: "draft" },
+      ]
+    : [
+        { label: "All", key: "all" },
+        { label: "Published", key: "published" },
+      ];
 
-  const filtered = walkthroughs.filter((w) => {
-    if (activeTab === "all") return true;
-    if (activeTab === "published") return w.status === "PUBLISHED";
-    if (activeTab === "draft") return w.status === "DRAFT";
-    return true;
-  });
+  const filtered = (() => {
+    const pool = isOwner ? walkthroughs : publishedWalkthroughs;
+    if (activeTab === "all") return pool;
+    if (activeTab === "published") return publishedWalkthroughs;
+    if (activeTab === "draft") return draftWalkthroughs;
+    return pool;
+  })();
 
   return (
     <DashboardLayout>
@@ -283,15 +296,17 @@ export default function PrDetailPage() {
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
             <h2 className="text-sm font-semibold text-gray-900">
               Walkthroughs{" "}
-              <span className="ml-1 text-gray-400 font-normal">{walkthroughs.length}</span>
+              <span className="ml-1 text-gray-400 font-normal">{counts.all}</span>
             </h2>
-            <Link
-              href={`/walkthroughs/new?owner=${owner}&repo=${repo}&prNumber=${prNumber}`}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-colors px-4 py-2 rounded-lg"
-            >
-              <Plus className="w-4 h-4" />
-              Create walkthrough
-            </Link>
+            {isOwner && (
+              <Link
+                href={`/walkthroughs/new?owner=${owner}&repo=${repo}&prNumber=${prNumber}`}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-colors px-4 py-2 rounded-lg"
+              >
+                <Plus className="w-4 h-4" />
+                Create walkthrough
+              </Link>
+            )}
           </div>
 
           <div className="flex items-center gap-0.5 px-5 border-b border-gray-100">
