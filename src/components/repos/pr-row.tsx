@@ -1,13 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import {
-  ArrowLeft, ArrowRight,
+  ArrowRight,
   BookOpen,
   ChevronRight,
   GitMerge,
   GitPullRequest,
   GitPullRequestClosed,
-  GitPullRequestDraft
 } from "lucide-react";
 import type { PullRequest, PullRequestState } from "@/types/github";
 import { UserAvatar } from "@/components/ui/user-avatar";
@@ -20,12 +20,6 @@ function PrStateIcon({ state }: { state: PullRequestState }) {
     return (
       <div className={cn(base, "bg-emerald-50")}>
         <GitPullRequest className="w-4 h-4 text-emerald-600" strokeWidth={2} />
-      </div>
-    );
-  if (state === "draft")
-    return (
-      <div className={cn(base, "bg-gray-100")}>
-        <GitPullRequestDraft className="w-4 h-4 text-gray-400" strokeWidth={2} />
       </div>
     );
   if (state === "merged")
@@ -48,12 +42,6 @@ function StateBadge({ state }: { state: PullRequestState }) {
         Open
       </span>
     );
-  if (state === "draft")
-    return (
-      <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
-        Draft
-      </span>
-    );
   if (state === "merged")
     return (
       <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 border border-violet-200">
@@ -67,9 +55,12 @@ function StateBadge({ state }: { state: PullRequestState }) {
   );
 }
 
-export function PrRow({ pr }: { pr: PullRequest }) {
+export function PrRow({ pr, owner, repo }: { pr: PullRequest; owner: string; repo: string }) {
   return (
-    <div className="flex items-center gap-4 py-4 border-b border-gray-100 last:border-0 group cursor-pointer hover:bg-gray-50/50 -mx-5 px-5 transition-colors">
+    <Link
+      href={`/repos/${owner}/${repo}/pulls/${pr.number}`}
+      className="flex items-center gap-4 py-4 border-b border-gray-100 last:border-0 group cursor-pointer hover:bg-gray-50/50 -mx-5 px-5 transition-colors"
+    >
       <PrStateIcon state={pr.state} />
 
       <div className="flex-1 min-w-0">
@@ -114,6 +105,6 @@ export function PrRow({ pr }: { pr: PullRequest }) {
         </span>
         <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-400 transition-colors" />
       </div>
-    </div>
+    </Link>
   );
 }

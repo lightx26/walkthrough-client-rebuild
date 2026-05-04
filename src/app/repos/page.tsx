@@ -1,10 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Pagination } from "@/components/ui/pagination";
 import { githubService } from "@/services/github.service";
 import { RepoCard } from "@/components/repos";
+
+const PER_PAGE = 20;
 
 function RepoCardSkeleton() {
   return (
@@ -31,12 +35,16 @@ function RepoCardSkeleton() {
 }
 
 export default function RepositoriesPage() {
+  const [page, setPage] = useState(1);
+
   const { data, isLoading } = useQuery({
-    queryKey: ["repos"],
-    queryFn: () => githubService.getRepositories(),
+    queryKey: ["repos", page],
+    queryFn: () => githubService.getRepositories(page, PER_PAGE),
   });
 
   const repos = data?.data?.items ?? [];
+  const totalPages = data?.data?.totalPages ?? 1;
+  const totalElements = data?.data?.totalElements ?? 0;
 
   return (
     <DashboardLayout>
@@ -48,7 +56,7 @@ export default function RepositoriesPage() {
           <p className="text-sm text-gray-400">
             {isLoading
               ? "Loading repositories…"
-              : `${repos.length} ${repos.length === 1 ? "repository" : "repositories"} connected to your account`}
+              : `${totalElements} ${totalElements === 1 ? "repository" : "repositories"} connected to your account`}
           </p>
         </div>
 
@@ -67,6 +75,12 @@ export default function RepositoriesPage() {
             repos.map((repo) => <RepoCard key={repo.id} repo={repo} />)
           )}
         </div>
+
+        {!isLoading && totalPages > 1 && (
+          <div className="flex justify-center mt-6">
+            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          </div>
+        )}
       </main>
     </DashboardLayout>
   );

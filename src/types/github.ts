@@ -21,7 +21,7 @@ export interface Repository {
   owner: RepositoryOwner;
 }
 
-export type PullRequestState = "open" | "draft" | "merged" | "closed";
+export type PullRequestState = "open" | "merged" | "closed";
 
 export interface PullRequestAuthor {
   id: number;

@@ -51,12 +51,14 @@ export interface WalkthroughSummary {
   id: string;
   userId: string;
   title: string;
+  description: string;
   owner: string;
   repo: string;
   prNumber: number;
   status: WalkthroughStatus;
   version: number;
   chapterCount: number;
+  commentCount: number;
   createdAt: string;
   updatedAt: string;
 }

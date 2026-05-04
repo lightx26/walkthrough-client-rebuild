@@ -28,15 +28,16 @@ function PrRowSkeleton() {
 interface PrListProps {
   prs: PullRequest[];
   isLoading: boolean;
+  owner: string;
+  repo: string;
 }
 
-export function PrList({ prs, isLoading }: PrListProps) {
+export function PrList({ prs, isLoading, owner, repo }: PrListProps) {
   const [activeTab, setActiveTab] = useState<TabKey>("all");
 
   const counts = {
     all: prs.length,
     open: prs.filter((p) => p.state === "open").length,
-    draft: prs.filter((p) => p.state === "draft").length,
     merged: prs.filter((p) => p.state === "merged").length,
     closed: prs.filter((p) => p.state === "closed").length,
   };
@@ -44,7 +45,6 @@ export function PrList({ prs, isLoading }: PrListProps) {
   const tabs: { label: string; key: TabKey }[] = [
     { label: "All", key: "all" },
     { label: "Open", key: "open" },
-    { label: "Draft", key: "draft" },
     { label: "Merged", key: "merged" },
     { label: "Closed", key: "closed" },
   ];
@@ -95,7 +95,7 @@ export function PrList({ prs, isLoading }: PrListProps) {
             No pull requests.
           </div>
         ) : (
-          filtered.map((pr) => <PrRow key={pr.number} pr={pr} />)
+          filtered.map((pr) => <PrRow key={pr.number} pr={pr} owner={owner} repo={repo} />)
         )}
       </div>
     </div>

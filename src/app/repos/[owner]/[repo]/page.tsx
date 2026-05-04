@@ -126,7 +126,7 @@ export default function RepoDetailsPage() {
           ) : null}
         </div>
 
-        <PrList prs={prs} isLoading={prsLoading} />
+        <PrList prs={prs} isLoading={prsLoading} owner={owner} repo={repo} />
       </main>
     </DashboardLayout>
   );

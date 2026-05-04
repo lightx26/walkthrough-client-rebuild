@@ -10,6 +10,8 @@ export function Navbar() {
 
   return (
     <header className="flex items-center gap-3 px-6 py-3 border-b border-gray-200 bg-white shrink-0">
+
+      {/* Search input */}
       <button className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-gray-50 border border-gray-200 text-sm text-gray-400 hover:bg-gray-100 transition-colors w-72">
         <Search className="w-4 h-4 shrink-0" />
         <span className="flex-1 text-left text-xs truncate">
@@ -27,11 +29,14 @@ export function Navbar() {
 
       <div className="flex-1" />
 
-      <button className="relative p-2 rounded-md hover:bg-gray-100 transition-colors">
+      {/* Notification bell with badge */}
+      <button className="relative p-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer">
         <Bell className="w-5 h-5 text-gray-500" />
         <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
       </button>
-      <div className="flex items-center gap-2.5">
+
+      {/* User avatar and info */}
+      <div className="flex items-center gap-2.5 p-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer">
         <UserAvatar
           src={user?.avatarUrl}
           displayName={user?.displayName}
@@ -44,9 +49,11 @@ export function Navbar() {
           <p className="text-gray-400 text-xs">@{user?.username}</p>
         </div>
       </div>
+      
+      {/* Sign out button */}
       <button
         onClick={() => logout.mutate()}
-        className="p-2 rounded-md text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500"
+        className="p-2 rounded-md text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 cursor-pointer"
         title="Sign out"
       >
         <LogOut className="w-4 h-4" />
