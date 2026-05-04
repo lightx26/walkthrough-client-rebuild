@@ -26,7 +26,10 @@ import { formatRelativeTime } from "@/utils/date-diff";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/store";
 import type { PullRequestState } from "@/types/github";
-import type { WalkthroughStatus, WalkthroughSummary } from "@/types/walkthrough";
+import type {
+  WalkthroughStatus,
+  WalkthroughSummary,
+} from "@/types/walkthrough";
 
 type TabKey = "all" | "published" | "draft";
 
@@ -93,13 +96,27 @@ function walkthroughIconColor(status: WalkthroughStatus) {
   return "text-gray-400";
 }
 
-function WalkthroughCard({ wt, owner, repo }: { wt: WalkthroughSummary; owner: string; repo: string }) {
+function WalkthroughCard({
+  wt,
+  owner,
+  repo,
+}: {
+  wt: WalkthroughSummary;
+  owner: string;
+  repo: string;
+}) {
   return (
     <div
       className="flex items-center gap-4 p-5 rounded-xl border border-gray-200 bg-white"
-      style={{ borderLeftColor: walkthroughAccentColor(wt.status), borderLeftWidth: 4 }}
+      style={{
+        borderLeftColor: walkthroughAccentColor(wt.status),
+        borderLeftWidth: 4,
+      }}
     >
-      <BookOpen className={cn("w-5 h-5 shrink-0", walkthroughIconColor(wt.status))} strokeWidth={1.75} />
+      <BookOpen
+        className={cn("w-5 h-5 shrink-0", walkthroughIconColor(wt.status))}
+        strokeWidth={1.75}
+      />
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
@@ -107,7 +124,9 @@ function WalkthroughCard({ wt, owner, repo }: { wt: WalkthroughSummary; owner: s
         </div>
         <p className="text-sm font-semibold text-gray-900 mb-1">{wt.title}</p>
         {wt.description && (
-          <p className="text-xs text-gray-500 truncate mb-2">{wt.description}</p>
+          <p className="text-xs text-gray-500 truncate mb-2">
+            {wt.description}
+          </p>
         )}
         <div className="flex items-center gap-3 text-xs text-gray-400">
           <span className="flex items-center gap-1">
@@ -194,12 +213,17 @@ export default function PrDetailPage() {
     enabled: !!owner && !!repo && !!prNumber,
   });
 
+  const isLoading = prLoading || walkthroughsLoading;
   const pr = prData?.data;
   const walkthroughs = walkthroughsData?.data?.items ?? [];
   const isOwner =
-    !!currentUser && !!pr && currentUser.username.toLowerCase() === pr.author.login.toLowerCase();
+    !!currentUser &&
+    !!pr &&
+    currentUser.username.toLowerCase() === pr.author.login.toLowerCase();
 
-  const publishedWalkthroughs = walkthroughs.filter((w) => w.status === "PUBLISHED");
+  const publishedWalkthroughs = walkthroughs.filter(
+    (w) => w.status === "PUBLISHED",
+  );
   const draftWalkthroughs = walkthroughs.filter((w) => w.status === "DRAFT");
 
   const counts = {
@@ -220,6 +244,7 @@ export default function PrDetailPage() {
       ];
 
   const filtered = (() => {
+    if (isLoading) return [];
     const pool = isOwner ? walkthroughs : publishedWalkthroughs;
     if (activeTab === "all") return pool;
     if (activeTab === "published") return publishedWalkthroughs;
@@ -232,7 +257,10 @@ export default function PrDetailPage() {
       <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
         <div className="mb-6">
           <div className="flex items-center gap-1.5 text-sm text-gray-400 mb-5">
-            <Link href="/repos" className="hover:text-gray-600 transition-colors">
+            <Link
+              href="/repos"
+              className="hover:text-gray-600 transition-colors"
+            >
               Repositories
             </Link>
             <span>/</span>
@@ -246,7 +274,7 @@ export default function PrDetailPage() {
             <span className="text-gray-700 font-medium">#{prNumber}</span>
           </div>
 
-          {prLoading ? (
+          {isLoading ? (
             <PrHeaderSkeleton />
           ) : pr ? (
             <div className="bg-white border border-gray-200 rounded-xl p-6">
@@ -255,7 +283,9 @@ export default function PrDetailPage() {
                 <span className="text-sm text-gray-400">#{pr.number}</span>
               </div>
 
-              <h1 className="text-xl font-bold text-gray-900 mb-3">{pr.title}</h1>
+              <h1 className="text-xl font-bold text-gray-900 mb-3">
+                {pr.title}
+              </h1>
 
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
                 <UserAvatar
@@ -263,9 +293,13 @@ export default function PrDetailPage() {
                   username={pr.author.login}
                   size="sm"
                 />
-                <span className="font-medium text-gray-700">{pr.author.login}</span>
+                <span className="font-medium text-gray-700">
+                  {pr.author.login}
+                </span>
                 <span className="text-gray-400">·</span>
-                <span className="text-gray-400">opened {formatRelativeTime(pr.createdAt)}</span>
+                <span className="text-gray-400">
+                  opened {formatRelativeTime(pr.createdAt)}
+                </span>
                 <span className="text-gray-400">·</span>
                 <code className="text-[11px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 font-mono">
                   {pr.head.ref}
@@ -283,10 +317,15 @@ export default function PrDetailPage() {
                 </span>
                 <span className="flex items-center gap-1.5">
                   <FileText className="w-4 h-4 text-gray-400" />
-                  {pr.changedFiles} {pr.changedFiles === 1 ? "file changed" : "files changed"}
+                  {pr.changedFiles}{" "}
+                  {pr.changedFiles === 1 ? "file changed" : "files changed"}
                 </span>
-                <span className="font-medium text-emerald-600">+{pr.additions}</span>
-                <span className="font-medium text-red-500">-{pr.deletions}</span>
+                <span className="font-medium text-emerald-600">
+                  +{pr.additions}
+                </span>
+                <span className="font-medium text-red-500">
+                  -{pr.deletions}
+                </span>
               </div>
             </div>
           ) : null}
@@ -295,10 +334,9 @@ export default function PrDetailPage() {
         <div className="bg-white rounded-xl border border-gray-200 shadow-[0_1px_3px_rgba(0,0,0,.04)]">
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
             <h2 className="text-sm font-semibold text-gray-900">
-              Walkthroughs{" "}
-              <span className="ml-1 text-gray-400 font-normal">{counts.all}</span>
+              Walkthroughs
             </h2>
-            {isOwner && (
+            {!isLoading && isOwner && (
               <Link
                 href={`/walkthroughs/new?owner=${owner}&repo=${repo}&prNumber=${prNumber}`}
                 className="inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-colors px-4 py-2 rounded-lg"
@@ -309,35 +347,37 @@ export default function PrDetailPage() {
             )}
           </div>
 
-          <div className="flex items-center gap-0.5 px-5 border-b border-gray-100">
-            {tabs.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 transition-colors",
-                  activeTab === tab.key
-                    ? "border-violet-600 text-violet-700"
-                    : "border-transparent text-gray-500 hover:text-gray-700",
-                )}
-              >
-                {tab.label}
-                <span
+          {!isLoading && (
+            <div className="flex items-center gap-0.5 px-5 border-b border-gray-100">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
                   className={cn(
-                    "text-xs px-1.5 py-0.5 rounded-full font-medium",
+                    "flex items-center gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 transition-colors",
                     activeTab === tab.key
-                      ? "bg-violet-100 text-violet-700"
-                      : "bg-gray-100 text-gray-500",
+                      ? "border-violet-600 text-violet-700"
+                      : "border-transparent text-gray-500 hover:text-gray-700",
                   )}
                 >
-                  {counts[tab.key]}
-                </span>
-              </button>
-            ))}
-          </div>
+                  {tab.label}
+                  <span
+                    className={cn(
+                      "text-xs px-1.5 py-0.5 rounded-full font-medium",
+                      activeTab === tab.key
+                        ? "bg-violet-100 text-violet-700"
+                        : "bg-gray-100 text-gray-500",
+                    )}
+                  >
+                    {counts[tab.key]}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
 
           <div className="p-5 space-y-3">
-            {walkthroughsLoading ? (
+            {isLoading ? (
               <>
                 <WalkthroughCardSkeleton />
                 <WalkthroughCardSkeleton />
@@ -348,7 +388,12 @@ export default function PrDetailPage() {
               </div>
             ) : (
               filtered.map((wt) => (
-                <WalkthroughCard key={wt.id} wt={wt} owner={owner} repo={repo} />
+                <WalkthroughCard
+                  key={wt.id}
+                  wt={wt}
+                  owner={owner}
+                  repo={repo}
+                />
               ))
             )}
           </div>
