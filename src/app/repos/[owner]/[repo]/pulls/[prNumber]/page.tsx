@@ -3,194 +3,27 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
 import {
-  ArrowLeft,
   ArrowRight,
-  BookOpen,
-  ChevronRight,
   FileText,
   GitCommitHorizontal,
-  GitMerge,
-  GitPullRequest,
-  GitPullRequestClosed,
-  MessageSquare,
   Plus,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { Skeleton } from "@/components/ui/skeleton";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import { githubService } from "@/services/github.service";
-import { walkthroughService } from "@/services/walkthrough.service";
+import {
+  PrStateBadge,
+  WalkthroughCard,
+  PrHeaderSkeleton,
+  WalkthroughCardSkeleton,
+} from "@/components/pr-detail";
+import { usePullRequest } from "@/hooks/use-github";
+import { useWalkthroughs } from "@/hooks/use-walkthrough";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/store";
-import type { PullRequestState } from "@/types/github";
-import type {
-  WalkthroughStatus,
-  WalkthroughSummary,
-} from "@/types/walkthrough";
 
 type TabKey = "all" | "published" | "draft";
-
-function PrStateBadge({ state }: { state: PullRequestState }) {
-  if (state === "open")
-    return (
-      <span className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-        <GitPullRequest className="w-3.5 h-3.5" strokeWidth={2} />
-        Open
-      </span>
-    );
-  if (state === "merged")
-    return (
-      <span className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full bg-violet-50 text-violet-700 border border-violet-200">
-        <GitMerge className="w-3.5 h-3.5" strokeWidth={2} />
-        Merged
-      </span>
-    );
-  return (
-    <span className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full bg-red-50 text-red-600 border border-red-200">
-      <GitPullRequestClosed className="w-3.5 h-3.5" strokeWidth={2} />
-      Closed
-    </span>
-  );
-}
-
-function WalkthroughStatusBadge({ status }: { status: WalkthroughStatus }) {
-  if (status === "PUBLISHED")
-    return (
-      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-        Published
-      </span>
-    );
-  if (status === "DRAFT")
-    return (
-      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-        Draft
-      </span>
-    );
-  if (status === "OUTDATED")
-    return (
-      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200">
-        Outdated
-      </span>
-    );
-  return (
-    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
-      Deprecated
-    </span>
-  );
-}
-
-function walkthroughAccentColor(status: WalkthroughStatus) {
-  if (status === "PUBLISHED") return "#34d399"; // emerald-400
-  if (status === "DRAFT") return "#fbbf24"; // amber-400
-  if (status === "OUTDATED") return "#fb923c"; // orange-400
-  return "#d1d5db"; // gray-300
-}
-
-function walkthroughIconColor(status: WalkthroughStatus) {
-  if (status === "PUBLISHED") return "text-emerald-600";
-  if (status === "DRAFT") return "text-amber-600";
-  if (status === "OUTDATED") return "text-orange-500";
-  return "text-gray-400";
-}
-
-function WalkthroughCard({
-  wt,
-  owner,
-  repo,
-}: {
-  wt: WalkthroughSummary;
-  owner: string;
-  repo: string;
-}) {
-  return (
-    <div
-      className="flex items-center gap-4 p-5 rounded-xl border border-gray-200 bg-white"
-      style={{
-        borderLeftColor: walkthroughAccentColor(wt.status),
-        borderLeftWidth: 4,
-      }}
-    >
-      <BookOpen
-        className={cn("w-5 h-5 shrink-0", walkthroughIconColor(wt.status))}
-        strokeWidth={1.75}
-      />
-
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <WalkthroughStatusBadge status={wt.status} />
-        </div>
-        <p className="text-sm font-semibold text-gray-900 mb-1">{wt.title}</p>
-        {wt.description && (
-          <p className="text-xs text-gray-500 truncate mb-2">
-            {wt.description}
-          </p>
-        )}
-        <div className="flex items-center gap-3 text-xs text-gray-400">
-          <span className="flex items-center gap-1">
-            <BookOpen className="w-3 h-3" />
-            {wt.chapterCount} {wt.chapterCount === 1 ? "chapter" : "chapters"}
-          </span>
-          {wt.commentCount > 0 && (
-            <span className="flex items-center gap-1">
-              <MessageSquare className="w-3 h-3" />
-              {wt.commentCount} {wt.commentCount === 1 ? "comment" : "comments"}
-            </span>
-          )}
-          <span>{formatRelativeTime(wt.updatedAt)}</span>
-        </div>
-      </div>
-
-      <Link
-        href={`/walkthroughs/${wt.id}`}
-        className="inline-flex items-center gap-1 text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-colors px-4 py-2 rounded-lg shrink-0"
-      >
-        Open
-        <ChevronRight className="w-4 h-4" />
-      </Link>
-    </div>
-  );
-}
-
-function PrHeaderSkeleton() {
-  return (
-    <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
-      <div className="flex items-center gap-3">
-        <Skeleton className="h-7 w-20 rounded-full" />
-        <Skeleton className="h-5 w-10" />
-      </div>
-      <Skeleton className="h-7 w-3/4" />
-      <div className="flex items-center gap-2">
-        <Skeleton className="h-6 w-6 rounded-full" />
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="h-5 w-40 rounded" />
-      </div>
-      <div className="flex items-center gap-4">
-        <Skeleton className="h-4 w-24" />
-        <Skeleton className="h-4 w-28" />
-        <Skeleton className="h-4 w-12" />
-        <Skeleton className="h-4 w-12" />
-      </div>
-    </div>
-  );
-}
-
-function WalkthroughCardSkeleton() {
-  return (
-    <div className="flex items-center gap-4 p-5 rounded-xl border border-gray-200 bg-white">
-      <Skeleton className="w-5 h-5 rounded shrink-0" />
-      <div className="flex-1 space-y-2">
-        <Skeleton className="h-4 w-16 rounded-full" />
-        <Skeleton className="h-4 w-56" />
-        <Skeleton className="h-3 w-40" />
-        <Skeleton className="h-3 w-32" />
-      </div>
-      <Skeleton className="h-9 w-20 rounded-lg shrink-0" />
-    </div>
-  );
-}
 
 export default function PrDetailPage() {
   const params = useParams<{ owner: string; repo: string; prNumber: string }>();
@@ -201,17 +34,13 @@ export default function PrDetailPage() {
   const currentUser = useAppSelector((state) => state.auth.user);
   const [activeTab, setActiveTab] = useState<TabKey>("all");
 
-  const { data: prData, isLoading: prLoading } = useQuery({
-    queryKey: ["pr", owner, repo, prNumber],
-    queryFn: () => githubService.getPullRequest(owner, repo, prNumber),
-    enabled: !!owner && !!repo && !!prNumber,
-  });
-
-  const { data: walkthroughsData, isLoading: walkthroughsLoading } = useQuery({
-    queryKey: ["walkthroughs", owner, repo, prNumber],
-    queryFn: () => walkthroughService.list(owner, repo, prNumber),
-    enabled: !!owner && !!repo && !!prNumber,
-  });
+  const { data: prData, isLoading: prLoading } = usePullRequest(
+    owner,
+    repo,
+    prNumber,
+  );
+  const { data: walkthroughsData, isLoading: walkthroughsLoading } =
+    useWalkthroughs(owner, repo, prNumber);
 
   const isLoading = prLoading || walkthroughsLoading;
   const pr = prData?.data;
@@ -388,12 +217,7 @@ export default function PrDetailPage() {
               </div>
             ) : (
               filtered.map((wt) => (
-                <WalkthroughCard
-                  key={wt.id}
-                  wt={wt}
-                  owner={owner}
-                  repo={repo}
-                />
+                <WalkthroughCard key={wt.id} wt={wt} />
               ))
             )}
           </div>
