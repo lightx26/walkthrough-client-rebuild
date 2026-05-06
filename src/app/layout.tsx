@@ -28,6 +28,9 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "Walkthrough",
   description: "Code review, made collaborative",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
