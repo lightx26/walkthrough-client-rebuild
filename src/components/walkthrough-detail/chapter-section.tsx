@@ -1,0 +1,122 @@
+"use client";
+
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { ChevronUp, ChevronDown, FileText } from "lucide-react";
+import type { Chapter, WalkthroughFile } from "@/types/walkthrough";
+import { walkthroughService } from "@/services/walkthrough.service";
+import { DiffViewer, computeDiffStats } from "./diff-viewer";
+
+interface FileSectionProps {
+  file: WalkthroughFile;
+  walkthroughId: string;
+}
+
+function FileSection({ file, walkthroughId }: FileSectionProps) {
+  const [expanded, setExpanded] = useState(true);
+  const stats = file.rawPatch ? computeDiffStats(file.rawPatch) : null;
+
+  const { data } = useQuery({
+    queryKey: ["file-comments", walkthroughId, file.id],
+    queryFn: () => walkthroughService.listFileComments(walkthroughId, file.id),
+  });
+  const comments = data?.data?.items ?? [];
+
+  return (
+    <div id={`file-${file.id}`} className="bg-gray-50">
+      {/* File header */}
+      <button
+        className="w-full flex items-center gap-2 px-6 py-2.5 hover:bg-gray-100 transition-colors text-left"
+        onClick={() => setExpanded((v) => !v)}
+      >
+        <FileText className="w-4 h-4 text-orange-500 shrink-0" />
+        <span className="text-sm font-medium text-gray-700 font-mono flex-1 truncate min-w-0">
+          {file.filename}
+        </span>
+        {stats && (
+          <span className="text-xs font-mono font-medium shrink-0">
+            <span className="text-green-600">+{stats.added}</span>
+            {" "}
+            <span className="text-red-500">-{stats.removed}</span>
+          </span>
+        )}
+        {expanded ? (
+          <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" />
+        ) : (
+          <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
+        )}
+      </button>
+
+      {/* Diff — animated collapse */}
+      <div
+        className={`grid transition-all duration-300 ease-in-out ${
+          expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
+          {file.rawPatch ? (
+            <div className="mx-4 mb-3 rounded-lg border border-gray-200 overflow-hidden">
+              <DiffViewer
+                rawPatch={file.rawPatch}
+                walkthroughId={walkthroughId}
+                fileId={file.id}
+                comments={comments}
+              />
+            </div>
+          ) : (
+            <p className="px-6 pb-3 text-xs text-gray-400">No diff available.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface ChapterSectionProps {
+  chapter: Chapter;
+  index: number;
+  walkthroughId: string;
+}
+
+export function ChapterSection({ chapter, index, walkthroughId }: ChapterSectionProps) {
+  const [expanded, setExpanded] = useState(true);
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      {/* Chapter header */}
+      <button
+        className="w-full flex items-start gap-4 px-6 py-4 hover:bg-gray-50 transition-colors text-left"
+        onClick={() => setExpanded((v) => !v)}
+      >
+        <span className="shrink-0 w-7 h-7 rounded-full bg-violet-600 text-white text-sm font-bold flex items-center justify-center mt-0.5">
+          {index + 1}
+        </span>
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold text-gray-900 leading-snug">{chapter.title}</p>
+          {chapter.description && (
+            <p className="text-sm text-gray-500 mt-0.5 leading-snug">{chapter.description}</p>
+          )}
+        </div>
+        <div className="flex items-center gap-2 shrink-0 text-sm text-gray-400 mt-0.5">
+          <span>{chapter.files.length} {chapter.files.length === 1 ? "file" : "files"}</span>
+          {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        </div>
+      </button>
+
+      {/* Files — animated collapse */}
+      <div
+        className={`grid transition-all duration-300 ease-in-out ${
+          expanded && chapter.files.length > 0 ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="border-t border-gray-100 divide-y divide-gray-100">
+            {chapter.files.map((file) => (
+              <FileSection key={file.id} file={file} walkthroughId={walkthroughId} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
