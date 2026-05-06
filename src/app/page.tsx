@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, FileText } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { useCurrentUser } from "@/hooks/use-auth";
-import { walkthroughService } from "@/services/walkthrough.service";
+import {
+  useRecentWalkthroughs,
+  useRecentlyReviewedWalkthroughs,
+} from "@/hooks/use-walkthrough";
 import {
   ResumeReadingCard,
   AiSuggestionBanner,
@@ -24,15 +26,10 @@ export default function HomePage() {
   const user = useCurrentUser();
   const [showAiBanner, setShowAiBanner] = useState(true);
 
-  const { data: recentData, isLoading: isLoadingRecent } = useQuery({
-    queryKey: ["walkthroughs", "recent"],
-    queryFn: () => walkthroughService.listRecent(),
-  });
+  const { data: recentData, isLoading: isLoadingRecent } =
+    useRecentWalkthroughs();
 
-  const { data: reviewedData } = useQuery({
-    queryKey: ["walkthroughs", "recently-reviewed"],
-    queryFn: () => walkthroughService.listRecentlyReviewed(),
-  });
+  const { data: reviewedData } = useRecentlyReviewedWalkthroughs();
 
   const walkthroughs = recentData?.data?.items ?? [];
   const resumeReading = reviewedData?.data?.items?.[0] ?? null;

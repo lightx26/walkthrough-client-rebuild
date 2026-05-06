@@ -2,13 +2,26 @@ import apiClient from "@/lib/axios";
 import type { DataResponse, ListData, PageData } from "@/types/api";
 import type { PullRequest, Repository } from "@/types/github";
 
+interface GetRepositoriesParams {
+  page?: number;
+  perPage?: number;
+  sort?: string;
+  q?: string;
+}
+
+interface GetPullRequestParams {
+  owner: string;
+  repo: string;
+  prNumber: number;
+}
+
 export const githubService = {
-  async getRepositories(
+  async getRepositories({
     page = 1,
     perPage = 20,
     sort = "updated",
-    q?: string,
-  ): Promise<DataResponse<PageData<Repository>>> {
+    q,
+  }: GetRepositoriesParams = {}): Promise<DataResponse<PageData<Repository>>> {
     const { data } = await apiClient.get<DataResponse<PageData<Repository>>>(
       "/v1/github/repos",
       { params: { page, perPage, sort, ...(q ? { q } : {}) } },
@@ -36,11 +49,11 @@ export const githubService = {
     return data;
   },
 
-  async getPullRequest(
-    owner: string,
-    repo: string,
-    prNumber: number,
-  ): Promise<DataResponse<PullRequest>> {
+  async getPullRequest({
+    owner,
+    repo,
+    prNumber,
+  }: GetPullRequestParams): Promise<DataResponse<PullRequest>> {
     const { data } = await apiClient.get<DataResponse<PullRequest>>(
       `/v1/github/repos/${owner}/${repo}/pulls/${prNumber}`,
     );

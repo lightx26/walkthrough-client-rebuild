@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MessageSquare, Send } from "lucide-react";
-import { toast } from "sonner";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { useCurrentUser } from "@/hooks/use-auth";
-import { walkthroughService } from "@/services/walkthrough.service";
+import {
+  useWalkthroughComments,
+  useCreateWalkthroughComment,
+} from "@/hooks/use-walkthrough";
 import { formatRelativeTime } from "@/utils/date-diff";
-import { getErrorMessage } from "@/lib/error";
 
 interface CommentSectionProps {
   walkthroughId: string;
@@ -16,30 +16,17 @@ interface CommentSectionProps {
 
 export function CommentSection({ walkthroughId }: CommentSectionProps) {
   const user = useCurrentUser();
-  const queryClient = useQueryClient();
   const [content, setContent] = useState("");
 
-  const { data } = useQuery({
-    queryKey: ["walkthrough-comments", walkthroughId],
-    queryFn: () => walkthroughService.listComments(walkthroughId),
-  });
+  const { data } = useWalkthroughComments(walkthroughId);
 
   const comments = (data?.data?.items ?? []).filter((c) => !c.chapterId && !c.walkthroughFileId && !c.parentId);
 
-  const addComment = useMutation({
-    mutationFn: () => walkthroughService.createComment(walkthroughId, { content }),
-    onSuccess: () => {
-      setContent("");
-      queryClient.invalidateQueries({ queryKey: ["walkthrough-comments", walkthroughId] });
-    },
-    onError: (err) => {
-      toast.error(getErrorMessage(err, "Failed to post comment."));
-    },
-  });
+  const addComment = useCreateWalkthroughComment(walkthroughId);
 
   const handleSubmit = () => {
     if (!content.trim()) return;
-    addComment.mutate();
+    addComment.mutate({ content }, { onSuccess: () => setContent("") });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

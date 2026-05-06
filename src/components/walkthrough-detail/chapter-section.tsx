@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { ChevronUp, ChevronDown, FileText } from "lucide-react";
 import type { Chapter, WalkthroughFile } from "@/types/walkthrough";
-import { walkthroughService } from "@/services/walkthrough.service";
+import { useFileComments } from "@/hooks/use-walkthrough";
 import { DiffViewer, computeDiffStats } from "./diff-viewer";
 
 interface FileSectionProps {
@@ -16,10 +15,7 @@ function FileSection({ file, walkthroughId }: FileSectionProps) {
   const [expanded, setExpanded] = useState(true);
   const stats = file.rawPatch ? computeDiffStats(file.rawPatch) : null;
 
-  const { data } = useQuery({
-    queryKey: ["file-comments", walkthroughId, file.id],
-    queryFn: () => walkthroughService.listFileComments(walkthroughId, file.id),
-  });
+  const { data } = useFileComments(walkthroughId, file.id);
   const comments = data?.data?.items ?? [];
 
   return (

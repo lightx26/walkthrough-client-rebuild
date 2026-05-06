@@ -14,6 +14,18 @@ import type {
   WalkthroughSummary,
 } from "@/types/walkthrough";
 
+interface ListWalkthroughsParams {
+  owner: string;
+  repo: string;
+  prNumber: number;
+}
+
+interface GetVersionDiffParams {
+  id: string;
+  fromVersion: number;
+  toVersion: number;
+}
+
 export const walkthroughService = {
   async create(
     request: CreateWalkthroughRequest,
@@ -25,11 +37,11 @@ export const walkthroughService = {
     return data;
   },
 
-  async list(
-    owner: string,
-    repo: string,
-    prNumber: number,
-  ): Promise<DataResponse<ListData<WalkthroughSummary>>> {
+  async list({
+    owner,
+    repo,
+    prNumber,
+  }: ListWalkthroughsParams): Promise<DataResponse<ListData<WalkthroughSummary>>> {
     const { data } = await apiClient.get<
       DataResponse<ListData<WalkthroughSummary>>
     >("/v1/walkthroughs", { params: { owner, repo, prNumber } });
@@ -159,11 +171,11 @@ export const walkthroughService = {
     return data;
   },
 
-  async getVersionDiff(
-    id: string,
-    fromVersion: number,
-    toVersion: number,
-  ): Promise<DataResponse<VersionDiffResponse>> {
+  async getVersionDiff({
+    id,
+    fromVersion,
+    toVersion,
+  }: GetVersionDiffParams): Promise<DataResponse<VersionDiffResponse>> {
     const { data } = await apiClient.get<DataResponse<VersionDiffResponse>>(
       `/v1/walkthroughs/${id}/diff`,
       { params: { fromVersion, toVersion } },

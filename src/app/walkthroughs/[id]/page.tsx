@@ -2,13 +2,12 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BookOpen, Pencil } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCurrentUser } from "@/hooks/use-auth";
-import { walkthroughService } from "@/services/walkthrough.service";
+import { useWalkthrough } from "@/hooks/use-walkthrough";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { ChapterSection } from "@/components/walkthrough-detail/chapter-section";
 import { CommentSection } from "@/components/walkthrough-detail/comment-section";
@@ -30,11 +29,7 @@ export default function WalkthroughDetailPage() {
   const router = useRouter();
   const user = useCurrentUser();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["walkthrough", params.id],
-    queryFn: () => walkthroughService.getById(params.id),
-    enabled: !!params.id,
-  });
+  const { data, isLoading } = useWalkthrough(params.id);
 
   const walkthrough = data?.data;
   const isOwner = !!user && !!walkthrough && user.id === walkthrough.userId;

@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Pagination } from "@/components/ui/pagination";
-import { githubService } from "@/services/github.service";
+import { useRepositories } from "@/hooks/use-github";
 import { RepoCard } from "@/components/repos";
 
 const PER_PAGE = 20;
@@ -37,10 +36,7 @@ function RepoCardSkeleton() {
 export default function RepositoriesPage() {
   const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["repos", page],
-    queryFn: () => githubService.getRepositories(page, PER_PAGE),
-  });
+  const { data, isLoading } = useRepositories({ page, perPage: PER_PAGE });
 
   const repos = data?.data?.items ?? [];
   const totalPages = data?.data?.totalPages ?? 1;

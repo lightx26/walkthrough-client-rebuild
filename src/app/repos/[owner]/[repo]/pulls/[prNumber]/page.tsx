@@ -34,13 +34,13 @@ export default function PrDetailPage() {
   const currentUser = useAppSelector((state) => state.auth.user);
   const [activeTab, setActiveTab] = useState<TabKey>("all");
 
-  const { data: prData, isLoading: prLoading } = usePullRequest(
+  const { data: prData, isLoading: prLoading } = usePullRequest({
     owner,
     repo,
     prNumber,
-  );
+  });
   const { data: walkthroughsData, isLoading: walkthroughsLoading } =
-    useWalkthroughs(owner, repo, prNumber);
+    useWalkthroughs({ owner, repo, prNumber });
 
   const isLoading = prLoading || walkthroughsLoading;
   const pr = prData?.data;

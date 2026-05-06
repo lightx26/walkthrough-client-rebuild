@@ -2,12 +2,11 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, GitBranch, GitFork, Star } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PrList } from "@/components/repos";
-import { githubService } from "@/services/github.service";
+import { useRepository, useRepositoryPullRequests } from "@/hooks/use-github";
 import { languageColor } from "@/utils/language-color";
 import { formatRelativeTime } from "@/utils/date-diff";
 
@@ -39,17 +38,10 @@ export default function RepoDetailsPage() {
   const owner = params.owner;
   const repo = params.repo;
 
-  const { data: repoData, isLoading: repoLoading } = useQuery({
-    queryKey: ["repo", owner, repo],
-    queryFn: () => githubService.getRepository(owner, repo),
-    enabled: !!owner && !!repo,
-  });
+  const { data: repoData, isLoading: repoLoading } = useRepository(owner, repo);
 
-  const { data: prsData, isLoading: prsLoading } = useQuery({
-    queryKey: ["repo-pulls", owner, repo],
-    queryFn: () => githubService.getRepositoryPullRequests(owner, repo),
-    enabled: !!owner && !!repo,
-  });
+  const { data: prsData, isLoading: prsLoading } =
+    useRepositoryPullRequests(owner, repo);
 
   const repoDetails = repoData?.data;
   const prs = prsData?.data?.items ?? [];

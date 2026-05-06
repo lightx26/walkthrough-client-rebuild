@@ -2,15 +2,12 @@
 
 import React, { useState } from "react";
 import { Send, CornerDownLeft, CheckCircle2, Circle, AlertCircle } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import type { WalkthroughComment } from "@/types/walkthrough";
-import { walkthroughService } from "@/services/walkthrough.service";
+import { useCreateFileComment } from "@/hooks/use-walkthrough";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { formatRelativeTime } from "@/utils/date-diff";
-import { getErrorMessage } from "@/lib/error";
 
 type DiffLineType = "hunk" | "add" | "del" | "ctx";
 
@@ -81,25 +78,10 @@ interface CommentThreadProps {
 
 function CommentThread({ comments, walkthroughId, fileId, diffPosition }: CommentThreadProps) {
   const user = useCurrentUser();
-  const queryClient = useQueryClient();
   const [replyTargetId, setReplyTargetId] = useState<string | null>(null);
   const [replyText, setReplyText] = useState("");
 
-  const addReply = useMutation({
-    mutationFn: (parentId: string) =>
-      walkthroughService.createComment(walkthroughId, {
-        content: replyText,
-        walkthroughFileId: fileId,
-        diffPosition,
-        parentId,
-      }),
-    onSuccess: () => {
-      setReplyText("");
-      setReplyTargetId(null);
-      queryClient.invalidateQueries({ queryKey: ["file-comments", walkthroughId, fileId] });
-    },
-    onError: (err) => toast.error(getErrorMessage(err, "Failed to post reply.")),
-  });
+  const addReply = useCreateFileComment(walkthroughId, fileId);
 
   return (
     <>
@@ -160,12 +142,18 @@ function CommentThread({ comments, walkthroughId, fileId, diffPosition }: Commen
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey && replyText.trim()) {
                         e.preventDefault();
-                        addReply.mutate(c.id);
+                        addReply.mutate(
+                          { content: replyText, walkthroughFileId: fileId, diffPosition, parentId: c.id },
+                          { onSuccess: () => { setReplyText(""); setReplyTargetId(null); } },
+                        );
                       }
                     }}
                   />
                   <button
-                    onClick={() => replyText.trim() && addReply.mutate(c.id)}
+                    onClick={() => replyText.trim() && addReply.mutate(
+                      { content: replyText, walkthroughFileId: fileId, diffPosition, parentId: c.id },
+                      { onSuccess: () => { setReplyText(""); setReplyTargetId(null); } },
+                    )}
                     disabled={!replyText.trim() || addReply.isPending}
                     className="p-1.5 rounded-md bg-violet-100 text-violet-600 hover:bg-violet-200 disabled:opacity-40 transition-colors"
                   >
@@ -192,23 +180,9 @@ interface AddCommentRowProps {
 
 function AddCommentRow({ walkthroughId, fileId, diffPosition, onClose }: AddCommentRowProps) {
   const user = useCurrentUser();
-  const queryClient = useQueryClient();
   const [text, setText] = useState("");
 
-  const addComment = useMutation({
-    mutationFn: () =>
-      walkthroughService.createComment(walkthroughId, {
-        content: text,
-        walkthroughFileId: fileId,
-        diffPosition,
-      }),
-    onSuccess: () => {
-      setText("");
-      onClose();
-      queryClient.invalidateQueries({ queryKey: ["file-comments", walkthroughId, fileId] });
-    },
-    onError: (err) => toast.error(getErrorMessage(err, "Failed to post comment.")),
-  });
+  const addComment = useCreateFileComment(walkthroughId, fileId);
 
   return (
     <tr>
@@ -225,12 +199,18 @@ function AddCommentRow({ walkthroughId, fileId, diffPosition, onClose }: AddComm
               if (e.key === "Escape") onClose();
               if (e.key === "Enter" && !e.shiftKey && text.trim()) {
                 e.preventDefault();
-                addComment.mutate();
+                addComment.mutate(
+                  { content: text, walkthroughFileId: fileId, diffPosition },
+                  { onSuccess: () => { setText(""); onClose(); } },
+                );
               }
             }}
           />
           <button
-            onClick={() => text.trim() && addComment.mutate()}
+            onClick={() => text.trim() && addComment.mutate(
+              { content: text, walkthroughFileId: fileId, diffPosition },
+              { onSuccess: () => { setText(""); onClose(); } },
+            )}
             disabled={!text.trim() || addComment.isPending}
             className="p-1.5 rounded-md bg-violet-100 text-violet-600 hover:bg-violet-200 disabled:opacity-40 transition-colors"
           >
