@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { WalkthroughSummary } from "@/types/walkthrough";
 import { DisplayStatus, toDisplayStatus } from "@/utils/walkthrough";
 import { BookOpen, Clock } from "lucide-react";
@@ -24,7 +25,7 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
   if (!displayStatus) return null;
 
   return (
-    <div className="flex items-start gap-3 py-3.5 border-b border-gray-100 last:border-0 group">
+    <Link href={`/walkthroughs/${wt.id}`} className="flex items-start gap-3 py-3.5 border-b border-gray-100 last:border-0 group">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 mb-1.5">
           <span
@@ -36,7 +37,7 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
             {displayStatus}
           </span>
         </div>
-        <p className="text-sm font-medium text-gray-900 group-hover:text-violet-700 cursor-pointer transition-colors leading-snug">
+        <p className="text-sm font-medium text-gray-900 group-hover:text-violet-700 transition-colors leading-snug">
           {wt.title}
         </p>
         <div className="flex items-center gap-2 mt-1.5 text-xs text-gray-400 flex-wrap">
@@ -58,6 +59,6 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

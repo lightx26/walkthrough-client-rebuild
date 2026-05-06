@@ -20,6 +20,7 @@ export interface WalkthroughFile {
   fileSha: string;
   fileStatus: string;
   sortOrder: number;
+  rawPatch?: string;
   annotations: WalkthroughAnnotation[];
 }
 
@@ -34,6 +35,9 @@ export interface Chapter {
 export interface Walkthrough {
   id: string;
   userId: string;
+  creatorUsername?: string;
+  creatorDisplayName?: string;
+  creatorAvatarUrl?: string;
   title: string;
   description: string;
   status: WalkthroughStatus;
