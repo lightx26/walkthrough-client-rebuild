@@ -6,19 +6,20 @@ import { cn } from "@/lib/utils";
 import type { WalkthroughComment } from "@/types/walkthrough";
 import { useCreateFileComment } from "@/hooks/use-walkthrough";
 import { useCurrentUser } from "@/hooks/use-auth";
+import { useSyntaxHighlight } from "@/hooks/use-syntax-highlight";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { formatRelativeTime } from "@/utils/date-diff";
 
-type DiffLineType = "hunk" | "add" | "del" | "ctx";
+export type DiffLineType = "hunk" | "add" | "del" | "ctx";
 
-interface DiffLine {
+export interface DiffLine {
   type: DiffLineType;
   content: string;
   oldNo?: number;
   newNo?: number;
 }
 
-function parsePatch(rawPatch: string): DiffLine[] {
+export function parsePatch(rawPatch: string): DiffLine[] {
   const lines = rawPatch.split("\n");
   const result: DiffLine[] = [];
   let oldLine = 0;
@@ -228,11 +229,13 @@ interface DiffViewerProps {
   rawPatch: string;
   walkthroughId: string;
   fileId: string;
+  filename: string;
   comments?: WalkthroughComment[];
 }
 
-export function DiffViewer({ rawPatch, walkthroughId, fileId, comments = [] }: DiffViewerProps) {
+export function DiffViewer({ rawPatch, walkthroughId, fileId, filename, comments = [] }: DiffViewerProps) {
   const [activeLineIdx, setActiveLineIdx] = useState<number | null>(null);
+  const { tokens } = useSyntaxHighlight(rawPatch, filename);
 
   const lines = parsePatch(rawPatch);
 
@@ -268,11 +271,14 @@ export function DiffViewer({ rawPatch, walkthroughId, fileId, comments = [] }: D
               line.type === "del" && "bg-red-50",
               line.type === "ctx" && "bg-white",
             );
-            const textCls = cn(
-              line.type === "add" && "text-green-700",
-              line.type === "del" && "text-red-700",
-              line.type === "ctx" && "text-gray-800",
-            );
+            const lineTokens = tokens?.get(i);
+            const textCls = lineTokens
+              ? undefined
+              : cn(
+                  line.type === "add" && "text-green-700",
+                  line.type === "del" && "text-red-700",
+                  line.type === "ctx" && "text-gray-800",
+                );
 
             return (
               <React.Fragment key={i}>
@@ -290,7 +296,13 @@ export function DiffViewer({ rawPatch, walkthroughId, fileId, comments = [] }: D
                     <span className="select-none mr-1 text-gray-400">
                       {line.type === "add" ? "+" : line.type === "del" ? "-" : " "}
                     </span>
-                    {line.content}
+                    {lineTokens
+                      ? lineTokens.map((token, j) => (
+                          <span key={j} style={{ color: token.color }}>
+                            {token.content}
+                          </span>
+                        ))
+                      : line.content}
                   </td>
                 </tr>
 

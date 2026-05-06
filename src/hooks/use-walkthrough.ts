@@ -4,7 +4,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { walkthroughService } from "@/services/walkthrough.service";
 import { getErrorMessage } from "@/lib/error";
-import type { CreateCommentRequest } from "@/types/walkthrough";
+import type {
+  CreateCommentRequest,
+  CreateWalkthroughRequest,
+  UpdateWalkthroughRequest,
+} from "@/types/walkthrough";
 
 interface UseWalkthroughsParams {
   owner: string;
@@ -59,6 +63,43 @@ export function useFileComments(walkthroughId: string, fileId: string) {
     queryKey: ["file-comments", walkthroughId, fileId],
     queryFn: () => walkthroughService.listFileComments(walkthroughId, fileId),
     enabled: !!walkthroughId && !!fileId,
+  });
+}
+
+export function useCreateWalkthrough() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: CreateWalkthroughRequest) =>
+      walkthroughService.create(request),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          "walkthroughs",
+          variables.owner,
+          variables.repo,
+          variables.prNumber,
+        ],
+      });
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Failed to create walkthrough."));
+    },
+  });
+}
+
+export function useUpdateWalkthrough(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: UpdateWalkthroughRequest) =>
+      walkthroughService.update(id, request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["walkthrough", id] });
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Failed to update walkthrough."));
+    },
   });
 }
 

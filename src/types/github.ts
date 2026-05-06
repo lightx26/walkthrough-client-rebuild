@@ -54,3 +54,22 @@ export interface PullRequest {
   base: BranchRef;
   walkthroughsCount: number;
 }
+
+export type PrFileStatus =
+  | "added"
+  | "removed"
+  | "modified"
+  | "renamed"
+  | "copied"
+  | "changed"
+  | "unchanged";
+
+export interface PrFile {
+  sha: string;
+  filename: string;
+  status: PrFileStatus;
+  additions: number;
+  deletions: number;
+  changes: number;
+  patch?: string;
+}

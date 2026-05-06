@@ -57,6 +57,7 @@ function FileSection({ file, walkthroughId }: FileSectionProps) {
                 walkthroughId={walkthroughId}
                 fileId={file.id}
                 comments={comments}
+                filename={file.filename}
               />
             </div>
           ) : (

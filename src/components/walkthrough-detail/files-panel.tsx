@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, LayoutGrid, FileText } from "lucide-react";
+import { X, FileText, LayoutList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Walkthrough } from "@/types/walkthrough";
 import { computeDiffStats } from "./diff-viewer";
@@ -35,9 +35,8 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
           onClick={() => setOpen(true)}
           className="fixed right-6 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 rounded-lg shadow-md text-sm text-gray-600 hover:border-violet-400 hover:text-violet-700 transition-colors z-40"
         >
-          <LayoutGrid className="w-4 h-4" />
+          <LayoutList className="w-4 h-4" />
           <span className="font-medium">Files</span>
-          <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
         </button>
       )}
 
@@ -46,7 +45,7 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
         <div className="fixed right-6 top-[5.5rem] z-40 w-72 bg-white border border-gray-200 rounded-xl shadow-xl flex flex-col max-h-[calc(100vh-7rem)]">
           {/* Header */}
           <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 shrink-0">
-            <LayoutGrid className="w-4 h-4 text-gray-500" />
+            <LayoutList className="w-4 h-4 text-gray-500" />
             <span className="font-semibold text-sm text-gray-900 flex-1">File Overview</span>
             <span className="text-xs font-semibold text-white bg-blue-500 rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
               {totalFiles}
@@ -110,7 +109,6 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
               onClick={() => setOpen(false)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white text-xs font-medium hover:bg-violet-700 transition-colors"
             >
-              <LayoutGrid className="w-3.5 h-3.5" />
               Close
             </button>
           </div>

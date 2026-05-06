@@ -1,6 +1,6 @@
 import apiClient from "@/lib/axios";
 import type { DataResponse, ListData, PageData } from "@/types/api";
-import type { PullRequest, Repository } from "@/types/github";
+import type { PrFile, PullRequest, Repository } from "@/types/github";
 
 interface GetRepositoriesParams {
   page?: number;
@@ -56,6 +56,17 @@ export const githubService = {
   }: GetPullRequestParams): Promise<DataResponse<PullRequest>> {
     const { data } = await apiClient.get<DataResponse<PullRequest>>(
       `/v1/github/repos/${owner}/${repo}/pulls/${prNumber}`,
+    );
+    return data;
+  },
+
+  async getPullRequestFiles(
+    owner: string,
+    repo: string,
+    prNumber: number,
+  ): Promise<DataResponse<ListData<PrFile>>> {
+    const { data } = await apiClient.get<DataResponse<ListData<PrFile>>>(
+      `/v1/github/repos/${owner}/${repo}/pulls/${prNumber}/files`,
     );
     return data;
   },

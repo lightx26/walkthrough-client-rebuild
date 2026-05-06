@@ -153,6 +153,8 @@ export interface VersionDiffResponse {
 export interface ChapterFileRequest {
   filename: string;
   fileSha?: string;
+  fileStatus: string;
+  rawPatch?: string;
 }
 
 export interface ChapterRequest {

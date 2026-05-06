@@ -55,3 +55,15 @@ export function usePullRequest({
     enabled: !!owner && !!repo && !!prNumber,
   });
 }
+
+export function usePullRequestFiles({
+  owner,
+  repo,
+  prNumber,
+}: UsePullRequestParams) {
+  return useQuery({
+    queryKey: ["pr-files", owner, repo, prNumber],
+    queryFn: () => githubService.getPullRequestFiles(owner, repo, prNumber),
+    enabled: !!owner && !!repo && !!prNumber,
+  });
+}
