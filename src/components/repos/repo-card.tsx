@@ -3,8 +3,29 @@ import { ChevronRight, GitBranch, GitFork, Globe, Lock, Star } from "lucide-reac
 import type { Repository } from "@/types/github";
 import { languageColor } from "@/utils/language-color";
 import { formatRelativeTime } from "@/utils/date-diff";
+import { useIsStarred, useStarRepo, useUnstarRepo } from "@/hooks/use-starred";
+import { cn } from "@/lib/utils";
 
 export function RepoCard({ repo }: { repo: Repository }) {
+  const { data: starredData } = useIsStarred(repo.fullName);
+  const isStarred = starredData?.data ?? false;
+  const starMutation = useStarRepo();
+  const unstarMutation = useUnstarRepo();
+
+  const handleToggleStar = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isStarred) {
+      unstarMutation.mutate(repo.fullName);
+    } else {
+      starMutation.mutate({
+        repoFullName: repo.fullName,
+        repoName: repo.name,
+        language: repo.language,
+      });
+    }
+  };
+
   return (
     <Link
       href={`/repos/${repo.owner.login}/${repo.name}`}
@@ -58,6 +79,18 @@ export function RepoCard({ repo }: { repo: Repository }) {
       </div>
 
       <div className="flex items-center gap-8 shrink-0">
+        <button
+          onClick={handleToggleStar}
+          className={cn(
+            "p-1.5 rounded-md transition-colors",
+            isStarred
+              ? "text-yellow-500 hover:text-yellow-600"
+              : "text-gray-300 hover:text-yellow-400",
+          )}
+          title={isStarred ? "Unstar repository" : "Star repository"}
+        >
+          <Star className={cn("w-4 h-4", isStarred && "fill-current")} />
+        </button>
         <div className="text-center">
           <p className="text-xl font-bold text-gray-900">{repo.openPrsCount}</p>
           <p className="text-xs text-gray-400">open PRs</p>

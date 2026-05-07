@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/logo";
+import { useStarredRepos } from "@/hooks/use-starred";
+import { languageColor } from "@/utils/language-color";
 import React from "react";
 
 const mainNav = [
@@ -29,13 +31,10 @@ const workspaceNav = [
   { href: "/templates", icon: LayoutTemplate, label: "Templates" },
 ];
 
-const starredRepos = [
-  { label: "walkthrough-server", color: "bg-violet-500" },
-  { label: "walkthrough-client", color: "bg-blue-500" },
-];
-
 export function Sidebar() {
   const pathname = usePathname();
+  const { data: starredData } = useStarredRepos();
+  const starredRepos = starredData?.data?.items ?? [];
 
   return (
     <aside className="w-56 shrink-0 flex flex-col border-r border-gray-200 bg-white h-full">
@@ -123,16 +122,20 @@ export function Sidebar() {
           </div>
           <div className="space-y-0.5">
             {starredRepos.map((repo) => (
-              <button
-                key={repo.label}
+              <Link
+                key={repo.repoFullName}
+                href={`/repos/${repo.repoFullName}`}
                 className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
               >
                 <span
-                  className={cn("w-2 h-2 rounded-full shrink-0", repo.color)}
+                  className={cn("w-2 h-2 rounded-full shrink-0", languageColor(repo.language ?? ""))}
                 />
-                <span className="truncate">{repo.label}</span>
-              </button>
+                <span className="truncate">{repo.repoName}</span>
+              </Link>
             ))}
+            {starredRepos.length === 0 && (
+              <p className="px-3 py-2 text-xs text-gray-400">No starred repos</p>
+            )}
           </div>
         </div>
       </nav>

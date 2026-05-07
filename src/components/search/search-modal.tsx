@@ -277,7 +277,7 @@ export function SearchModal({ onClose }: Props) {
           {showResults && (
             <div className="py-1">
               <p className="px-4 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                Walkthroughs{walkthroughHits.length}
+                Walkthroughs {walkthroughHits.length}
               </p>
               {walkthroughHits.map((hit, i) => (
                 <SearchWalkthroughItem
