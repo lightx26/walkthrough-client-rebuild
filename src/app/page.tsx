@@ -92,6 +92,7 @@ export default function HomePage() {
 
       <WeekSummaryPanel
         walkthroughCount={walkthroughs.length}
+        commentCount={walkthroughs.reduce((sum, w) => sum + (w.commentCount ?? 0), 0)}
         recentlyReviewed={recentlyReviewed}
       />
     </DashboardLayout>

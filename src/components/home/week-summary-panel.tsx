@@ -1,18 +1,38 @@
-import { BookOpen, MessageSquare } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
+import { BookOpen, MessageSquare, PanelRightClose, PanelRightOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { RecentlyReviewedWalkthrough } from "@/types/walkthrough";
 
 interface WeekSummaryPanelProps {
   walkthroughCount: number;
+  commentCount: number;
   recentlyReviewed: RecentlyReviewedWalkthrough[];
 }
 
 export function WeekSummaryPanel({
   walkthroughCount,
+  commentCount,
   recentlyReviewed,
 }: WeekSummaryPanelProps) {
+  const [collapsed, setCollapsed] = useState(false);
+
+  if (collapsed) {
+    return (
+      <aside className="shrink-0 border-l border-gray-200 bg-white flex flex-col items-center py-4 px-1.5">
+        <button
+          onClick={() => setCollapsed(false)}
+          className="p-1.5 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
+          aria-label="Expand panel"
+        >
+          <PanelRightOpen className="w-4 h-4" />
+        </button>
+      </aside>
+    );
+  }
+
   return (
-    <aside className="w-70 shrink-0 border-l border-gray-200 bg-white overflow-y-auto px-5 py-5">
+    <aside className="w-70 shrink-0 border-l border-gray-200 bg-white overflow-y-auto px-5 py-5 flex flex-col">
       {/* this week */}
       <div className="mb-7">
         <div className="flex items-center justify-between mb-3">
@@ -32,7 +52,7 @@ export function WeekSummaryPanel({
               iconColor: "text-violet-500",
               bg: "bg-violet-50",
               label: "Comments",
-              value: "—",
+              value: commentCount,
             },
           ].map(({ icon: Icon, iconColor, bg, label, value }) => (
             <div
@@ -70,9 +90,10 @@ export function WeekSummaryPanel({
             {recentlyReviewed.slice(0, 5).map((r) => {
               const pct = Math.round((r.readChapters / r.totalChapters) * 100);
               return (
-                <div
+                <Link
                   key={r.walkthroughId}
-                  className="flex items-center gap-2.5"
+                  href={`/walkthroughs/${r.walkthroughId}`}
+                  className="flex items-center gap-2.5 hover:bg-gray-50 rounded-lg px-1 py-0.5 -mx-1 transition-colors"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1.5">
@@ -90,12 +111,23 @@ export function WeekSummaryPanel({
                       />
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
         </div>
       )}
+
+      {/* collapse button */}
+      <div className="mt-auto pt-4 flex justify-end">
+        <button
+          onClick={() => setCollapsed(true)}
+          className="p-1.5 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
+          aria-label="Collapse panel"
+        >
+          <PanelRightClose className="w-4 h-4" />
+        </button>
+      </div>
     </aside>
   );
 }
