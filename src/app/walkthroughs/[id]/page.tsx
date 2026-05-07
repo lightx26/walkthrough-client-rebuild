@@ -7,7 +7,7 @@ import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCurrentUser } from "@/hooks/use-auth";
-import { useWalkthrough } from "@/hooks/use-walkthrough";
+import { useWalkthrough, useReadProgress } from "@/hooks/use-walkthrough";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { ChapterSection } from "@/components/walkthrough-detail/chapter-section";
 import { CommentSection } from "@/components/walkthrough-detail/comment-section";
@@ -30,8 +30,10 @@ export default function WalkthroughDetailPage() {
   const user = useCurrentUser();
 
   const { data, isLoading } = useWalkthrough(params.id);
+  const { data: progressData } = useReadProgress(params.id);
 
   const walkthrough = data?.data;
+  const progress = progressData?.data;
   const isOwner = !!user && !!walkthrough && user.id === walkthrough.userId;
 
   return (
@@ -104,6 +106,28 @@ export default function WalkthroughDetailPage() {
                     <p className="text-sm text-gray-600 leading-relaxed">
                       {walkthrough.description}
                     </p>
+                  </div>
+                )}
+
+                {/* Reading Progress */}
+                {progress && progress.totalChapters > 0 && !isOwner && (
+                  <div className="bg-white rounded-xl border border-gray-200 px-6 py-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-700">
+                        Review Progress
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {progress.readChapters}/{progress.totalChapters} chapters
+                      </span>
+                    </div>
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-violet-500 rounded-full transition-all"
+                        style={{
+                          width: `${Math.round((progress.readChapters / progress.totalChapters) * 100)}%`,
+                        }}
+                      />
+                    </div>
                   </div>
                 )}
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { GitCommit, Play } from "lucide-react";
 import type { RecentlyReviewedWalkthrough } from "@/types/walkthrough";
 
@@ -41,10 +42,13 @@ export function ResumeReadingCard({ walkthrough }: ResumeReadingCardProps) {
             {walkthrough.owner}/{walkthrough.repo} · #{walkthrough.prNumber}
           </p>
         </div>
-        <button className="flex items-center gap-2 bg-white/15 hover:bg-white/25 active:bg-white/30 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors shrink-0 shadow-sm">
+        <Link
+          href={`/walkthroughs/${walkthrough.walkthroughId}`}
+          className="flex items-center gap-2 bg-white/15 hover:bg-white/25 active:bg-white/30 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors shrink-0 shadow-sm"
+        >
           <Play className="w-4 h-4 fill-white" />
           Continue
-        </button>
+        </Link>
       </div>
     </div>
   );

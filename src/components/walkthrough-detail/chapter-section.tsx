@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ChevronUp, ChevronDown, FileText } from "lucide-react";
 import type { Chapter, WalkthroughFile } from "@/types/walkthrough";
 import { useFileComments } from "@/hooks/use-walkthrough";
+import { useRecordChapterView } from "@/hooks/use-walkthrough";
 import { DiffViewer, computeDiffStats } from "./diff-viewer";
 
 interface FileSectionProps {
@@ -76,7 +77,21 @@ interface ChapterSectionProps {
 }
 
 export function ChapterSection({ chapter, index, walkthroughId }: ChapterSectionProps) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(index === 0);
+  const viewRecorded = useRef(false);
+  const recordChapterView = useRecordChapterView(walkthroughId);
+
+  useEffect(() => {
+    if (expanded && !viewRecorded.current) {
+      viewRecorded.current = true;
+      recordChapterView.mutate({
+        chapterId: chapter.id,
+        timeSpentSec: 0,
+        scrolledToBottom: false,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expanded, chapter.id]);
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">

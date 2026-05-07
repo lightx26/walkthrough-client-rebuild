@@ -7,6 +7,7 @@ import { getErrorMessage } from "@/lib/error";
 import type {
   CreateCommentRequest,
   CreateWalkthroughRequest,
+  RecordChapterViewRequest,
   UpdateWalkthroughRequest,
 } from "@/types/walkthrough";
 
@@ -133,6 +134,31 @@ export function useCreateFileComment(walkthroughId: string, fileId: string) {
     },
     onError: (error) => {
       toast.error(getErrorMessage(error, "Failed to post comment."));
+    },
+  });
+}
+
+export function useReadProgress(walkthroughId: string) {
+  return useQuery({
+    queryKey: ["read-progress", walkthroughId],
+    queryFn: () => walkthroughService.getReadProgress(walkthroughId),
+    enabled: !!walkthroughId,
+  });
+}
+
+export function useRecordChapterView(walkthroughId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: RecordChapterViewRequest) =>
+      walkthroughService.recordChapterView(walkthroughId, request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["read-progress", walkthroughId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["walkthroughs", "recently-reviewed"],
+      });
     },
   });
 }
