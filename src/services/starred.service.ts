@@ -1,35 +1,35 @@
 import apiClient from "@/lib/axios";
 import type { DataResponse, ListData } from "@/types/api";
-import type { StarredRepo, StarRepoRequest } from "@/types/starred";
+import type { PinnedRepo, PinRepoRequest } from "@/types/starred";
 
-export const starredRepoService = {
-  async getStarredRepos(): Promise<DataResponse<ListData<StarredRepo>>> {
-    const { data } = await apiClient.get<DataResponse<ListData<StarredRepo>>>(
-      "/v1/starred-repos",
+export const pinnedRepoService = {
+  async getPinnedRepos(): Promise<DataResponse<ListData<PinnedRepo>>> {
+    const { data } = await apiClient.get<DataResponse<ListData<PinnedRepo>>>(
+      "/v1/pinned-repos",
     );
     return data;
   },
 
-  async starRepo(request: StarRepoRequest): Promise<DataResponse<StarredRepo>> {
-    const { data } = await apiClient.post<DataResponse<StarredRepo>>(
-      "/v1/starred-repos",
+  async pinRepo(request: PinRepoRequest): Promise<DataResponse<PinnedRepo>> {
+    const { data } = await apiClient.post<DataResponse<PinnedRepo>>(
+      "/v1/pinned-repos",
       request,
     );
     return data;
   },
 
-  async unstarRepo(repoFullName: string): Promise<DataResponse<void>> {
+  async unpinRepo(repoFullName: string): Promise<DataResponse<void>> {
     const [owner, repo] = repoFullName.split("/");
     const { data } = await apiClient.delete<DataResponse<void>>(
-      `/v1/starred-repos/${owner}/${repo}`,
+      `/v1/pinned-repos/${owner}/${repo}`,
     );
     return data;
   },
 
-  async isStarred(repoFullName: string): Promise<DataResponse<boolean>> {
+  async isPinned(repoFullName: string): Promise<DataResponse<boolean>> {
     const [owner, repo] = repoFullName.split("/");
     const { data } = await apiClient.get<DataResponse<boolean>>(
-      `/v1/starred-repos/check/${owner}/${repo}`,
+      `/v1/pinned-repos/check/${owner}/${repo}`,
     );
     return data;
   },

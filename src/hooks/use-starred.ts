@@ -1,42 +1,42 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { starredRepoService } from "@/services/starred.service";
-import type { StarRepoRequest } from "@/types/starred";
+import { pinnedRepoService } from "@/services/starred.service";
+import type { PinRepoRequest } from "@/types/starred";
 
-export function useStarredRepos() {
+export function usePinnedRepos() {
   return useQuery({
-    queryKey: ["starred-repos"],
-    queryFn: () => starredRepoService.getStarredRepos(),
+    queryKey: ["pinned-repos"],
+    queryFn: () => pinnedRepoService.getPinnedRepos(),
   });
 }
 
-export function useIsStarred(repoFullName: string) {
+export function useIsPinned(repoFullName: string) {
   return useQuery({
-    queryKey: ["starred-repos", "check", repoFullName],
-    queryFn: () => starredRepoService.isStarred(repoFullName),
+    queryKey: ["pinned-repos", "check", repoFullName],
+    queryFn: () => pinnedRepoService.isPinned(repoFullName),
     enabled: !!repoFullName,
   });
 }
 
-export function useStarRepo() {
+export function usePinRepo() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (request: StarRepoRequest) => starredRepoService.starRepo(request),
+    mutationFn: (request: PinRepoRequest) => pinnedRepoService.pinRepo(request),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["starred-repos"] });
+      queryClient.invalidateQueries({ queryKey: ["pinned-repos"] });
     },
   });
 }
 
-export function useUnstarRepo() {
+export function useUnpinRepo() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (repoFullName: string) => starredRepoService.unstarRepo(repoFullName),
+    mutationFn: (repoFullName: string) => pinnedRepoService.unpinRepo(repoFullName),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["starred-repos"] });
+      queryClient.invalidateQueries({ queryKey: ["pinned-repos"] });
     },
   });
 }

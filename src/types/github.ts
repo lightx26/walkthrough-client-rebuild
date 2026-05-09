@@ -2,6 +2,7 @@ export interface RepositoryOwner {
   id: number;
   login: string;
   avatarUrl: string;
+  type: string;
 }
 
 export interface Repository {

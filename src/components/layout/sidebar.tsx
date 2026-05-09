@@ -10,31 +10,31 @@ import {
   GitPullRequest,
   Home,
   LayoutTemplate,
-  Star,
+  Pin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/logo";
-import { useStarredRepos } from "@/hooks/use-starred";
+import { usePinnedRepos } from "@/hooks/use-starred";
 import { languageColor } from "@/utils/language-color";
 import React from "react";
 
 const mainNav = [
   { href: "/", icon: Home, label: "Home" },
-  { href: "/walkthroughs", icon: BookOpen, label: "Walkthroughs", count: 23 },
-  { href: "/reviewing", icon: Eye, label: "Reviewing", count: 6 },
-  { href: "/pulls", icon: GitPullRequest, label: "Pull Requests", count: 11 },
+  { href: "/walkthroughs", icon: BookOpen, label: "Walkthroughs", count: 23, disabled: true },
+  { href: "/reviewing", icon: Eye, label: "Reviewing", count: 6, disabled: true },
+  { href: "/pulls", icon: GitPullRequest, label: "Pull Requests", count: 11, disabled: true },
 ];
 
 const workspaceNav = [
-  { href: "/repos", icon: Database, label: "Repositories" },
-  { href: "/analytics", icon: BarChart2, label: "Analytics" },
-  { href: "/templates", icon: LayoutTemplate, label: "Templates" },
+  { href: "/repos", icon: Database, label: "Repositories", disabled: false },
+  { href: "/analytics", icon: BarChart2, label: "Analytics", disabled: true },
+  { href: "/templates", icon: LayoutTemplate, label: "Templates", disabled: true },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { data: starredData } = useStarredRepos();
-  const starredRepos = starredData?.data?.items ?? [];
+  const { data: pinnedData } = usePinnedRepos();
+  const pinnedRepos = pinnedData?.data?.items ?? [];
 
   return (
     <aside className="w-56 shrink-0 flex flex-col border-r border-gray-200 bg-white h-full">
@@ -57,6 +57,11 @@ export function Sidebar() {
                     ? "bg-violet-50 text-violet-700 font-bold"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                 )}
+                onClick={(e: React.MouseEvent) => {
+                  if (item.disabled) {
+                    e.preventDefault();
+                  }
+                }}
               >
                 <item.icon
                   className={cn(
@@ -99,6 +104,11 @@ export function Sidebar() {
                       ? "bg-violet-50 text-violet-700 font-bold"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                   )}
+                  onClick={(e: React.MouseEvent) => {
+                    if (item.disabled) {
+                      e.preventDefault();
+                    }
+                  }}
                 >
                   <item.icon
                     className={cn(
@@ -116,12 +126,12 @@ export function Sidebar() {
         <div>
           <div className="flex items-center px-3 mb-1.5">
             <p className="flex-1 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
-              Starred
+              Pinned
             </p>
-            <Star className="w-3 h-3 text-gray-300" />
+            <Pin className="w-3 h-3 text-gray-300" />
           </div>
           <div className="space-y-0.5">
-            {starredRepos.map((repo) => (
+            {pinnedRepos.map((repo) => (
               <Link
                 key={repo.repoFullName}
                 href={`/repos/${repo.repoFullName}`}
@@ -133,8 +143,8 @@ export function Sidebar() {
                 <span className="truncate">{repo.repoName}</span>
               </Link>
             ))}
-            {starredRepos.length === 0 && (
-              <p className="px-3 py-2 text-xs text-gray-400">No starred repos</p>
+            {pinnedRepos.length === 0 && (
+              <p className="px-3 py-2 text-xs text-gray-400">No pinned repos</p>
             )}
           </div>
         </div>

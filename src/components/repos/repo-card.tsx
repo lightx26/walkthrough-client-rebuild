@@ -1,30 +1,32 @@
 import Link from "next/link";
-import { ChevronRight, GitBranch, GitFork, Globe, Lock, Star } from "lucide-react";
+import { Building2, ChevronRight, GitBranch, GitFork, Globe, Lock, Pin, Star, User } from "lucide-react";
 import type { Repository } from "@/types/github";
 import { languageColor } from "@/utils/language-color";
 import { formatRelativeTime } from "@/utils/date-diff";
-import { useIsStarred, useStarRepo, useUnstarRepo } from "@/hooks/use-starred";
+import { useIsPinned, usePinRepo, useUnpinRepo } from "@/hooks/use-starred";
 import { cn } from "@/lib/utils";
 
 export function RepoCard({ repo }: { repo: Repository }) {
-  const { data: starredData } = useIsStarred(repo.fullName);
-  const isStarred = starredData?.data ?? false;
-  const starMutation = useStarRepo();
-  const unstarMutation = useUnstarRepo();
+  const { data: pinnedData } = useIsPinned(repo.fullName);
+  const isPinned = pinnedData?.data ?? false;
+  const pinMutation = usePinRepo();
+  const unpinMutation = useUnpinRepo();
 
-  const handleToggleStar = (e: React.MouseEvent) => {
+  const handleTogglePin = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isStarred) {
-      unstarMutation.mutate(repo.fullName);
+    if (isPinned) {
+      unpinMutation.mutate(repo.fullName);
     } else {
-      starMutation.mutate({
+      pinMutation.mutate({
         repoFullName: repo.fullName,
         repoName: repo.name,
         language: repo.language,
       });
     }
   };
+
+  const isOrg = repo.owner.type === "Organization";
 
   return (
     <Link
@@ -39,6 +41,15 @@ export function RepoCard({ repo }: { repo: Repository }) {
 
       <div className="flex-1 min-w-0">
         <h3 className="text-sm font-semibold text-violet-600 hover:underline truncate mb-[6px]">
+          <span className="inline-flex items-center gap-1 mr-1.5 text-[11px] font-medium text-gray-500 align-middle">
+            {isOrg ? (
+              <Building2 className="w-3 h-3 text-gray-400" />
+            ) : (
+              <User className="w-3 h-3 text-gray-400" />
+            )}
+            {repo.owner.login}
+            <span className="text-gray-300">/</span>
+          </span>
           {repo.name}
           {repo.isPrivate ? (
             <span className="inline-flex items-center gap-1 ml-2 text-[11px] font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2 py-0.5 align-middle">
@@ -80,16 +91,16 @@ export function RepoCard({ repo }: { repo: Repository }) {
 
       <div className="flex items-center gap-8 shrink-0">
         <button
-          onClick={handleToggleStar}
+          onClick={handleTogglePin}
           className={cn(
             "p-1.5 rounded-md transition-colors",
-            isStarred
-              ? "text-yellow-500 hover:text-yellow-600"
-              : "text-gray-300 hover:text-yellow-400",
+            isPinned
+              ? "text-violet-500 hover:text-violet-600"
+              : "text-gray-300 hover:text-violet-400",
           )}
-          title={isStarred ? "Unstar repository" : "Star repository"}
+          title={isPinned ? "Unpin repository" : "Pin repository"}
         >
-          <Star className={cn("w-4 h-4", isStarred && "fill-current")} />
+          <Pin className={cn("w-4 h-4", isPinned && "fill-current")} />
         </button>
         <div className="text-center">
           <p className="text-xl font-bold text-gray-900">{repo.openPrsCount}</p>

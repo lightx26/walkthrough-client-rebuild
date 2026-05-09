@@ -8,6 +8,8 @@ interface UseRepositoriesParams {
   perPage?: number;
   sort?: string;
   q?: string;
+  type?: string;
+  language?: string;
 }
 
 export function useRepositories({
@@ -15,10 +17,12 @@ export function useRepositories({
   perPage = 20,
   sort,
   q,
+  type,
+  language,
 }: UseRepositoriesParams = {}) {
   return useQuery({
-    queryKey: ["repos", page, perPage, sort, q],
-    queryFn: () => githubService.getRepositories({ page, perPage, sort, q }),
+    queryKey: ["repos", page, perPage, sort, q, type, language],
+    queryFn: () => githubService.getRepositories({ page, perPage, sort, q, type, language }),
   });
 }
 

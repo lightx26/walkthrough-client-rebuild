@@ -1,4 +1,4 @@
-export interface StarredRepo {
+export interface PinnedRepo {
   id: string;
   repoFullName: string;
   repoName: string;
@@ -6,7 +6,7 @@ export interface StarredRepo {
   createdAt: string;
 }
 
-export interface StarRepoRequest {
+export interface PinRepoRequest {
   repoFullName: string;
   repoName: string;
   language?: string | null;

@@ -7,6 +7,8 @@ interface GetRepositoriesParams {
   perPage?: number;
   sort?: string;
   q?: string;
+  type?: string;
+  language?: string;
 }
 
 interface GetPullRequestParams {
@@ -21,10 +23,21 @@ export const githubService = {
     perPage = 20,
     sort = "updated",
     q,
+    type,
+    language,
   }: GetRepositoriesParams = {}): Promise<DataResponse<PageData<Repository>>> {
     const { data } = await apiClient.get<DataResponse<PageData<Repository>>>(
       "/v1/github/repos",
-      { params: { page, perPage, sort, ...(q ? { q } : {}) } },
+      {
+        params: {
+          page,
+          perPage,
+          sort,
+          ...(q ? { q } : {}),
+          ...(type ? { type } : {}),
+          ...(language ? { language } : {}),
+        },
+      },
     );
     return data;
   },
