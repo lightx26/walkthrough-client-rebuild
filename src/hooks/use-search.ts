@@ -64,3 +64,33 @@ export function useUserSearch(query: string) {
     placeholderData: (prev) => prev,
   });
 }
+
+export function useRepoSearch(query: string) {
+  const debouncedQuery = useDebounce(query, 300);
+  const isWaitingForDebounce = query.trim().length > 0 && query !== debouncedQuery;
+
+  const searchQuery = useQuery({
+    queryKey: ["search", "repos", debouncedQuery],
+    queryFn: () => searchService.searchRepos(debouncedQuery),
+    enabled: debouncedQuery.trim().length > 0,
+    placeholderData: (prev) => prev,
+  });
+
+  return { ...searchQuery, isWaitingForDebounce };
+}
+
+export function usePRSearch(query: string) {
+  const debouncedQuery = useDebounce(query, 300);
+  const isWaitingForDebounce = query.trim().length > 0 && query !== debouncedQuery;
+
+  const { data, isFetching } = useQuery({
+    queryKey: ["search", "prs", debouncedQuery],
+    queryFn: () => searchService.searchPRs(debouncedQuery),
+    enabled: debouncedQuery.trim().length > 0,
+    placeholderData: (prev) => prev,
+  });
+
+  const hits = data?.data?.items ?? [];
+
+  return { hits, isFetching, isWaitingForDebounce };
+}

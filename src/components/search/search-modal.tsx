@@ -11,16 +11,21 @@ import {
 import { cn } from "@/lib/utils";
 import {
   useWalkthroughSearch,
+  useRepoSearch,
+  usePRSearch,
   useSearchHistory,
   useSaveSearchHistory,
 } from "@/hooks/use-search";
-import type { SearchFilters, SearchHit, SearchTab, UserSearchResult } from "@/types/search";
+import type { RecentPRResult, SearchFilters, SearchHit, SearchTab, UserSearchResult } from "@/types/search";
+import type { Repository } from "@/types/github";
 import { SearchAuthorDropdown } from "@/components/search/search-author-dropdown";
 import {
   SearchDateRangeDropdown,
   type SearchDateRange,
 } from "@/components/search/search-date-range-dropdown";
 import { SearchWalkthroughItem } from "@/components/search/search-walkthrough-item";
+import { SearchRepoItem } from "@/components/search/search-repo-item";
+import { SearchPRItem } from "@/components/search/search-pr-item";
 
 interface Props {
   onClose: () => void;
@@ -68,19 +73,37 @@ export function SearchModal({ onClose }: Props) {
         }
       : undefined;
 
-  const { data, isFetching, isWaitingForDebounce } = useWalkthroughSearch(
-    query,
-    filters,
-  );
+  const {
+    data: walkthroughData,
+    isFetching: walkthroughFetching,
+    isWaitingForDebounce,
+  } = useWalkthroughSearch(query, filters);
+
+  const { data: repoData, isFetching: repoFetching } = useRepoSearch(query);
+  const { hits: allPrHits, isFetching: prFetching } = usePRSearch(query);
+
+  const allWalkthroughHits = walkthroughData?.data?.hits ?? [];
+  const allRepoHits = repoData?.data?.items ?? [];
 
   const walkthroughHits = useMemo(
-    () => {
-      const resolvedHits = data?.data?.hits ?? [];
-      return activeTab === "prs" || activeTab === "repos" ? [] : resolvedHits;
-    },
-    [activeTab, data],
+    () => (activeTab === "prs" || activeTab === "repos" ? [] : allWalkthroughHits),
+    [activeTab, allWalkthroughHits],
   );
-  const totalResults = walkthroughHits.length;
+  const repoHits = useMemo(
+    () => (activeTab === "walkthroughs" || activeTab === "prs" ? [] : allRepoHits),
+    [activeTab, allRepoHits],
+  );
+  const prHits = useMemo(
+    () => (activeTab === "walkthroughs" || activeTab === "repos" ? [] : allPrHits),
+    [activeTab, allPrHits],
+  );
+
+  const totalResults = walkthroughHits.length + repoHits.length + prHits.length;
+
+  const isFetching =
+    (activeTab === "all" || activeTab === "walkthroughs") && walkthroughFetching ||
+    (activeTab === "all" || activeTab === "repos") && repoFetching ||
+    (activeTab === "all" || activeTab === "prs") && prFetching;
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -93,6 +116,22 @@ export function SearchModal({ onClose }: Props) {
       onClose();
     },
     [query, router, onClose, saveHistory],
+  );
+
+  const openRepo = useCallback(
+    (repo: Repository) => {
+      router.push(`/repos/${repo.owner.login}/${repo.name}`);
+      onClose();
+    },
+    [router, onClose],
+  );
+
+  const openPR = useCallback(
+    (pr: RecentPRResult) => {
+      router.push(`/repos/${pr.owner}/${pr.repo}/pulls/${pr.number}`);
+      onClose();
+    },
+    [router, onClose],
   );
 
   const openSelected = useCallback(() => {
@@ -127,10 +166,10 @@ export function SearchModal({ onClose }: Props) {
     !showEmpty &&
     !isFetching &&
     !isWaitingForDebounce &&
-    walkthroughHits.length === 0;
-  const showResults = !showEmpty && walkthroughHits.length > 0;
+    totalResults === 0;
+  const showResults = !showEmpty && totalResults > 0;
   const isLoading =
-    (isFetching || isWaitingForDebounce) && query.trim().length > 0 && walkthroughHits.length === 0;
+    (isFetching || isWaitingForDebounce) && query.trim().length > 0 && totalResults === 0;
 
   return (
     <div
@@ -276,17 +315,53 @@ export function SearchModal({ onClose }: Props) {
 
           {showResults && (
             <div className="py-1">
-              <p className="px-4 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                Walkthroughs {walkthroughHits.length}
-              </p>
-              {walkthroughHits.map((hit, i) => (
-                <SearchWalkthroughItem
-                  key={hit.id}
-                  hit={hit}
-                  selected={selectedIndex === i}
-                  onClick={() => openHit(hit)}
-                />
-              ))}
+              {walkthroughHits.length > 0 && (
+                <>
+                  <p className="px-4 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                    Walkthroughs {walkthroughHits.length}
+                  </p>
+                  {walkthroughHits.map((hit, i) => (
+                    <SearchWalkthroughItem
+                      key={hit.id}
+                      hit={hit}
+                      selected={selectedIndex === i}
+                      onClick={() => openHit(hit)}
+                    />
+                  ))}
+                </>
+              )}
+
+              {repoHits.length > 0 && (
+                <>
+                  <p className="px-4 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                    Repositories {repoHits.length}
+                  </p>
+                  {repoHits.map((repo) => (
+                    <SearchRepoItem
+                      key={repo.id}
+                      repo={repo}
+                      selected={false}
+                      onClick={() => openRepo(repo)}
+                    />
+                  ))}
+                </>
+              )}
+
+              {prHits.length > 0 && (
+                <>
+                  <p className="px-4 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                    Pull Requests {prHits.length}
+                  </p>
+                  {prHits.map((pr) => (
+                    <SearchPRItem
+                      key={pr.id}
+                      pr={pr}
+                      selected={false}
+                      onClick={() => openPR(pr)}
+                    />
+                  ))}
+                </>
+              )}
             </div>
           )}
         </div>

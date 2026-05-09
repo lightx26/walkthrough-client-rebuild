@@ -1,6 +1,8 @@
 import apiClient from "@/lib/axios";
-import type { DataResponse, ListData } from "@/types/api";
+import type { DataResponse, ListData, PageData } from "@/types/api";
+import type { Repository } from "@/types/github";
 import type {
+  RecentPRResult,
   SearchHistoryItem,
   SearchWalkthroughRequest,
   SearchWalkthroughResponse,
@@ -33,6 +35,22 @@ export const searchService = {
     const { data } = await apiClient.get<DataResponse<ListData<UserSearchResult>>>(
       "/v1/users/search",
       { params: { q } },
+    );
+    return data;
+  },
+
+  async searchRepos(q: string): Promise<DataResponse<PageData<Repository>>> {
+    const { data } = await apiClient.get<DataResponse<PageData<Repository>>>(
+      "/v1/github/repos",
+      { params: { q, perPage: 10 } },
+    );
+    return data;
+  },
+
+  async searchPRs(q: string, perPage = 10): Promise<DataResponse<ListData<RecentPRResult>>> {
+    const { data } = await apiClient.get<DataResponse<ListData<RecentPRResult>>>(
+      "/v1/github/pulls/search",
+      { params: { q, perPage } },
     );
     return data;
   },

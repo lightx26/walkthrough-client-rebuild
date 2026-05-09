@@ -64,3 +64,16 @@ export interface UserSearchResult {
   displayName: string | null;
   avatarUrl: string | null;
 }
+
+export interface RecentPRResult {
+  id: number;
+  number: number;
+  title: string;
+  state: string;
+  htmlUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  owner: string;
+  repo: string;
+  author: { login: string; avatarUrl: string | null } | null;
+}
