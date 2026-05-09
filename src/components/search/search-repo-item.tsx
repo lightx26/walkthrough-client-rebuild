@@ -1,14 +1,16 @@
 import { GitFork, Lock, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Repository } from "@/types/github";
+import { HighlightText } from "@/components/search/highlight-text";
 
 interface Props {
   repo: Repository;
+  query: string;
   selected: boolean;
   onClick: () => void;
 }
 
-export function SearchRepoItem({ repo, selected, onClick }: Props) {
+export function SearchRepoItem({ repo, query, selected, onClick }: Props) {
   return (
     <button
       onClick={onClick}
@@ -23,7 +25,7 @@ export function SearchRepoItem({ repo, selected, onClick }: Props) {
       <div className="flex-1 min-w-0">
         <p className="text-sm text-gray-900 truncate flex items-center gap-1.5">
           {repo.isPrivate && <Lock className="w-3 h-3 text-gray-400 shrink-0" />}
-          <span>{repo.fullName}</span>
+          <HighlightText text={repo.fullName} query={query} />
         </p>
         {repo.description && (
           <p className="text-xs text-gray-400 truncate">{repo.description}</p>

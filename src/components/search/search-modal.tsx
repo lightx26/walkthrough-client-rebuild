@@ -340,6 +340,7 @@ export function SearchModal({ onClose }: Props) {
                     <SearchRepoItem
                       key={repo.id}
                       repo={repo}
+                      query={query}
                       selected={false}
                       onClick={() => openRepo(repo)}
                     />
@@ -356,6 +357,7 @@ export function SearchModal({ onClose }: Props) {
                     <SearchPRItem
                       key={pr.id}
                       pr={pr}
+                      query={query}
                       selected={false}
                       onClick={() => openPR(pr)}
                     />

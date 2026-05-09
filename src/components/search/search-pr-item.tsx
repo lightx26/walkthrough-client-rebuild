@@ -2,6 +2,7 @@ import { GitPullRequest, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRelativeTime } from "@/utils/date-diff";
 import type { RecentPRResult } from "@/types/search";
+import { HighlightText } from "@/components/search/highlight-text";
 
 function prStateBadgeClass(state: string) {
   switch (state.toLowerCase()) {
@@ -18,11 +19,12 @@ function prStateBadgeClass(state: string) {
 
 interface Props {
   pr: RecentPRResult;
+  query: string;
   selected: boolean;
   onClick: () => void;
 }
 
-export function SearchPRItem({ pr, selected, onClick }: Props) {
+export function SearchPRItem({ pr, query, selected, onClick }: Props) {
   return (
     <button
       onClick={onClick}
@@ -35,7 +37,9 @@ export function SearchPRItem({ pr, selected, onClick }: Props) {
         <GitPullRequest className="w-4 h-4 text-purple-600" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-gray-900 truncate">{pr.title}</p>
+        <p className="text-sm text-gray-900 truncate">
+          <HighlightText text={pr.title} query={query} />
+        </p>
         <p className="text-xs text-gray-400 truncate">
           {pr.owner}/{pr.repo} #{pr.number}
         </p>
