@@ -7,7 +7,6 @@ import type { WalkthroughSummary } from "@/types/walkthrough";
 import type { ProfileReviewingItem } from "@/types/profile";
 
 interface OverviewTabProps {
-  username: string;
   walkthroughs?: WalkthroughSummary[];
   walkthroughsLoading: boolean;
   totalWalkthroughs?: number;
@@ -17,7 +16,6 @@ interface OverviewTabProps {
 }
 
 export function OverviewTab({
-  username,
   walkthroughs,
   walkthroughsLoading,
   totalWalkthroughs,
@@ -30,7 +28,6 @@ export function OverviewTab({
       {/* Main column */}
       <div className="flex-1 min-w-0 space-y-4">
         <AuthoredWalkthroughsPanel
-          username={username}
           walkthroughs={walkthroughs}
           total={totalWalkthroughs}
           isLoading={walkthroughsLoading}

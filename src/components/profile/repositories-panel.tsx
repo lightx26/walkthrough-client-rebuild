@@ -1,89 +1,106 @@
 "use client";
 
-import { ExternalLink, GitFork, Star } from "lucide-react";
-
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatRelativeTime } from "@/utils/date-diff";
 import { cn } from "@/lib/utils";
-import { languageColor } from "@/utils/language-color";
+import { RepoCard } from "./repo-card";
 import type { Repository } from "@/types/github";
 
 interface RepositoriesPanelProps {
-  repositories?: Repository[];
+  repositories: Repository[];
+  total: number;
   isLoading: boolean;
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 }
 
-export function RepositoriesPanel({ repositories, isLoading }: RepositoriesPanelProps) {
-  const items = repositories?.slice(0, 6) ?? [];
-
+function RepositoriesListSkeleton() {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5">
-      <div className="flex items-center justify-between mb-4">
+    <div className="pb-2">
+      {[0, 1, 2, 3].map((i) => (
+        <div
+          key={i}
+          className="flex items-center gap-5 p-6 border-b border-gray-100 last:border-0"
+        >
+          <Skeleton className="w-9 h-9 rounded-lg shrink-0" />
+          <div className="flex-1 min-w-0 space-y-2">
+            <Skeleton className="h-4 w-48" />
+            <Skeleton className="h-3.5 w-72" />
+            <Skeleton className="h-3 w-40" />
+          </div>
+          <div className="flex items-center gap-8 shrink-0">
+            <Skeleton className="w-4 h-4 rounded" />
+            <Skeleton className="h-10 w-14" />
+            <Skeleton className="h-10 w-14" />
+            <Skeleton className="w-4 h-4 rounded" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function RepositoriesPanel({
+  repositories,
+  total,
+  isLoading,
+  page,
+  totalPages,
+  onPageChange,
+}: RepositoriesPanelProps) {
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg">
+      <div className="flex items-center justify-between px-5 pt-5 pb-3">
         <h2 className="text-sm font-semibold text-gray-900">
           Repositories{" "}
-          <span className="text-gray-400 font-normal">{repositories?.length ?? 0}</span>
+          <span className="text-gray-400 font-normal">{total}</span>
         </h2>
-        <a
-          href="https://github.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1 text-xs text-violet-600 hover:text-violet-700 transition-colors"
-        >
-          View on GitHub <ExternalLink className="w-3 h-3" />
-        </a>
       </div>
 
       {isLoading ? (
-        <div className="space-y-5">
-          {[0, 1, 2].map((i) => (
-            <Skeleton key={i} className="h-16 w-full" />
+        <RepositoriesListSkeleton />
+      ) : repositories.length === 0 ? (
+        <p className="text-sm text-gray-400 px-5 pb-5">
+          No repositories found.
+        </p>
+      ) : (
+        <div className="pb-2">
+          {repositories.map((repo) => (
+            <RepoCard key={repo.id} repo={repo} />
           ))}
         </div>
-      ) : items.length === 0 ? (
-        <p className="text-sm text-gray-400">No repositories found.</p>
-      ) : (
-        <div className="divide-y divide-gray-100">
-          {items.map((repo) => {
-            const color = languageColor(repo.language);
-            return (
-              <div key={repo.id} className="py-4 first:pt-0 last:pb-0">
-                <div className="flex items-start justify-between">
-                  <a
-                    href={repo.htmlUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-medium text-violet-600 hover:underline flex items-center gap-1"
-                  >
-                    {repo.name}
-                  </a>
-                </div>
-                {repo.description && (
-                  <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">
-                    {repo.description}
-                  </p>
-                )}
-                <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
-                  {repo.language && (
-                    <span className="flex items-center gap-1">
-                      <span
-                        className={cn("w-2.5 h-2.5 rounded-full shrink-0", color)}
-                      />
-                      {repo.language}
-                    </span>
-                  )}
-                  <span className="flex items-center gap-1">
-                    <Star className="w-3 h-3" />
-                    {repo.stargazersCount}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <GitFork className="w-3 h-3" />
-                    {repo.forksCount}
-                  </span>
-                  <span>Updated {formatRelativeTime(repo.updatedAt)}</span>
-                </div>
-              </div>
-            );
-          })}
+      )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 px-5 pb-5 pt-2">
+          <button
+            onClick={() => onPageChange(Math.max(1, page - 1))}
+            disabled={page <= 1}
+            className={cn(
+              "p-1.5 rounded-md border border-gray-200 transition-colors",
+              page <= 1
+                ? "text-gray-300 cursor-not-allowed"
+                : "text-gray-600 hover:bg-gray-50",
+            )}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <span className="text-sm text-gray-500">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+            disabled={page >= totalPages}
+            className={cn(
+              "p-1.5 rounded-md border border-gray-200 transition-colors",
+              page >= totalPages
+                ? "text-gray-300 cursor-not-allowed"
+                : "text-gray-600 hover:bg-gray-50",
+            )}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       )}
     </div>

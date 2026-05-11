@@ -29,14 +29,14 @@ export function ProfileHeader({
 }: ProfileHeaderProps) {
   const tabs: { id: ProfileTab; label: string; count?: number }[] = [
     { id: "overview", label: "Overview" },
-    { id: "walkthroughs", label: "Walkthroughs", count: stats?.walkthroughs },
+    { id: "walkthroughs", label: "Walkthroughs" },
     { id: "repositories", label: "Repositories" },
   ];
 
   return (
     <div>
       {/* Banner */}
-      <div className="h-24 bg-gradient-to-r from-violet-600 via-violet-500 to-indigo-500" />
+      <div className="h-24 bg-linear-to-r from-violet-600 via-violet-500 to-indigo-500" />
 
       {/* Profile info row */}
       <div className="px-8 pt-4">

@@ -6,7 +6,6 @@ import { WalkthroughCard } from "@/components/home";
 import type { WalkthroughSummary } from "@/types/walkthrough";
 
 interface AuthoredWalkthroughsPanelProps {
-  username: string;
   walkthroughs?: WalkthroughSummary[];
   total?: number;
   isLoading: boolean;
@@ -14,9 +13,7 @@ interface AuthoredWalkthroughsPanelProps {
 }
 
 export function AuthoredWalkthroughsPanel({
-  username,
   walkthroughs,
-  total = 0,
   isLoading,
   onViewAll,
 }: AuthoredWalkthroughsPanelProps) {
@@ -26,8 +23,7 @@ export function AuthoredWalkthroughsPanel({
     <div className="bg-white border border-gray-200 rounded-lg p-5">
       <div className="flex items-center justify-between mb-1">
         <h2 className="text-sm font-semibold text-gray-900">
-          Authored walkthroughs{" "}
-          <span className="text-gray-400 font-normal">{total}</span>
+          Authored walkthroughs
         </h2>
         <button
           onClick={onViewAll}
