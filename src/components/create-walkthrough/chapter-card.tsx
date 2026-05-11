@@ -5,7 +5,7 @@ import { useDrop } from "react-dnd";
 import { FileText, Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PrFile } from "@/types/github";
-import { DRAG_TYPE_PR_FILE } from "./file-utils";
+import { DRAG_TYPE_PR_FILE, DRAG_TYPE_PR_DIR } from "./file-utils";
 import {
   ChapterFileRow,
   DRAG_TYPE_CHAPTER_FILE,
@@ -37,12 +37,17 @@ export function ChapterCard({
   const dropRef = useRef<HTMLDivElement>(null);
 
   const [{ isOver }, drop] = useDrop<DragItem, void, { isOver: boolean }>({
-    accept: [DRAG_TYPE_PR_FILE, DRAG_TYPE_CHAPTER_FILE],
+    accept: [DRAG_TYPE_PR_FILE, DRAG_TYPE_PR_DIR, DRAG_TYPE_CHAPTER_FILE],
     drop(item) {
       if (item.type === DRAG_TYPE_PR_FILE) {
         if (chapter.files.find((f) => f.filename === item.file.filename))
           return;
         onChange({ ...chapter, files: [...chapter.files, item.file] });
+      } else if (item.type === DRAG_TYPE_PR_DIR) {
+        const existing = new Set(chapter.files.map((f) => f.filename));
+        const toAdd = item.files.filter((f) => !existing.has(f.filename));
+        if (toAdd.length === 0) return;
+        onChange({ ...chapter, files: [...chapter.files, ...toAdd] });
       } else if (
         item.type === DRAG_TYPE_CHAPTER_FILE &&
         item.chapterId !== chapter.id

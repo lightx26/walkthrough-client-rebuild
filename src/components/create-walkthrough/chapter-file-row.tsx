@@ -5,13 +5,24 @@ import { useDrag, useDrop } from "react-dnd";
 import { FileText, GripVertical, Eye, X, FileCode2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PrFile } from "@/types/github";
-import { DRAG_TYPE_PR_FILE, statusBadge, baseName } from "./file-utils";
+import {
+  DRAG_TYPE_PR_FILE,
+  DRAG_TYPE_PR_DIR,
+  statusBadge,
+  baseName,
+} from "./file-utils";
 
 export const DRAG_TYPE_CHAPTER_FILE = "CHAPTER_FILE";
 
 export interface PrFileDragItem {
   type: typeof DRAG_TYPE_PR_FILE;
   file: PrFile;
+}
+
+export interface PrDirDragItem {
+  type: typeof DRAG_TYPE_PR_DIR;
+  dir: string;
+  files: PrFile[];
 }
 
 export interface ChapterFileDragItem {
@@ -21,7 +32,7 @@ export interface ChapterFileDragItem {
   file: PrFile;
 }
 
-export type DragItem = PrFileDragItem | ChapterFileDragItem;
+export type DragItem = PrFileDragItem | PrDirDragItem | ChapterFileDragItem;
 
 function getFileIcon(filename: string) {
   const ext = filename.split(".").pop()?.toLowerCase();

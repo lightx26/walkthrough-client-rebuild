@@ -1,6 +1,7 @@
 import type { PrFile } from "@/types/github";
 
 export const DRAG_TYPE_PR_FILE = "PR_FILE";
+export const DRAG_TYPE_PR_DIR = "PR_DIR";
 
 export function statusBadge(status: PrFile["status"]) {
   if (status === "added")
