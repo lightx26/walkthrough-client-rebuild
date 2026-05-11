@@ -11,14 +11,14 @@ import type {
 function walkthroughAccentColor(status: WalkthroughStatus) {
   if (status === "PUBLISHED") return "#34d399";
   if (status === "DRAFT") return "#fbbf24";
-  if (status === "OUTDATED") return "#fb923c";
+  if (status === "OUTDATED") return "#9ca3af";
   return "#d1d5db";
 }
 
 function walkthroughIconColor(status: WalkthroughStatus) {
   if (status === "PUBLISHED") return "text-emerald-600";
   if (status === "DRAFT") return "text-amber-600";
-  if (status === "OUTDATED") return "text-orange-500";
+  if (status === "OUTDATED") return "text-gray-500";
   return "text-gray-400";
 }
 

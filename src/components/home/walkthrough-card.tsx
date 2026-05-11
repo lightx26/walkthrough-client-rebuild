@@ -17,7 +17,7 @@ function compactAge(iso: string): string {
 const statusStyle: Record<DisplayStatus, string> = {
   Published: "bg-green-50 text-green-700 border border-green-200",
   Draft: "bg-amber-50 text-amber-700 border border-amber-200",
-  Outdated: "bg-orange-50 text-orange-700 border border-orange-200",
+  Outdated: "bg-gray-100 text-gray-500 border border-gray-200",
 };
 
 export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
