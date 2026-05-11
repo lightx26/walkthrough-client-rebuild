@@ -17,9 +17,26 @@ export function WeekSummaryPanel({
 }: WeekSummaryPanelProps) {
   const [collapsed, setCollapsed] = useState(false);
 
+  const summaryData = [
+  {
+    icon: BookOpen,
+    iconColor: "text-blue-500",
+    bg: "bg-blue-50",
+    label: "Walkthroughs",
+    value: walkthroughCount,
+  },
+  {
+    icon: MessageSquare,
+    iconColor: "text-violet-500",
+    bg: "bg-violet-50",
+    label: "Comments",
+    value: commentCount,
+  },
+];
+
   if (collapsed) {
     return (
-      <aside className="shrink-0 border-l border-gray-200 bg-white flex flex-col items-center py-4 px-1.5">
+      <aside className="shrink-0 border-l border-gray-200 bg-white flex flex-col items-center py-4 px-1.5 justify-end">
         <button
           onClick={() => setCollapsed(false)}
           className="p-1.5 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
@@ -39,22 +56,7 @@ export function WeekSummaryPanel({
           <h3 className="font-semibold text-gray-900 text-sm">This week</h3>
         </div>
         <div className="grid grid-cols-2 gap-2.5">
-          {[
-            {
-              icon: BookOpen,
-              iconColor: "text-blue-500",
-              bg: "bg-blue-50",
-              label: "Walkthroughs",
-              value: walkthroughCount,
-            },
-            {
-              icon: MessageSquare,
-              iconColor: "text-violet-500",
-              bg: "bg-violet-50",
-              label: "Comments",
-              value: commentCount,
-            },
-          ].map(({ icon: Icon, iconColor, bg, label, value }) => (
+          {summaryData.map(({ icon: Icon, iconColor, bg, label, value }) => (
             <div
               key={label}
               className="bg-gray-50 rounded-xl p-3 border border-gray-100"
@@ -119,10 +121,10 @@ export function WeekSummaryPanel({
       )}
 
       {/* collapse button */}
-      <div className="mt-auto pt-4 flex justify-end">
+      <div className="mt-auto flex justify-end">
         <button
           onClick={() => setCollapsed(true)}
-          className="p-1.5 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
+          className="rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
           aria-label="Collapse panel"
         >
           <PanelRightClose className="w-4 h-4" />

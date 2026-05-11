@@ -26,6 +26,7 @@ export function usePinRepo() {
     mutationFn: (request: PinRepoRequest) => pinnedRepoService.pinRepo(request),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pinned-repos"] });
+      queryClient.invalidateQueries({ queryKey: ["repos"] });
     },
   });
 }
@@ -37,6 +38,7 @@ export function useUnpinRepo() {
     mutationFn: (repoFullName: string) => pinnedRepoService.unpinRepo(repoFullName),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pinned-repos"] });
+      queryClient.invalidateQueries({ queryKey: ["repos"] });
     },
   });
 }

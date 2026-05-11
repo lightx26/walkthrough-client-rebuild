@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Bell, LogOut, Search } from "lucide-react";
 import { useCurrentUser, useLogout } from "@/hooks/use-auth";
 import { UserAvatar } from "@/components/ui/user-avatar";
@@ -54,7 +55,10 @@ export function Navbar() {
         </button>
 
         {/* User avatar and info */}
-        <div className="flex items-center gap-2.5 p-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer">
+        <Link
+          href={user ? `/profile/${user.username}` : "#"}
+          className="flex items-center gap-2.5 p-2 rounded-md hover:bg-gray-100 transition-colors"
+        >
           <UserAvatar
             src={user?.avatarUrl}
             displayName={user?.displayName}
@@ -66,7 +70,7 @@ export function Navbar() {
             </p>
             <p className="text-gray-400 text-xs">@{user?.username}</p>
           </div>
-        </div>
+        </Link>
 
         {/* Sign out button */}
         <button

@@ -3,12 +3,11 @@ import { Building2, ChevronRight, GitBranch, GitFork, Globe, Lock, Pin, Star, Us
 import type { Repository } from "@/types/github";
 import { languageColor } from "@/utils/language-color";
 import { formatRelativeTime } from "@/utils/date-diff";
-import { useIsPinned, usePinRepo, useUnpinRepo } from "@/hooks/use-starred";
+import { usePinRepo, useUnpinRepo } from "@/hooks/use-starred";
 import { cn } from "@/lib/utils";
 
 export function RepoCard({ repo }: { repo: Repository }) {
-  const { data: pinnedData } = useIsPinned(repo.fullName);
-  const isPinned = pinnedData?.data ?? false;
+  const isPinned = repo.pinned;
   const pinMutation = usePinRepo();
   const unpinMutation = useUnpinRepo();
 
