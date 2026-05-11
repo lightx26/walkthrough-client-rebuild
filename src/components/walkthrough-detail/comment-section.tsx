@@ -83,7 +83,7 @@ export function CommentSection({ walkthroughId }: CommentSectionProps) {
                   <span className="text-sm font-medium text-gray-900">{comment.username}</span>
                   <span className="text-xs text-gray-400">{formatRelativeTime(comment.createdAt)}</span>
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed break-words">{comment.content}</p>
+                <p className="text-sm text-gray-700 leading-relaxed wrap-break-word">{comment.content}</p>
               </div>
             </div>
           ))}
