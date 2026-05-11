@@ -93,7 +93,7 @@ export function PrRow({ pr, owner, repo, showRepoInfo }: PrRowProps) {
   return (
     <Link
       href={`/repos/${owner}/${repo}/pulls/${pr.number}`}
-      className="flex items-center gap-4 py-4 border-b border-gray-100 last:border-0 group cursor-pointer hover:bg-gray-50/50 -mx-5 px-5 transition-colors"
+      className="flex items-center gap-4 p-5 border-b border-gray-100 last:border-0 group cursor-pointer hover:bg-gray-100/50 -mx-5 transition-colors"
     >
       <PrStateIcon state={pr.state} />
 

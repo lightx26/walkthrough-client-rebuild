@@ -30,7 +30,7 @@ export function RepoCard({ repo }: { repo: Repository }) {
   return (
     <Link
       href={`/repos/${repo.owner.login}/${repo.name}`}
-      className="bg-white border border-gray-200 rounded-xl px-6 py-5 flex items-center gap-5 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer group block"
+      className="bg-white border border-gray-200 rounded-xl px-6 py-5 flex items-center gap-5 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer group"
     >
       <div className="shrink-0">
         <div className="bg-[#EEF2FF] flex items-center justify-center w-9 h-9 rounded-lg">
@@ -39,7 +39,7 @@ export function RepoCard({ repo }: { repo: Repository }) {
       </div>
 
       <div className="flex-1 min-w-0">
-        <h3 className="text-sm font-semibold text-violet-600 hover:underline truncate mb-[6px]">
+        <h3 className="text-sm font-semibold text-violet-600 hover:underline truncate mb-1.5">
           <span className="inline-flex items-center gap-1 mr-1.5 text-[11px] font-medium text-gray-500 align-middle">
             {isOrg ? (
               <Building2 className="w-3 h-3 text-gray-400" />
