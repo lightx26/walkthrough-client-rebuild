@@ -18,6 +18,7 @@ export interface Repository {
   openIssuesCount: number;
   openPrsCount: number;
   walkthroughsCount: number;
+  pinned: boolean;
   updatedAt: string;
   owner: RepositoryOwner;
 }
