@@ -12,6 +12,7 @@ import { formatRelativeTime } from "@/utils/date-diff";
 import { ChapterSection } from "@/components/walkthrough-detail/chapter-section";
 import { CommentSection } from "@/components/walkthrough-detail/comment-section";
 import { FilesPanel } from "@/components/walkthrough-detail/files-panel";
+import { FileTreePanel } from "@/components/walkthrough-detail/file-tree-panel";
 
 function DetailSkeleton() {
   return (
@@ -141,6 +142,9 @@ export default function WalkthroughDetailPage() {
 
                 {/* Files navigation panel */}
                 <FilesPanel walkthrough={walkthrough} />
+
+                {/* Repo folder-tree panel */}
+                <FileTreePanel walkthrough={walkthrough} />
               </>
             ) : (
               <div className="text-center py-20 text-sm text-gray-400">
