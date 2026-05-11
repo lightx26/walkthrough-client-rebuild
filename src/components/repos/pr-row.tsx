@@ -9,12 +9,27 @@ import {
   GitPullRequest,
   GitPullRequestClosed,
 } from "lucide-react";
-import type { PullRequest, PullRequestState } from "@/types/github";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { cn } from "@/lib/utils";
 
-function PrStateIcon({ state }: { state: PullRequestState }) {
+export interface PrRowItem {
+  number: number;
+  title: string;
+  state: "open" | "merged" | "closed" | "draft";
+  updatedAt: string;
+  author: {
+    login: string;
+    avatarUrl: string | null;
+  };
+  head?: { ref: string };
+  base?: { ref: string };
+  walkthroughsCount?: number;
+}
+
+type PrState = PrRowItem["state"];
+
+function PrStateIcon({ state }: { state: PrState }) {
   const base = "w-9 h-9 rounded-full flex items-center justify-center shrink-0";
   if (state === "open")
     return (
@@ -28,6 +43,12 @@ function PrStateIcon({ state }: { state: PullRequestState }) {
         <GitMerge className="w-4 h-4 text-violet-600" strokeWidth={2} />
       </div>
     );
+  if (state === "draft")
+    return (
+      <div className={cn(base, "bg-gray-100")}>
+        <GitPullRequest className="w-4 h-4 text-gray-400" strokeWidth={2} />
+      </div>
+    );
   return (
     <div className={cn(base, "bg-red-50")}>
       <GitPullRequestClosed className="w-4 h-4 text-red-500" strokeWidth={2} />
@@ -35,7 +56,7 @@ function PrStateIcon({ state }: { state: PullRequestState }) {
   );
 }
 
-function StateBadge({ state }: { state: PullRequestState }) {
+function StateBadge({ state }: { state: PrState }) {
   if (state === "open")
     return (
       <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -48,6 +69,12 @@ function StateBadge({ state }: { state: PullRequestState }) {
         Merged
       </span>
     );
+  if (state === "draft")
+    return (
+      <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+        Draft
+      </span>
+    );
   return (
     <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-200">
       Closed
@@ -55,7 +82,14 @@ function StateBadge({ state }: { state: PullRequestState }) {
   );
 }
 
-export function PrRow({ pr, owner, repo }: { pr: PullRequest; owner: string; repo: string }) {
+interface PrRowProps {
+  pr: PrRowItem;
+  owner: string;
+  repo: string;
+  showRepoInfo?: boolean;
+}
+
+export function PrRow({ pr, owner, repo, showRepoInfo }: PrRowProps) {
   return (
     <Link
       href={`/repos/${owner}/${repo}/pulls/${pr.number}`}
@@ -65,6 +99,9 @@ export function PrRow({ pr, owner, repo }: { pr: PullRequest; owner: string; rep
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
+          {showRepoInfo && (
+            <span className="text-xs text-gray-400 shrink-0">{owner}/{repo}</span>
+          )}
           <span className="text-sm font-semibold text-gray-900 truncate">
             {pr.title}
           </span>
@@ -77,28 +114,36 @@ export function PrRow({ pr, owner, repo }: { pr: PullRequest; owner: string; rep
             size="sm"
           />
           <span className="font-medium text-gray-500">{pr.author.login}</span>
-          <span>·</span>
-          <code className="text-[11px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 font-mono">
-            {pr.head.ref}
-          </code>
-          <ArrowRight className="w-4 h-4" />
-          <code className="text-[11px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 font-mono">
-            {pr.base.ref}
-          </code>
+          {pr.head && (
+            <>
+              <span>·</span>
+              <code className="text-[11px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 font-mono">
+                {pr.head.ref}
+              </code>
+              {pr.base && (
+                <>
+                  <ArrowRight className="w-4 h-4" />
+                  <code className="text-[11px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 font-mono">
+                    {pr.base.ref}
+                  </code>
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
 
       <div className="flex items-center gap-3 shrink-0">
-        {pr.walkthroughsCount > 0 ? (
+        {pr.walkthroughsCount != null && pr.walkthroughsCount > 0 ? (
           <span className="flex items-center gap-1.5 text-xs text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
             <BookOpen className="w-3.5 h-3.5 text-gray-400" />
             {pr.walkthroughsCount === 1
               ? "1 walkthrough"
               : `${pr.walkthroughsCount} walkthroughs`}
           </span>
-        ) : (
+        ) : pr.walkthroughsCount === 0 ? (
           <span className="text-xs text-gray-400">No walkthroughs</span>
-        )}
+        ) : null}
         <StateBadge state={pr.state} />
         <span className="text-xs text-gray-400 w-12 text-right">
           {formatRelativeTime(pr.updatedAt)}
