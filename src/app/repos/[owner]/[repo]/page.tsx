@@ -1,8 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, GitBranch, GitFork, Star } from "lucide-react";
+import { ArrowLeft, BarChart2, GitBranch, GitFork, Star } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PrList } from "@/components/repos";
@@ -37,11 +37,14 @@ export default function RepoDetailsPage() {
   const params = useParams<{ owner: string; repo: string }>();
   const owner = params.owner;
   const repo = params.repo;
+  const router = useRouter();
 
   const { data: repoData, isLoading: repoLoading } = useRepository(owner, repo);
 
-  const { data: prsData, isLoading: prsLoading } =
-    useRepositoryPullRequests(owner, repo);
+  const { data: prsData, isLoading: prsLoading } = useRepositoryPullRequests(
+    owner,
+    repo,
+  );
 
   const repoDetails = repoData?.data;
   const prs = prsData?.data?.items ?? [];
@@ -67,7 +70,10 @@ export default function RepoDetailsPage() {
           ) : repoDetails ? (
             <div className="bg-white border border-gray-200 rounded-xl px-8 py-6 flex items-center gap-6">
               <div className="bg-[#EEF2FF] flex items-center justify-center w-12 h-12 rounded-xl shrink-0">
-                <GitBranch className="text-violet-600 w-5 h-5" strokeWidth={2} />
+                <GitBranch
+                  className="text-violet-600 w-5 h-5"
+                  strokeWidth={2}
+                />
               </div>
 
               <div className="flex-1 min-w-0">
@@ -96,7 +102,9 @@ export default function RepoDetailsPage() {
                     <GitFork className="w-3 h-3" />
                     {repoDetails.forksCount}
                   </span>
-                  <span>Updated {formatRelativeTime(repoDetails.updatedAt)}</span>
+                  <span>
+                    Updated {formatRelativeTime(repoDetails.updatedAt)}
+                  </span>
                 </div>
               </div>
 
@@ -113,6 +121,19 @@ export default function RepoDetailsPage() {
                   </p>
                   <p className="text-xs text-gray-400 mt-0.5">walkthroughs</p>
                 </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    router.push("/analytics");
+                  }}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200 rounded-md px-3 py-1.5"
+                  title="View analytics"
+                >
+                  <BarChart2 className="w-3.5 h-3.5" />
+                  Analytics
+                </button>
               </div>
             </div>
           ) : null}

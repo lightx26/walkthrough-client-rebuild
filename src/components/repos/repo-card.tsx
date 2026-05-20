@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Building2, ChevronRight, GitBranch, GitFork, Globe, Lock, Pin, Star, User } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { BarChart2, Building2, ChevronRight, GitBranch, GitFork, Globe, Lock, Pin, Star, User } from "lucide-react";
 import type { Repository } from "@/types/github";
 import { languageColor } from "@/utils/language-color";
 import { formatRelativeTime } from "@/utils/date-diff";
@@ -7,6 +8,7 @@ import { usePinRepo, useUnpinRepo } from "@/hooks/use-starred";
 import { cn } from "@/lib/utils";
 
 export function RepoCard({ repo }: { repo: Repository }) {
+  const router = useRouter();
   const isPinned = repo.pinned;
   const pinMutation = usePinRepo();
   const unpinMutation = useUnpinRepo();

@@ -27,7 +27,6 @@ const mainNav = [
 
 const workspaceNav = [
   { href: "/repos", icon: Database, label: "Repositories", disabled: false },
-  { href: "/analytics", icon: BarChart2, label: "Analytics", disabled: true },
   { href: "/templates", icon: LayoutTemplate, label: "Templates", disabled: true },
 ];
 
