@@ -83,6 +83,8 @@ export interface ReviewerStatus {
   lastActiveAt: string | null;
 }
 
+import type { WalkthroughStatus } from "./walkthrough";
+
 export interface AuthorWalkthroughSummary {
   walkthroughId: string;
   title: string;
@@ -90,6 +92,7 @@ export interface AuthorWalkthroughSummary {
   owner: string;
   repo: string;
   prNumber: number;
+  status: WalkthroughStatus;
   totalChapters: number;
   totalComments: number;
   unreadChapterCount: number;

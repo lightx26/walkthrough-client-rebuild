@@ -9,16 +9,19 @@ import {
   MessageSquare,
   Users,
 } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { DashboardLayout } from "@/components/layout";
 import {
   useChapterAttention,
   useReviewProgress,
   useUnreadSummary,
 } from "@/hooks/use-analytics";
 import { useWalkthrough } from "@/hooks/use-walkthrough";
-import { UnreadChaptersCard } from "@/components/analytics/unread-chapters-card";
-import { ReadingMatrix } from "@/components/analytics/reading-matrix";
-import { ChapterAttentionList } from "@/components/analytics/chapter-attention-list";
+import {
+  ChapterAttentionList,
+  ReadingMatrix,
+  UnreadChaptersCard,
+} from "@/components/analytics";
+import { WalkthroughStatusBadge } from "@/components/pr-detail";
 
 export default function AnalyticsDetailPage({
   params,
@@ -62,9 +65,15 @@ export default function AnalyticsDetailPage({
                 {walkthrough?.title ?? "Walkthrough"}
               </h1>
               {walkthrough && (
-                <span className="text-[11px] text-gray-500 bg-gray-100 rounded px-2 py-0.5">
-                  {walkthrough.repo}
-                </span>
+                <>
+                  <span className="text-[11px] text-gray-500 bg-gray-100 rounded px-2 py-0.5">
+                    {walkthrough.repo}
+                  </span>
+                  <span className="text-[11px] text-gray-500 bg-gray-100 rounded px-2 py-0.5">
+                    PR #{walkthrough.prNumber}
+                  </span>
+                  <WalkthroughStatusBadge status={walkthrough.status} />
+                </>
               )}
             </div>
             {walkthrough?.description && (
