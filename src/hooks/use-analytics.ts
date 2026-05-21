@@ -3,10 +3,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { analyticsService } from "@/services/analytics.service";
 
-export function useAuthorAnalyticsSummary() {
+export function useAuthorAnalyticsSummary(params?: { owner?: string; repo?: string }) {
   return useQuery({
-    queryKey: ["analytics", "author-summary"],
-    queryFn: () => analyticsService.authorSummary(),
+    queryKey: ["analytics", "author-summary", params?.owner, params?.repo],
+    queryFn: () => analyticsService.authorSummary(params),
   });
 }
 

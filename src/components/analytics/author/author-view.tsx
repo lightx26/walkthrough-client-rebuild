@@ -8,13 +8,8 @@ interface AuthorViewProps {
 }
 
 export function AuthorView({ scopedRepo }: AuthorViewProps = {}) {
-  const { data, isLoading } = useAuthorAnalyticsSummary();
-  const allItems = data?.data?.items ?? [];
-  const items = scopedRepo
-    ? allItems.filter(
-        (wt) => wt.owner === scopedRepo.owner && wt.repo === scopedRepo.repo,
-      )
-    : allItems;
+  const { data, isLoading } = useAuthorAnalyticsSummary(scopedRepo);
+  const items = data?.data?.items ?? [];
 
   return (
     <div>
@@ -23,9 +18,6 @@ export function AuthorView({ scopedRepo }: AuthorViewProps = {}) {
           <h2 className="text-base font-semibold text-gray-900">
             My walkthroughs
           </h2>
-          <p className="text-xs text-gray-500">
-            Per-reviewer reading status — who read what, not aggregated rates
-          </p>
         </div>
         <span className="text-[11px] text-gray-500 bg-gray-100 rounded-full px-2.5 py-1 shrink-0">
           {items.length} walkthroughs
