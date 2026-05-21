@@ -27,7 +27,7 @@ const mainNav = [
 
 const workspaceNav = [
   { href: "/repos", icon: Database, label: "Repositories", disabled: false },
-  { href: "/templates", icon: LayoutTemplate, label: "Templates", disabled: true },
+  { href: "/templates", icon: LayoutTemplate, label: "Templates", disabled: false },
 ];
 
 export function Sidebar() {

@@ -1,0 +1,190 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  ChevronDown,
+  ChevronRight,
+  ChevronUp,
+  Copy,
+  Lock,
+  X,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useDuplicateTemplate } from "@/hooks/use-templates";
+import type { Template } from "@/types/template";
+import { PrTypeBadge } from "./pr-type-badge";
+
+interface Props {
+  open: boolean;
+  templates: Template[];
+  onClose: () => void;
+}
+
+export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
+  const router = useRouter();
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const duplicateTemplate = useDuplicateTemplate();
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const filtered = query
+    ? templates.filter((t) =>
+        (t.name + " " + (t.description ?? ""))
+          .toLowerCase()
+          .includes(query.toLowerCase()),
+      )
+    : templates;
+
+  const onDuplicate = (id: string) => {
+    duplicateTemplate.mutate(
+      { id },
+      {
+        onSuccess: (res) => {
+          onClose();
+          router.push(`/templates/${res.data.id}/edit`);
+        },
+      },
+    );
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 px-4 py-12 overflow-y-auto"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-xl w-full max-w-2xl my-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <div className="flex items-center gap-2">
+            <Lock className="w-4 h-4 text-gray-400" />
+            <h2 className="font-semibold text-gray-900 text-base">
+              Built-in templates
+            </h2>
+            <span className="text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
+              {templates.length}
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-md hover:bg-gray-50 flex items-center justify-center text-gray-400 hover:text-gray-600"
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="px-6 pt-4">
+          <p className="text-sm text-gray-500 mb-3">
+            Provided by the system. Read-only — duplicate to create an editable
+            copy.
+          </p>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search built-in templates…"
+            className="w-full text-sm text-gray-400 border border-gray-200 rounded-lg px-3 py-2 mb-3 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
+          />
+        </div>
+
+        <div className="px-6 pb-6 space-y-2 max-h-[60vh] overflow-y-auto">
+          {filtered.length === 0 ? (
+            <p className="text-sm text-gray-400 text-center py-8">
+              No templates match your search.
+            </p>
+          ) : (
+            filtered.map((tpl) => {
+              const isOpen = expandedId === tpl.id;
+              return (
+                <div
+                  key={tpl.id}
+                  className="border border-gray-200 rounded-lg bg-white"
+                >
+                  <div className="flex items-start gap-3 p-3">
+                    <div className="w-8 h-8 rounded-md bg-gray-100 text-gray-400 flex items-center justify-center shrink-0">
+                      <Lock className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <p className="font-medium text-sm text-gray-900 truncate">
+                          {tpl.name}
+                        </p>
+                        <PrTypeBadge prType={tpl.prType} />
+                      </div>
+                      {tpl.description && (
+                        <p className="text-xs text-gray-500 line-clamp-2">
+                          {tpl.description}
+                        </p>
+                      )}
+                      <button
+                        onClick={() => setExpandedId(isOpen ? null : tpl.id)}
+                        className="flex items-center gap-1 text-xs text-violet-600 hover:text-violet-700 mt-2 font-medium"
+                      >
+                        {isOpen ? (
+                          <>
+                            <ChevronUp className="w-3 h-3" />
+                            Hide chapters
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="w-3 h-3" />
+                            Preview chapters
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => onDuplicate(tpl.id)}
+                        disabled={duplicateTemplate.isPending}
+                        className="inline-flex items-center gap-1 text-xs text-gray-700 border border-gray-200 hover:bg-gray-50 px-2.5 py-1 rounded-md disabled:opacity-50"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                        Duplicate
+                      </button>
+                    </div>
+                  </div>
+
+                  {isOpen && tpl.chapters && tpl.chapters.length > 0 && (
+                    <ul className="px-3 pb-3 pl-14 space-y-1.5 border-t border-gray-100 pt-2">
+                      {tpl.chapters.map((c, idx) => (
+                        <li key={c.id} className={cn("flex items-start gap-2")}>
+                          <span className="w-4 h-4 rounded-full bg-violet-100 text-violet-600 text-[9px] font-bold flex items-center justify-center mt-0.5 shrink-0">
+                            {idx + 1}
+                          </span>
+                          <div className="min-w-0">
+                            <p className="text-xs font-medium text-gray-900">
+                              {c.title}
+                            </p>
+                            {c.description && (
+                              <p className="text-[11px] text-gray-500 mt-0.5">
+                                {c.description}
+                              </p>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
