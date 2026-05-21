@@ -9,7 +9,7 @@ import {
   MessageSquare,
   RefreshCw,
 } from "lucide-react";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 import type { ChapterAttention } from "@/types/analytics";
 import { AttentionBadge } from "./attention-badge";
 

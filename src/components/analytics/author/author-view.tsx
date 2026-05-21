@@ -3,9 +3,18 @@
 import { useAuthorAnalyticsSummary } from "@/hooks/use-analytics";
 import { AuthorWalkthroughCard } from "./author-walkthrough-card";
 
-export function AuthorView() {
+interface AuthorViewProps {
+  scopedRepo?: { owner: string; repo: string };
+}
+
+export function AuthorView({ scopedRepo }: AuthorViewProps = {}) {
   const { data, isLoading } = useAuthorAnalyticsSummary();
-  const items = data?.data?.items ?? [];
+  const allItems = data?.data?.items ?? [];
+  const items = scopedRepo
+    ? allItems.filter(
+        (wt) => wt.owner === scopedRepo.owner && wt.repo === scopedRepo.repo,
+      )
+    : allItems;
 
   return (
     <div>

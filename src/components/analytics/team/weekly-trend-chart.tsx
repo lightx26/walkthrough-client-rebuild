@@ -46,11 +46,11 @@ export function WeeklyTrendChart({ trend }: { trend: RepoTrendPoint[] }) {
         {trend.reduce((s, p) => s + p.reviewsCompleted, 0)} cumulative sessions
       </p>
       {trend.length === 0 ? (
-        <div className="h-[180px] flex items-center justify-center text-xs text-gray-400">
+        <div className="h-45 flex items-center justify-center text-xs text-gray-400">
           Not enough data yet
         </div>
       ) : (
-        <svg viewBox={`0 0 ${width} ${chartHeight}`} className="w-full h-[180px]">
+        <svg viewBox={`0 0 ${width} ${chartHeight}`} className="w-full h-45">
           {[0, 0.5, 0.65, 0.8, 1].map((rate) => {
             const y = padding.top + innerH * (1 - rate);
             return (

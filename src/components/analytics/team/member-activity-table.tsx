@@ -1,6 +1,6 @@
 import { Clock, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 import type { RepoMember } from "@/types/analytics";
 
 function formatDuration(sec: number): string {

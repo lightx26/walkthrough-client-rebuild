@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 
 interface Person {
   userId: string;

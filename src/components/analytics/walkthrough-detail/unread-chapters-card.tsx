@@ -1,7 +1,7 @@
 "use client";
 
 import { BookOpen } from "lucide-react";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 import type { UnreadSummary } from "@/types/analytics";
 
 export function UnreadChaptersCard({ data }: { data: UnreadSummary }) {

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { AlertTriangle, BarChart2, BookOpen, CheckCircle2, MessageSquare } from "lucide-react";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
+import { WalkthroughStatusBadge } from "@/components/pr-detail";
 import { ProgressDots } from "./progress-dots";
 import type { AuthorWalkthroughSummary } from "@/types/analytics";
 
@@ -13,8 +14,9 @@ export function AuthorWalkthroughCard({
 }: {
   walkthrough: AuthorWalkthroughSummary;
 }) {
+  const hasReviewActivity = walkthrough.reviewers.length > 0;
   const allRead =
-    walkthrough.unreadChapterCount === 0 && walkthrough.reviewers.length > 0;
+    walkthrough.unreadChapterCount === 0 && hasReviewActivity;
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl px-5 py-4">
@@ -25,8 +27,9 @@ export function AuthorWalkthroughCard({
               {walkthrough.title}
             </h3>
             <span className="text-[11px] text-gray-500 bg-gray-100 rounded px-1.5 py-0.5">
-              {walkthrough.repo}
+              PR #{walkthrough.prNumber}
             </span>
+            <WalkthroughStatusBadge status={walkthrough.status} />
             {allRead ? (
               <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2 py-0.5">
                 <CheckCircle2 className="w-3 h-3" />
@@ -47,13 +50,15 @@ export function AuthorWalkthroughCard({
           )}
         </div>
 
-        <Link
-          href={`/analytics/${walkthrough.walkthroughId}`}
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200 rounded-md px-3 py-1.5 shrink-0"
-        >
-          <BarChart2 className="w-3.5 h-3.5" />
-          Details
-        </Link>
+        {hasReviewActivity && (
+          <Link
+            href={`/analytics/${walkthrough.walkthroughId}`}
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200 rounded-md px-3 py-1.5 shrink-0"
+          >
+            <BarChart2 className="w-3.5 h-3.5" />
+            Details
+          </Link>
+        )}
       </div>
 
       <div className="flex items-start justify-between gap-4">

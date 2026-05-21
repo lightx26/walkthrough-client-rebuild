@@ -10,12 +10,20 @@ import { WeeklyTrendChart } from "./weekly-trend-chart";
 import { ReviewsPerMemberChart } from "./reviews-per-member-chart";
 import { MemberActivityTable } from "./member-activity-table";
 
-export function TeamLeadView() {
+interface TeamLeadViewProps {
+  scopedRepo?: { owner: string; repo: string };
+}
+
+export function TeamLeadView({ scopedRepo }: TeamLeadViewProps = {}) {
   const { data: pinnedData } = usePinnedRepos();
   const repos = pinnedData?.data?.items ?? [];
   const [selected, setSelected] = useState<string | null>(null);
 
-  const fullName = selected ?? repos[0]?.repoFullName ?? null;
+  const scopedFullName = scopedRepo
+    ? `${scopedRepo.owner}/${scopedRepo.repo}`
+    : null;
+  const fullName =
+    scopedFullName ?? selected ?? repos[0]?.repoFullName ?? null;
   const [owner, repo] = fullName?.split("/") ?? [];
 
   const { data, isLoading } = useRepoMetrics({
@@ -35,7 +43,7 @@ export function TeamLeadView() {
 
   return (
     <div className="space-y-6">
-      {repos.length > 1 && (
+      {!scopedRepo && repos.length > 1 && (
         <div className="flex items-center gap-2 flex-wrap">
           {repos.map((r) => {
             const isActive = r.repoFullName === fullName;

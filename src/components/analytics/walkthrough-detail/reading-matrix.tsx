@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, Check, Clock, MessageSquare, Users } from "lucide-react";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 import { formatRelativeTime } from "@/utils/date-diff";
 import type { ReviewProgress } from "@/types/analytics";
 import { MatrixCell } from "./matrix-cell";

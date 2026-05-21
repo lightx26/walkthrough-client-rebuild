@@ -9,11 +9,11 @@ export function ReviewsPerMemberChart({ members }: { members: RepoMember[] }) {
         Completed vs. partial across all walkthroughs
       </p>
       {members.length === 0 ? (
-        <div className="h-[180px] flex items-center justify-center text-xs text-gray-400">
+        <div className="h-45 flex items-center justify-center text-xs text-gray-400">
           No reviewer activity yet
         </div>
       ) : (
-        <div className="h-[180px] flex items-end gap-2 px-2">
+        <div className="h-45 flex items-end gap-2 px-2">
           {members.slice(0, 8).map((m) => {
             const h = Math.max(8, (m.walkthroughsReviewed / max) * 150);
             return (
