@@ -4,7 +4,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { PullRequest, PullRequestState } from "@/types/github";
 import { PrRow } from "./pr-row";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui";
 
 type TabKey = "all" | PullRequestState;
 

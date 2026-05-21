@@ -40,6 +40,29 @@ export function PullRequestDetail({ owner, repo, pullNumber }: PullRequestDetail
 - **Components**: named exports — `export function Button() {}`
 - **Pages**: default export — `export default PullRequestPage`
 
+## Barrel Files (index.ts)
+
+Every component folder **must** have an `index.ts` barrel file that re-exports all public components. This keeps imports clean and decoupled from internal file structure.
+
+```ts
+// components/analytics/author/index.ts
+export { AuthorView } from "./author-view";
+export { AuthorWalkthroughCard } from "./author-walkthrough-card";
+export { ProgressDots } from "./progress-dots";
+```
+
+- Use named re-exports (`export { X } from "./x"`) — no default exports in barrel files.
+- A parent folder's `index.ts` should re-export from its subfolders using `export * from "./subfolder"`.
+- Consumers import from the folder path, never from individual files:
+
+```tsx
+// Good
+import { AuthorView, TeamLeadView, AnalyticsTabButton } from "@/components/analytics";
+
+// Bad
+import { AuthorView } from "@/components/analytics/author/author-view";
+```
+
 ## UI Component Stack
 
 - **Base**: `@base-ui/react` headless primitives (Button, Input, Avatar)

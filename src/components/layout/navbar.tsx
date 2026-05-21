@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Bell, LogOut, Search } from "lucide-react";
 import { useCurrentUser, useLogout } from "@/hooks/use-auth";
-import { UserAvatar } from "@/components/ui/user-avatar";
-import { SearchModal } from "@/components/search/search-modal";
+import { UserAvatar } from "@/components/ui";
+import { SearchModal } from "@/components/search";
 
 export function Navbar() {
   const user = useCurrentUser();

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AlertTriangle, FileText } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { DashboardLayout } from "@/components/layout";
 import { useCurrentUser } from "@/hooks/use-auth";
 import {
   useRecentWalkthroughs,

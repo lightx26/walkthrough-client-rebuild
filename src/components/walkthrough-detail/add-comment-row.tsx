@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Send } from "lucide-react";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { useCreateFileComment } from "@/hooks/use-walkthrough";
 

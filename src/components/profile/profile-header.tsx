@@ -1,7 +1,7 @@
 "use client";
 
 import { Calendar, Link as LinkIcon } from "lucide-react";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import type { Profile, ProfileStats } from "@/types/profile";
 

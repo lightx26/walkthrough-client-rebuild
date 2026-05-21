@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Pagination } from "@/components/ui/pagination";
+import { DashboardLayout } from "@/components/layout";
+import { Skeleton, Pagination } from "@/components/ui";
 import { useRepositories } from "@/hooks/use-github";
 import { RepoCard } from "@/components/repos";
 import { Filter, X } from "lucide-react";

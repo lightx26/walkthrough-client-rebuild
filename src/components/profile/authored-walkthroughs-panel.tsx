@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui";
 import { WalkthroughCard } from "@/components/home";
 import type { WalkthroughSummary } from "@/types/walkthrough";
 

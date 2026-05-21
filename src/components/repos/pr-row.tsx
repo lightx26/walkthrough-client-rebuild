@@ -9,7 +9,7 @@ import {
   GitPullRequest,
   GitPullRequestClosed,
 } from "lucide-react";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { cn } from "@/lib/utils";
 

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Send, CornerDownLeft } from "lucide-react";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { useCreateFileComment } from "@/hooks/use-walkthrough";
 import { formatRelativeTime } from "@/utils/date-diff";

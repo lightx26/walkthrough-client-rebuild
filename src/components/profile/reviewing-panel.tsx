@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/ui/user-avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import { UserAvatar, Skeleton } from "@/components/ui";
 import type { ProfileReviewingItem } from "@/types/profile";
 
 interface ReviewingPanelProps {

@@ -1,7 +1,7 @@
 import { GitFork, Lock, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Repository } from "@/types/github";
-import { HighlightText } from "@/components/search/highlight-text";
+import { HighlightText } from "@/components/search";
 
 interface Props {
   repo: Repository;

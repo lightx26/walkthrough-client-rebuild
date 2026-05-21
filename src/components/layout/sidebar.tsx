@@ -13,7 +13,7 @@ import {
   Pin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Logo } from "@/components/ui/logo";
+import { Logo } from "@/components/ui";
 import { usePinnedRepos } from "@/hooks/use-starred";
 import { languageColor } from "@/utils/language-color";
 import React from "react";

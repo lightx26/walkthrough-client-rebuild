@@ -5,15 +5,15 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { ArrowLeft, BookOpen, Plus, Send } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { DashboardLayout } from "@/components/layout";
 import { usePullRequest, usePullRequestFiles } from "@/hooks/use-github";
 import { useCreateWalkthrough } from "@/hooks/use-walkthrough";
-import { ChangedFilesPanel } from "@/components/create-walkthrough/changed-files-panel";
 import {
+  ChangedFilesPanel,
   ChapterCard,
   type ChapterDraft,
-} from "@/components/create-walkthrough/chapter-card";
-import { DiffFileModal } from "@/components/create-walkthrough/diff-file-modal";
+  DiffFileModal,
+} from "@/components/create-walkthrough";
 import type { PrFile } from "@/types/github";
 import type { CreateWalkthroughRequest } from "@/types/walkthrough";
 import { toast } from "sonner";

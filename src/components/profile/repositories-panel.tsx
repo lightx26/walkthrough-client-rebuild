@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { RepoCard } from "./repo-card";
 import type { Repository } from "@/types/github";

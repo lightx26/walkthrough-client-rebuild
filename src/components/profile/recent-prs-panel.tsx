@@ -1,8 +1,8 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui";
 import { PrRow } from "@/components/repos";
-import type { PrRowItem } from "@/components/repos/pr-row";
+import type { PrRowItem } from "@/components/repos";
 import type { RecentPullRequest } from "@/types/profile";
 
 interface RecentPrsPanelProps {

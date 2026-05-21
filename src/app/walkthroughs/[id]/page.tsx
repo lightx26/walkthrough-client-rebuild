@@ -3,16 +3,17 @@
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, BookOpen, Pencil } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { UserAvatar } from "@/components/ui/user-avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import { DashboardLayout } from "@/components/layout";
+import { UserAvatar, Skeleton } from "@/components/ui";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { useWalkthrough, useReadProgress } from "@/hooks/use-walkthrough";
 import { formatRelativeTime } from "@/utils/date-diff";
-import { ChapterSection } from "@/components/walkthrough-detail/chapter-section";
-import { CommentSection } from "@/components/walkthrough-detail/comment-section";
-import { FilesPanel } from "@/components/walkthrough-detail/files-panel";
-import { FileTreePanel } from "@/components/walkthrough-detail/file-tree-panel";
+import {
+  ChapterSection,
+  CommentSection,
+  FilesPanel,
+  FileTreePanel,
+} from "@/components/walkthrough-detail";
 
 function DetailSkeleton() {
   return (

@@ -1,5 +1,5 @@
 import type { ThemedToken, BundledLanguage, Highlighter } from "shiki";
-import { parsePatch } from "@/components/walkthrough-detail/diff-viewer";
+import { parsePatch } from "@/components/walkthrough-detail";
 
 const EXTENSION_TO_LANG: Record<string, string> = {
   ts: "typescript",

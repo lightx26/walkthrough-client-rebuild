@@ -7,7 +7,7 @@ import type { PrFile } from "@/types/github";
 import {
   parsePatch,
   computeDiffStats,
-} from "@/components/walkthrough-detail/diff-viewer";
+} from "@/components/walkthrough-detail";
 import { useSyntaxHighlight } from "@/hooks/use-syntax-highlight";
 import { baseName } from "./file-utils";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useState } from "react";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { DashboardLayout } from "@/components/layout";
 import {
   OverviewTab,
   ProfileHeader,

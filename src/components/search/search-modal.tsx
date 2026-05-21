@@ -18,14 +18,14 @@ import {
 } from "@/hooks/use-search";
 import type { RecentPRResult, SearchFilters, SearchHit, SearchTab, UserSearchResult } from "@/types/search";
 import type { Repository } from "@/types/github";
-import { SearchAuthorDropdown } from "@/components/search/search-author-dropdown";
 import {
+  SearchAuthorDropdown,
   SearchDateRangeDropdown,
   type SearchDateRange,
-} from "@/components/search/search-date-range-dropdown";
-import { SearchWalkthroughItem } from "@/components/search/search-walkthrough-item";
-import { SearchRepoItem } from "@/components/search/search-repo-item";
-import { SearchPRItem } from "@/components/search/search-pr-item";
+  SearchWalkthroughItem,
+  SearchRepoItem,
+  SearchPRItem,
+} from "@/components/search";
 
 interface Props {
   onClose: () => void;

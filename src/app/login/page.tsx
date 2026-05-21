@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Github, Zap, Users, ShieldCheck } from "lucide-react";
 import { useIsAuthenticated, useAuthIsLoading } from "@/hooks/use-auth";
-import { Logo } from "@/components/ui/logo";
+import { Logo } from "@/components/ui";
 
 function handleGitHubLogin() {
   const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;

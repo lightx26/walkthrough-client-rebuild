@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Search, User, ChevronDown, ChevronUp, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUserSearch } from "@/hooks/use-search";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { UserAvatar } from "@/components/ui";
 import type { UserSearchResult } from "@/types/search";
 
 interface SearchAuthorDropdownProps {

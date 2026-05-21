@@ -9,8 +9,8 @@ import {
   GitCommitHorizontal,
   Plus,
 } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { UserAvatar } from "@/components/ui/user-avatar";
+import { DashboardLayout } from "@/components/layout";
+import { UserAvatar } from "@/components/ui";
 import {
   PrStateBadge,
   WalkthroughCard,

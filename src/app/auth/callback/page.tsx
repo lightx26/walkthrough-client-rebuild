@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLoginWithGitHub } from "@/hooks/use-auth";
-import { Logo } from "@/components/ui/logo";
+import { Logo } from "@/components/ui";
 
 function CallbackHandler() {
   const searchParams = useSearchParams();

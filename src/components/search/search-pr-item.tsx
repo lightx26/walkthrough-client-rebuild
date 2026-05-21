@@ -2,7 +2,7 @@ import { GitPullRequest, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRelativeTime } from "@/utils/date-diff";
 import type { RecentPRResult } from "@/types/search";
-import { HighlightText } from "@/components/search/highlight-text";
+import { HighlightText } from "@/components/search";
 
 function prStateBadgeClass(state: string) {
   switch (state.toLowerCase()) {
