@@ -3,8 +3,8 @@
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, BarChart2, GitBranch, GitFork, Star } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { Skeleton } from "@/components/ui/skeleton";
+import { DashboardLayout } from "@/components/layout";
+import { Skeleton } from "@/components/ui";
 import { PrList } from "@/components/repos";
 import { useRepository, useRepositoryPullRequests } from "@/hooks/use-github";
 import { languageColor } from "@/utils/language-color";
@@ -126,7 +126,9 @@ export default function RepoDetailsPage() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    router.push("/analytics");
+                    router.push(
+                      `/analytics?owner=${encodeURIComponent(owner)}&repo=${encodeURIComponent(repo)}`,
+                    );
                   }}
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200 rounded-md px-3 py-1.5"
                   title="View analytics"

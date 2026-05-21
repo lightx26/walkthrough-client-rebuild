@@ -1,16 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { BarChart2, BookOpen, Users } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { AuthorView } from "@/components/analytics/author-view";
-import { TeamLeadView } from "@/components/analytics/team-lead-view";
-import { AnalyticsTabButton } from "@/components/analytics/analytics-tab-button";
+import { DashboardLayout } from "@/components/layout";
+import {
+  AnalyticsTabButton,
+  AuthorView,
+  TeamLeadView,
+} from "@/components/analytics";
 
 type Tab = "author" | "team";
 
 export default function AnalyticsPage() {
   const [tab, setTab] = useState<Tab>("author");
+  const searchParams = useSearchParams();
+  const owner = searchParams.get("owner") ?? undefined;
+  const repo = searchParams.get("repo") ?? undefined;
+  const scopedRepo = owner && repo ? { owner, repo } : undefined;
 
   return (
     <DashboardLayout>
@@ -19,7 +26,14 @@ export default function AnalyticsPage() {
           <div className="w-9 h-9 rounded-lg bg-violet-100 flex items-center justify-center">
             <BarChart2 className="w-4 h-4 text-violet-600" />
           </div>
-          <h1 className="text-[22px] font-bold text-gray-900">Analytics</h1>
+          <h1 className="text-[22px] font-bold text-gray-900">
+            Analytics
+            {scopedRepo && (
+              <span className="ml-2 text-sm font-medium text-gray-500">
+                · {scopedRepo.owner}/{scopedRepo.repo}
+              </span>
+            )}
+          </h1>
         </div>
 
         <div className="inline-flex items-center p-1 mb-6">
@@ -37,7 +51,11 @@ export default function AnalyticsPage() {
           />
         </div>
 
-        {tab === "author" ? <AuthorView /> : <TeamLeadView />}
+        {tab === "author" ? (
+          <AuthorView scopedRepo={scopedRepo} />
+        ) : (
+          <TeamLeadView scopedRepo={scopedRepo} />
+        )}
       </main>
     </DashboardLayout>
   );
