@@ -1,5 +1,6 @@
 import { GitFork, Lock, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { Repository } from "@/types/github";
 import { HighlightText } from "@/components/search";
 
@@ -12,11 +13,13 @@ interface Props {
 
 export function SearchRepoItem({ repo, query, selected, onClick }: Props) {
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="none"
       onClick={onClick}
       className={cn(
-        "w-full flex items-center gap-3 px-4 py-2.5 text-left group transition-colors",
-        selected ? "bg-indigo-50" : "hover:bg-gray-50",
+        "w-full justify-start gap-3 px-4 py-2.5 text-left rounded-none font-normal group",
+        selected ? "bg-indigo-50 hover:bg-indigo-50" : "hover:bg-gray-50",
       )}
     >
       <div className="shrink-0 w-8 h-8 rounded-md bg-blue-100 flex items-center justify-center">
@@ -44,6 +47,6 @@ export function SearchRepoItem({ repo, query, selected, onClick }: Props) {
           )}
         />
       </div>
-    </button>
+    </Button>
   );
 }

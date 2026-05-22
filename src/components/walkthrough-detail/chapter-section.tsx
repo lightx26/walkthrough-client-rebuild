@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import type { Chapter } from "@/types/walkthrough";
 import { useRecordChapterView } from "@/hooks/use-walkthrough";
+import { Button } from "@/components/ui/button";
 import { FileSection } from "./file-section";
 
 interface ChapterSectionProps {
@@ -32,8 +33,10 @@ export function ChapterSection({ chapter, index, walkthroughId }: ChapterSection
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
       {/* Chapter header */}
-      <button
-        className="w-full flex items-start gap-4 px-6 py-4 hover:bg-gray-50 transition-colors text-left"
+      <Button
+        variant="ghost"
+        size="none"
+        className="w-full justify-start items-start gap-4 px-6 py-4 rounded-none text-left font-normal hover:bg-gray-50"
         onClick={() => setExpanded((v) => !v)}
       >
         <span className="shrink-0 w-7 h-7 rounded-full bg-violet-600 text-white text-sm font-bold flex items-center justify-center mt-0.5">
@@ -49,7 +52,7 @@ export function ChapterSection({ chapter, index, walkthroughId }: ChapterSection
           <span>{chapter.files.length} {chapter.files.length === 1 ? "file" : "files"}</span>
           {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </div>
-      </button>
+      </Button>
 
       {/* Files — animated collapse */}
       <div

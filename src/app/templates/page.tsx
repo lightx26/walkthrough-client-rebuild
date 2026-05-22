@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { LayoutTemplate, Lock, Plus, Sparkles } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import { Skeleton } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { useTemplates } from "@/hooks/use-templates";
 import {
   BuiltInTemplatesDialog,
@@ -46,13 +47,15 @@ export default function TemplatesPage() {
               </p>
             </div>
           </div>
-          <button
+          <Button
+            variant="primary"
+            size="sm"
             onClick={() => router.push("/templates/new")}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 px-3.5 py-2 rounded-md transition-colors shrink-0"
+            className="gap-1.5 shrink-0"
           >
             <Plus className="w-4 h-4" />
             Create template
-          </button>
+          </Button>
         </div>
 
         <section className="mb-8">
@@ -81,20 +84,24 @@ export default function TemplatesPage() {
                 an editable copy.
               </p>
               <div className="flex items-center justify-center gap-2">
-                <button
+                <Button
+                  variant="primary"
+                  size="sm"
                   onClick={() => router.push("/templates/new")}
-                  className="inline-flex items-center gap-1.5 text-sm text-white bg-violet-600 hover:bg-violet-700 px-3 py-1.5 rounded-md"
+                  className="gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   Create template
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => setShowBuiltins(true)}
-                  className="inline-flex items-center gap-1.5 text-sm text-gray-700 border border-gray-200 hover:bg-gray-50 px-3 py-1.5 rounded-md"
+                  className="gap-1.5"
                 >
                   <Lock className="w-3.5 h-3.5" />
                   Browse built-in templates
-                </button>
+                </Button>
               </div>
             </div>
           ) : (
@@ -123,15 +130,17 @@ export default function TemplatesPage() {
             copy.
           </p>
 
-          <button
+          <Button
+            variant="primarySoft"
+            size="none"
             onClick={() => setShowBuiltins(true)}
             disabled={isLoading || builtinTemplates.length === 0}
-            className="w-full flex items-center justify-center gap-2 text-sm font-medium text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-100 rounded-xl py-4 transition-colors disabled:opacity-50"
+            className="w-full gap-2 py-4 rounded-xl border border-primary-soft text-sm font-medium"
           >
             <Lock className="w-4 h-4" />
             Browse {builtinTemplates.length} built-in template
             {builtinTemplates.length === 1 ? "" : "s"}
-          </button>
+          </Button>
         </section>
 
         <BuiltInTemplatesDialog

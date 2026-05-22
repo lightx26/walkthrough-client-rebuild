@@ -2,7 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { RepoCard } from "./repo-card";
 import type { Repository } from "@/types/github";
 
@@ -74,33 +74,25 @@ export function RepositoriesPanel({
 
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 px-5 pb-5 pt-2">
-          <button
+          <Button
+            variant="outline"
+            size="iconSm"
             onClick={() => onPageChange(Math.max(1, page - 1))}
             disabled={page <= 1}
-            className={cn(
-              "p-1.5 rounded-md border border-gray-200 transition-colors",
-              page <= 1
-                ? "text-gray-300 cursor-not-allowed"
-                : "text-gray-600 hover:bg-gray-50",
-            )}
           >
             <ChevronLeft className="w-4 h-4" />
-          </button>
+          </Button>
           <span className="text-sm text-gray-500">
             Page {page} of {totalPages}
           </span>
-          <button
+          <Button
+            variant="outline"
+            size="iconSm"
             onClick={() => onPageChange(Math.min(totalPages, page + 1))}
             disabled={page >= totalPages}
-            className={cn(
-              "p-1.5 rounded-md border border-gray-200 transition-colors",
-              page >= totalPages
-                ? "text-gray-300 cursor-not-allowed"
-                : "text-gray-600 hover:bg-gray-50",
-            )}
           >
             <ChevronRight className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       )}
     </div>

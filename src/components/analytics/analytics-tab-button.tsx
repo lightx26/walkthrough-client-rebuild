@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export function AnalyticsTabButton({
   active,
@@ -12,17 +13,19 @@ export function AnalyticsTabButton({
   label: string;
 }) {
   return (
-    <button
+    <Button
+      variant={active ? "primarySoft" : "ghost"}
+      size="none"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors",
+        "gap-1.5 text-xs font-medium px-3 py-1.5",
         active
-          ? "bg-violet-50 text-violet-700 border border-violet-200"
+          ? "border border-primary-soft"
           : "text-gray-600 hover:text-gray-900",
       )}
     >
       {icon}
       {label}
-    </button>
+    </Button>
   );
 }

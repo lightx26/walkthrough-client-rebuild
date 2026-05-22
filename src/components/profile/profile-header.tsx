@@ -2,6 +2,7 @@
 
 import { Calendar, Link as LinkIcon } from "lucide-react";
 import { UserAvatar } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Profile, ProfileStats } from "@/types/profile";
 
@@ -96,14 +97,16 @@ export function ProfileHeader({
         {/* Tabs */}
         <div className="flex items-center gap-1 mt-5 border-b border-gray-200">
           {tabs.map((tab) => (
-            <button
+            <Button
               key={tab.id}
+              variant="ghost"
+              size="none"
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-2 text-sm font-medium border-b-2 -mb-px transition-colors",
+                "gap-1.5 px-3 py-2 text-sm font-medium border-b-2 -mb-px rounded-none hover:bg-transparent",
                 activeTab === tab.id
-                  ? "border-violet-600 text-violet-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700",
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground",
               )}
             >
               {tab.label}
@@ -112,14 +115,14 @@ export function ProfileHeader({
                   className={cn(
                     "text-xs px-1.5 py-0.5 rounded-full font-medium",
                     activeTab === tab.id
-                      ? "bg-violet-100 text-violet-700"
-                      : "bg-gray-100 text-gray-500",
+                      ? "bg-primary-soft text-primary-soft-foreground"
+                      : "bg-muted text-muted-foreground",
                   )}
                 >
                   {tab.count}
                 </span>
               )}
-            </button>
+            </Button>
           ))}
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { X, FileText, LayoutList } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { Walkthrough } from "@/types/walkthrough";
 import { computeDiffStats } from "./diff-viewer";
 
@@ -31,13 +32,15 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
     <>
       {/* Floating toggle button */}
       {!open && (
-        <button
+        <Button
+          variant="outline"
+          size="none"
           onClick={() => setOpen(true)}
-          className="fixed right-6 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 rounded-lg shadow-md text-sm text-gray-600 hover:border-violet-400 hover:text-violet-700 transition-colors z-30"
+          className="fixed right-6 top-1/2 -translate-y-1/2 gap-1.5 px-3 py-2 shadow-md text-sm text-gray-600 hover:border-violet-400 hover:text-violet-700 font-medium z-30"
         >
           <LayoutList className="w-4 h-4" />
-          <span className="font-medium">Files</span>
-        </button>
+          <span>Files</span>
+        </Button>
       )}
 
       {/* Panel */}
@@ -50,12 +53,14 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
             <span className="text-xs font-semibold text-white bg-blue-500 rounded-full px-1.5 py-0.5 min-w-5 text-center">
               {totalFiles}
             </span>
-            <button
+            <Button
+              variant="ghost"
+              size="none"
               onClick={() => setOpen(false)}
-              className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors ml-1"
+              className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 ml-1"
             >
               <X className="w-3.5 h-3.5" />
-            </button>
+            </Button>
           </div>
 
           {/* File list */}
@@ -77,12 +82,14 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
                   const shortName = file.filename.split("/").pop() ?? file.filename;
 
                   return (
-                    <button
+                    <Button
                       key={file.id}
+                      variant="ghost"
+                      size="none"
                       onClick={() => {
                         scrollToFile(file.id);
                       }}
-                      className="w-full flex items-center gap-2 pl-10 pr-4 py-1.5 hover:bg-violet-50 text-left group transition-colors"
+                      className="w-full justify-start gap-2 pl-10 pr-4 py-1.5 rounded-none font-normal hover:bg-violet-50 group"
                     >
                       <FileText className="w-3.5 h-3.5 text-orange-400 shrink-0" />
                       <span className="text-xs text-gray-600 group-hover:text-violet-700 truncate flex-1 font-mono">
@@ -96,7 +103,7 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
                           +{stats.added}
                         </span>
                       )}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
@@ -105,12 +112,14 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
 
           {/* Close button */}
           <div className="border-t border-gray-100 px-4 py-3 shrink-0 flex justify-end">
-            <button
+            <Button
+              variant="primary"
+              size="xs"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white text-xs font-medium hover:bg-violet-700 transition-colors"
+              className="rounded-lg"
             >
               Close
-            </button>
+            </Button>
           </div>
         </div>
       )}

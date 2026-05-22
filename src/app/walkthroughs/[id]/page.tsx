@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, BookOpen, Pencil } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import { UserAvatar, Skeleton } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { useWalkthrough, useReadProgress } from "@/hooks/use-walkthrough";
 import { formatRelativeTime } from "@/utils/date-diff";
@@ -43,13 +44,15 @@ export default function WalkthroughDetailPage() {
       <div className="flex-1 flex flex-col min-h-0">
         {/* Sub-header */}
         <div className="flex items-center gap-4 px-6 py-3.5 border-b border-gray-200 bg-white shrink-0">
-          <button
+          <Button
+            variant="muted"
+            size="none"
             onClick={() => router.back()}
-            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors shrink-0"
+            className="gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
-          </button>
+          </Button>
 
           {walkthrough ? (
             <>
@@ -77,13 +80,12 @@ export default function WalkthroughDetailPage() {
                 </div>
 
                 {isOwner && (
-                  <Link
-                    href={`/walkthroughs/${walkthrough.id}/edit`}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 transition-colors"
-                  >
-                    <Pencil className="w-3.5 h-3.5" />
-                    Edit
-                  </Link>
+                  <Button asChild variant="primary" size="sm" className="gap-1.5">
+                    <Link href={`/walkthroughs/${walkthrough.id}/edit`}>
+                      <Pencil className="w-3.5 h-3.5" />
+                      Edit
+                    </Link>
+                  </Button>
                 )}
               </div>
             </>

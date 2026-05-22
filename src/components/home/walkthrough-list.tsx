@@ -8,6 +8,7 @@ import type {
 } from "@/types/walkthrough";
 import { DisplayStatus, toDisplayStatus } from "@/utils/walkthrough";
 import { Filter } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { WalkthroughCard, WalkthroughRowSkeleton } from "@/components/home";
 
 const STATUS_FILTER_MAP: Record<DisplayStatus, WalkthroughStatus> = {
@@ -55,14 +56,16 @@ export function WalkthroughList({
       <div className="flex items-center justify-between px-5 border-b border-gray-100">
         <div className="flex items-center gap-0.5">
           {tabs.map((tab) => (
-            <button
+            <Button
               key={tab.key}
+              variant="ghost"
+              size="none"
               onClick={() => setActiveTab(tab.key)}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 transition-colors",
+                "gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 rounded-none hover:bg-transparent",
                 activeTab === tab.key
-                  ? "border-violet-600 text-violet-700"
-                  : "border-transparent text-gray-500 hover:text-gray-700",
+                  ? "border-primary text-primary-soft-foreground"
+                  : "border-transparent text-muted-foreground hover:text-foreground",
               )}
             >
               {tab.label}
@@ -70,20 +73,24 @@ export function WalkthroughList({
                 className={cn(
                   "text-xs px-1.5 py-0.5 rounded-full font-medium",
                   activeTab === tab.key
-                    ? "bg-violet-100 text-violet-700"
-                    : "bg-gray-100 text-gray-500",
+                    ? "bg-primary-soft text-primary-soft-foreground"
+                    : "bg-muted text-muted-foreground",
                 )}
               >
                 {tab.count}
               </span>
-            </button>
+            </Button>
           ))}
         </div>
         <div className="flex items-center gap-3">
-          <button className="text-xs text-gray-400 hover:text-gray-700 flex items-center gap-1 transition-colors">
+          <Button
+            variant="muted"
+            size="none"
+            className="text-xs font-normal gap-1 px-1 py-1 hover:bg-transparent"
+          >
             <Filter className="w-4 h-4 stroke-2" />
             Filter
-          </button>
+          </Button>
         </div>
       </div>
       <div className="px-5">

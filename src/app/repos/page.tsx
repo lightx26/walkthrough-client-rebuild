@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout";
 import { Skeleton, Pagination } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { useRepositories } from "@/hooks/use-github";
 import { RepoCard } from "@/components/repos";
 import { Filter, X } from "lucide-react";
@@ -173,13 +174,15 @@ export default function RepositoriesPage() {
           </select>
 
           {hasActiveFilters && (
-            <button
+            <Button
+              variant="muted"
+              size="none"
               onClick={clearFilters}
-              className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 transition-colors ml-1"
+              className="gap-1 px-2 py-1 text-xs font-normal hover:bg-transparent ml-1"
             >
               <X className="w-3 h-3" />
               Clear
-            </button>
+            </Button>
           )}
         </div>
 

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { X, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { PrFile } from "@/types/github";
 import {
   parsePatch,
@@ -91,12 +92,14 @@ export function DiffFileModal({ file, onClose }: Props) {
             </div>
           </div>
 
-          <button
+          <Button
+            variant="ghost"
+            size="iconSm"
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors shrink-0"
+            className="text-muted-foreground shrink-0"
           >
             <X className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
 
         {/* Diff content */}

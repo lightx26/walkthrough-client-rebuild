@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, BarChart2, GitBranch, GitFork, Star } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import { Skeleton } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { PrList } from "@/components/repos";
 import { useRepository, useRepositoryPullRequests } from "@/hooks/use-github";
 import { languageColor } from "@/utils/language-color";
@@ -121,8 +122,10 @@ export default function RepoDetailsPage() {
                   </p>
                   <p className="text-xs text-gray-400 mt-0.5">walkthroughs</p>
                 </div>
-                <button
+                <Button
                   type="button"
+                  variant="primarySoft"
+                  size="xs"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -130,12 +133,12 @@ export default function RepoDetailsPage() {
                       `/analytics?owner=${encodeURIComponent(owner)}&repo=${encodeURIComponent(repo)}`,
                     );
                   }}
-                  className="inline-flex items-center gap-1.5 text-xs font-medium text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200 rounded-md px-3 py-1.5"
+                  className="gap-1.5 border border-primary-soft"
                   title="View analytics"
                 >
                   <BarChart2 className="w-3.5 h-3.5" />
                   Analytics
-                </button>
+                </Button>
               </div>
             </div>
           ) : null}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { BookOpen, MessageSquare, PanelRightClose, PanelRightOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { RecentlyReviewedWalkthrough } from "@/types/walkthrough";
 
 interface WeekSummaryPanelProps {
@@ -37,13 +38,15 @@ export function WeekSummaryPanel({
   if (collapsed) {
     return (
       <aside className="shrink-0 border-l border-gray-200 bg-white flex flex-col items-center py-4 px-1.5 justify-end">
-        <button
+        <Button
+          variant="ghost"
+          size="iconSm"
           onClick={() => setCollapsed(false)}
-          className="p-1.5 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
+          className="text-gray-500"
           aria-label="Expand panel"
         >
           <PanelRightOpen className="w-4 h-4" />
-        </button>
+        </Button>
       </aside>
     );
   }
@@ -122,13 +125,15 @@ export function WeekSummaryPanel({
 
       {/* collapse button */}
       <div className="mt-auto flex justify-end">
-        <button
+        <Button
+          variant="ghost"
+          size="iconSm"
           onClick={() => setCollapsed(true)}
-          className="rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
+          className="text-gray-500"
           aria-label="Collapse panel"
         >
           <PanelRightClose className="w-4 h-4" />
-        </button>
+        </Button>
       </div>
     </aside>
   );

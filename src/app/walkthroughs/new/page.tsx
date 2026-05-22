@@ -6,6 +6,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { ArrowLeft, BookOpen, Plus, Send } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
+import { Button } from "@/components/ui/button";
 import { usePullRequest, usePullRequestFiles } from "@/hooks/use-github";
 import { useCreateWalkthrough } from "@/hooks/use-walkthrough";
 import {
@@ -120,13 +121,15 @@ function CreateWalkthroughContent() {
         <div className="flex-1 flex flex-col min-h-0 min-w-0">
           {/* Sub-header */}
           <div className="flex items-center gap-3 px-5 py-3 border-b border-gray-200 bg-white shrink-0">
-            <button
+            <Button
+              variant="muted"
+              size="none"
               onClick={() => router.back()}
-              className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors shrink-0"
+              className="gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent shrink-0"
             >
               <ArrowLeft className="w-4 h-4" />
               Back
-            </button>
+            </Button>
 
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <BookOpen className="w-4 h-4 text-gray-400 shrink-0" />
@@ -145,21 +148,25 @@ function CreateWalkthroughContent() {
               · {totalAssigned} of {totalFiles} files assigned
             </span>
 
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => handleSave("DRAFT")}
               disabled={isSaving}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 shrink-0"
+              className="shrink-0"
             >
               Save draft
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
               onClick={() => handleSave("PUBLISHED")}
               disabled={isSaving || !allFilesAssigned}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 transition-colors disabled:opacity-50 shrink-0"
+              className="gap-1.5 shrink-0"
             >
               <Send className="w-3.5 h-3.5" />
               Publish
-            </button>
+            </Button>
           </div>
 
           {/* Scrollable form */}
@@ -225,13 +232,15 @@ function CreateWalkthroughContent() {
                 </div>
 
                 {/* Add chapter */}
-                <button
+                <Button
+                  variant="dashed"
+                  size="none"
                   onClick={handleAddChapter}
-                  className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-dashed border-gray-200 text-sm text-gray-400 hover:border-gray-300 hover:text-gray-500 transition-colors"
+                  className="mt-3 w-full gap-2 px-4 py-3 rounded-xl text-sm"
                 >
                   <Plus className="w-4 h-4" />
                   Add chapter
-                </button>
+                </Button>
               </div>
             </div>
           </div>

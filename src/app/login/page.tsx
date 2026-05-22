@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Github, Zap, Users, ShieldCheck } from "lucide-react";
 import { useIsAuthenticated, useAuthIsLoading } from "@/hooks/use-auth";
 import { Logo } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 
 function handleGitHubLogin() {
   const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
@@ -55,13 +56,15 @@ export default function LoginPage() {
               </p>
             </div>
 
-            <button
+            <Button
+              variant="secondary"
+              size="cta"
               onClick={handleGitHubLogin}
-              className="w-full flex items-center justify-center gap-2.5 bg-gray-900 hover:bg-gray-800 active:bg-gray-950 text-white font-medium py-3 px-6 rounded-xl transition-colors text-sm shadow-sm shadow-gray-900/20"
+              className="gap-2.5"
             >
               <Github className="w-5 h-5" />
               Sign in with GitHub
-            </button>
+            </Button>
 
             <div className="grid grid-cols-3 gap-3 w-full mt-6">
               {features.map(({ icon: Icon, label }) => (

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MessageSquare, Send } from "lucide-react";
 import { UserAvatar } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-auth";
 import {
   useWalkthroughComments,
@@ -56,13 +57,15 @@ export function CommentSection({ walkthroughId }: CommentSectionProps) {
             onChange={(e) => setContent(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button
+          <Button
+            variant="primarySoft"
+            size="none"
             onClick={handleSubmit}
             disabled={!content.trim() || addComment.isPending}
-            className="p-1.5 rounded-md bg-violet-100 text-violet-600 hover:bg-violet-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+            className="p-1.5 shrink-0"
           >
             <Send className="w-3.5 h-3.5" />
-          </button>
+          </Button>
         </div>
       </div>
 

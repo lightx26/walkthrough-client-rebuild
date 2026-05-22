@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface PaginationProps {
   page: number;
@@ -15,14 +16,16 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
 
   return (
     <div className={cn("flex items-center gap-1", className)}>
-      <button
+      <Button
+        variant="ghost"
+        size="iconSm"
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 1}
         aria-label="Previous page"
-        className="flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="text-gray-500"
       >
         <ChevronLeft className="w-4 h-4" />
-      </button>
+      </Button>
 
       {pages.map((entry, i) =>
         entry === "..." ? (
@@ -30,29 +33,28 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
             …
           </span>
         ) : (
-          <button
+          <Button
             key={entry}
+            variant={entry === page ? "primary" : "ghost"}
+            size="iconSm"
             onClick={() => onPageChange(entry as number)}
-            className={cn(
-              "w-8 h-8 rounded-md text-sm font-medium transition-colors",
-              entry === page
-                ? "bg-violet-600 text-white"
-                : "text-gray-600 hover:bg-gray-100",
-            )}
+            className={entry === page ? "shadow-none" : "text-gray-600"}
           >
             {entry}
-          </button>
+          </Button>
         )
       )}
 
-      <button
+      <Button
+        variant="ghost"
+        size="iconSm"
         onClick={() => onPageChange(page + 1)}
         disabled={page >= totalPages}
         aria-label="Next page"
-        className="flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="text-gray-500"
       >
         <ChevronRight className="w-4 h-4" />
-      </button>
+      </Button>
     </div>
   );
 }

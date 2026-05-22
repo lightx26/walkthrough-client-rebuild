@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Calendar, ChevronDown, ChevronUp, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export interface SearchDateRange {
   from: string;
@@ -46,13 +47,15 @@ export function SearchDateRangeDropdown({
 
   return (
     <div ref={ref} className="relative">
-      <button
+      <Button
+        variant="outline"
+        size="none"
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "flex items-center gap-1 px-2.5 py-1 rounded-md text-xs transition-colors border",
+          "gap-1 px-2.5 py-1 text-xs font-normal",
           isActive
-            ? "bg-indigo-50 border-indigo-300 text-indigo-700"
-            : "text-gray-500 hover:bg-gray-100 border-gray-200",
+            ? "bg-indigo-50 border-indigo-300 text-indigo-700 hover:bg-indigo-50"
+            : "text-gray-500 hover:bg-gray-100",
         )}
       >
         <Calendar className="w-3 h-3" />
@@ -76,7 +79,7 @@ export function SearchDateRangeDropdown({
             <X className="w-3 h-3" />
           </span>
         )}
-      </button>
+      </Button>
 
       {open && (
         <div className="absolute top-full mt-1 left-0 z-60 w-72 bg-white rounded-xl shadow-lg border border-gray-100 p-4">
@@ -110,18 +113,22 @@ export function SearchDateRangeDropdown({
               Quick select
             </p>
             <div className="grid grid-cols-2 gap-2">
-              <button
+              <Button
+                variant="outline"
+                size="none"
                 onClick={() => applyQuickSelect(7)}
-                className="px-3 py-1.5 text-xs text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-3 py-1.5 text-xs font-normal text-gray-600"
               >
                 Last 7 days
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
+                size="none"
                 onClick={() => applyQuickSelect(30)}
-                className="px-3 py-1.5 text-xs text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-3 py-1.5 text-xs font-normal text-gray-600"
               >
                 Last 30 days
-              </button>
+              </Button>
             </div>
           </div>
         </div>

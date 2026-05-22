@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { ChevronRight, FileText, FolderTree, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { Walkthrough, WalkthroughFile } from "@/types/walkthrough";
 import { computeDiffStats } from "./diff-viewer";
 
@@ -96,9 +97,11 @@ function DirNode({ node, depth }: DirRowProps) {
 
   return (
     <div>
-      <button
+      <Button
+        variant="ghost"
+        size="none"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center gap-1 py-1 hover:bg-violet-50 text-left transition-colors"
+        className="w-full justify-start gap-1 py-1 rounded-none font-normal hover:bg-violet-50"
         style={{ paddingLeft: 12 + depth * 12 }}
       >
         <ChevronRight
@@ -108,7 +111,7 @@ function DirNode({ node, depth }: DirRowProps) {
           )}
         />
         <span className="text-xs font-medium text-gray-700 truncate">{node.name}</span>
-      </button>
+      </Button>
       {open && (
         <>
           {childDirs.map((child) => (
@@ -140,9 +143,11 @@ function FileLeaf({ name, leaf, depth }: FileLeafProps) {
   const badge = statusBadge(leaf.file.fileStatus);
   const stats = leaf.file.rawPatch ? computeDiffStats(leaf.file.rawPatch) : null;
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="none"
       onClick={() => scrollToFile(leaf.file.id)}
-      className="w-full flex items-center gap-2 pr-4 py-1 hover:bg-violet-50 text-left group transition-colors"
+      className="w-full justify-start gap-2 pr-4 py-1 rounded-none font-normal hover:bg-violet-50 group"
       style={{ paddingLeft: 12 + depth * 12 + 16 }}
     >
       <FileText className="w-3.5 h-3.5 text-orange-400 shrink-0" />
@@ -161,7 +166,7 @@ function FileLeaf({ name, leaf, depth }: FileLeafProps) {
       {stats && (
         <span className="text-[10px] font-mono text-green-600 shrink-0">+{stats.added}</span>
       )}
-    </button>
+    </Button>
   );
 }
 
@@ -187,13 +192,15 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
   return (
     <>
       {!open && (
-        <button
+        <Button
+          variant="outline"
+          size="none"
           onClick={() => setOpen(true)}
-          className="fixed right-6 top-[calc(50%+3rem)] -translate-y-1/2 flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 rounded-lg shadow-md text-sm text-gray-600 hover:border-violet-400 hover:text-violet-700 transition-colors z-30"
+          className="fixed right-6 top-[calc(50%+3rem)] -translate-y-1/2 gap-1.5 px-3 py-2 shadow-md text-sm text-gray-600 hover:border-violet-400 hover:text-violet-700 font-medium z-30"
         >
           <FolderTree className="w-4 h-4" />
-          <span className="font-medium">Tree</span>
-        </button>
+          <span>Tree</span>
+        </Button>
       )}
 
       {open && (
@@ -204,12 +211,14 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
             <span className="text-xs font-semibold text-white bg-blue-500 rounded-full px-1.5 py-0.5 min-w-5 text-center">
               {totalFiles}
             </span>
-            <button
+            <Button
+              variant="ghost"
+              size="none"
               onClick={() => setOpen(false)}
-              className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors ml-1"
+              className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 ml-1"
             >
               <X className="w-3.5 h-3.5" />
-            </button>
+            </Button>
           </div>
 
           <div className="overflow-y-auto flex-1 py-2">
@@ -224,12 +233,14 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
           </div>
 
           <div className="border-t border-gray-100 px-4 py-3 shrink-0 flex justify-end">
-            <button
+            <Button
+              variant="primary"
+              size="xs"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white text-xs font-medium hover:bg-violet-700 transition-colors"
+              className="rounded-lg"
             >
               Close
-            </button>
+            </Button>
           </div>
         </div>
       )}

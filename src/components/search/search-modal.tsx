@@ -9,6 +9,7 @@ import {
   GitPullRequest,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   useWalkthroughSearch,
   useRepoSearch,
@@ -191,15 +192,17 @@ export function SearchModal({ onClose }: Props) {
             className="flex-1 text-sm text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
           />
           {query && (
-            <button
+            <Button
+              variant="secondary"
+              size="iconXs"
               onClick={() => {
                 setQuery("");
                 setSelectedIndex(0);
               }}
-              className="shrink-0 w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+              className="shrink-0 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 shadow-none"
             >
-              <X className="w-3 h-3 text-gray-500" />
-            </button>
+              <X className="w-3 h-3" />
+            </Button>
           )}
         </div>
 
@@ -207,21 +210,23 @@ export function SearchModal({ onClose }: Props) {
         <div className="flex items-center gap-2 px-4 py-2.5 border-b border-gray-100 flex-wrap">
           <div className="flex items-center gap-1">
             {TABS.map((tab) => (
-              <button
+              <Button
                 key={tab.id}
+                variant="ghost"
+                size="none"
                 onClick={() => {
                   setActiveTab(tab.id);
                   setSelectedIndex(0);
                 }}
                 className={cn(
-                  "px-3 py-1 rounded-full text-xs font-medium transition-colors",
+                  "px-3 py-1 rounded-full text-xs font-medium",
                   activeTab === tab.id
-                    ? "bg-indigo-600 text-white"
+                    ? "bg-indigo-600 text-white hover:bg-indigo-600 hover:text-white"
                     : "text-gray-500 hover:bg-gray-100",
                 )}
               >
                 {tab.label}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -280,18 +285,20 @@ export function SearchModal({ onClose }: Props) {
                     Recent searches
                   </p>
                   {recentSearches.map((item) => (
-                    <button
+                    <Button
                       key={item.id}
+                      variant="ghost"
+                      size="none"
                       onClick={() => {
                         setQuery(item.query);
                         setSelectedIndex(0);
                         inputRef.current?.focus();
                       }}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-gray-50 transition-colors"
+                      className="w-full justify-start gap-3 px-3 py-2 rounded-lg text-left font-normal hover:bg-gray-50"
                     >
                       <Clock className="w-4 h-4 text-gray-400 shrink-0" />
                       <span className="text-sm text-gray-700">{item.query}</span>
-                    </button>
+                    </Button>
                   ))}
                 </div>
               )}

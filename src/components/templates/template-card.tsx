@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   useDeleteTemplate,
   useDuplicateTemplate,
@@ -107,21 +108,25 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
         <div className="flex items-center gap-1.5 shrink-0">
           {isBuiltin ? (
             <>
-              <button
+              <Button
+                variant="outline"
+                size="xs"
                 onClick={() => setExpanded((v) => !v)}
-                className="inline-flex items-center gap-1.5 text-xs text-gray-600 border border-gray-200 hover:bg-gray-50 px-2.5 py-1.5 rounded-md transition-colors"
+                className="gap-1.5"
               >
                 <BookOpen className="w-3.5 h-3.5" />
                 Preview
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
+                size="xs"
                 onClick={onDuplicate}
                 disabled={duplicateTemplate.isPending}
-                className="inline-flex items-center gap-1.5 text-xs text-gray-600 border border-gray-200 hover:bg-gray-50 px-2.5 py-1.5 rounded-md transition-colors disabled:opacity-50"
+                className="gap-1.5"
               >
                 <Copy className="w-3.5 h-3.5" />
                 Duplicate to my templates
-              </button>
+              </Button>
               <span className="inline-flex items-center gap-1 text-[10px] text-gray-400 ml-1">
                 <Lock className="w-3 h-3" />
                 Read-only
@@ -129,38 +134,46 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
             </>
           ) : (
             <>
-              <button
+              <Button
+                variant="outline"
+                size="xs"
                 onClick={() => router.push(`/templates/${template.id}/edit`)}
-                className="inline-flex items-center gap-1.5 text-xs text-gray-700 border border-gray-200 hover:bg-gray-50 px-2.5 py-1.5 rounded-md transition-colors"
+                className="gap-1.5"
               >
                 <Pencil className="w-3.5 h-3.5" />
                 Edit
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
+                size="xs"
                 onClick={onDuplicate}
                 disabled={duplicateTemplate.isPending}
-                className="inline-flex items-center gap-1.5 text-xs text-gray-700 border border-gray-200 hover:bg-gray-50 px-2.5 py-1.5 rounded-md transition-colors disabled:opacity-50"
+                className="gap-1.5"
               >
                 <Copy className="w-3.5 h-3.5" />
                 Duplicate
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="destructiveGhost"
+                size="iconSm"
                 onClick={onDelete}
                 disabled={deleteTemplate.isPending}
-                className="inline-flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 w-7 h-7 rounded-md transition-colors disabled:opacity-50"
+                className="w-7 h-7"
                 aria-label="Delete template"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-              </button>
+              </Button>
             </>
           )}
         </div>
       </div>
 
       {!isBuiltin && (
-        <button
+        <Button
+          variant="link"
+          size="none"
           onClick={() => setExpanded((v) => !v)}
-          className="flex items-center gap-1 text-xs text-violet-600 hover:text-violet-700 mt-3 ml-14 font-medium"
+          className="gap-1 text-xs mt-3 ml-14 font-medium no-underline hover:no-underline"
         >
           {expanded ? (
             <>
@@ -173,7 +186,7 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
               Preview chapters
             </>
           )}
-        </button>
+        </Button>
       )}
 
       {expanded && template.chapters && template.chapters.length > 0 && (

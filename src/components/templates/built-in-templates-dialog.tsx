@@ -11,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { useDuplicateTemplate } from "@/hooks/use-templates";
 import type { Template } from "@/types/template";
 import { PrTypeBadge } from "./pr-type-badge";
@@ -77,13 +78,15 @@ export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
               {templates.length}
             </span>
           </div>
-          <button
+          <Button
+            variant="ghost"
+            size="iconSm"
             onClick={onClose}
-            className="w-8 h-8 rounded-md hover:bg-gray-50 flex items-center justify-center text-gray-400 hover:text-gray-600"
+            className="text-muted-foreground"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
 
         <div className="px-6 pt-4">
@@ -129,9 +132,11 @@ export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
                           {tpl.description}
                         </p>
                       )}
-                      <button
+                      <Button
+                        variant="link"
+                        size="none"
                         onClick={() => setExpandedId(isOpen ? null : tpl.id)}
-                        className="flex items-center gap-1 text-xs text-violet-600 hover:text-violet-700 mt-2 font-medium"
+                        className="gap-1 text-xs mt-2 font-medium no-underline hover:no-underline"
                       >
                         {isOpen ? (
                           <>
@@ -144,17 +149,19 @@ export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
                             Preview chapters
                           </>
                         )}
-                      </button>
+                      </Button>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <button
+                      <Button
+                        variant="outline"
+                        size="xs"
                         onClick={() => onDuplicate(tpl.id)}
                         disabled={duplicateTemplate.isPending}
-                        className="inline-flex items-center gap-1 text-xs text-gray-700 border border-gray-200 hover:bg-gray-50 px-2.5 py-1 rounded-md disabled:opacity-50"
+                        className="gap-1"
                       >
                         <Copy className="w-3.5 h-3.5" />
                         Duplicate
-                      </button>
+                      </Button>
                     </div>
                   </div>
 

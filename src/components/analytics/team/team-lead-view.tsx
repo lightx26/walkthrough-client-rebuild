@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRepoMetrics } from "@/hooks/use-analytics";
 import { usePinnedRepos } from "@/hooks/use-starred";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { TeamOverviewCards } from "./team-overview-cards";
 import { WeeklyTrendChart } from "./weekly-trend-chart";
 import { ReviewsPerMemberChart } from "./reviews-per-member-chart";
@@ -48,18 +49,15 @@ export function TeamLeadView({ scopedRepo }: TeamLeadViewProps = {}) {
           {repos.map((r) => {
             const isActive = r.repoFullName === fullName;
             return (
-              <button
+              <Button
                 key={r.repoFullName}
+                variant={isActive ? "primarySoft" : "outline"}
+                size="xs"
                 onClick={() => setSelected(r.repoFullName)}
-                className={cn(
-                  "text-xs px-3 py-1.5 rounded-md border",
-                  isActive
-                    ? "border-violet-200 bg-violet-50 text-violet-700"
-                    : "border-gray-200 bg-white text-gray-600 hover:border-gray-300",
-                )}
+                className={cn(isActive && "border border-primary-soft")}
               >
                 {r.repoName}
-              </button>
+              </Button>
             );
           })}
         </div>

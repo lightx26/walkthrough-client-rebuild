@@ -2,6 +2,7 @@
 
 import { ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { WalkthroughCard } from "@/components/home";
 import type { WalkthroughSummary } from "@/types/walkthrough";
 
@@ -25,12 +26,14 @@ export function AuthoredWalkthroughsPanel({
         <h2 className="text-sm font-semibold text-gray-900">
           Authored walkthroughs
         </h2>
-        <button
+        <Button
+          variant="link"
+          size="none"
           onClick={onViewAll}
-          className="flex items-center gap-0.5 text-xs text-violet-600 hover:text-violet-700 transition-colors"
+          className="gap-0.5 text-xs no-underline hover:no-underline"
         >
           View all <ChevronRight className="w-3.5 h-3.5" />
-        </button>
+        </Button>
       </div>
 
       {isLoading ? (

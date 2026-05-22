@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronUp, ChevronDown, FileText } from "lucide-react";
 import type { WalkthroughFile } from "@/types/walkthrough";
 import { useFileComments } from "@/hooks/use-walkthrough";
+import { Button } from "@/components/ui/button";
 import { DiffViewer } from "./diff-viewer";
 import { computeDiffStats } from "./diff-utils";
 
@@ -22,8 +23,10 @@ export function FileSection({ file, walkthroughId }: FileSectionProps) {
   return (
     <div id={`file-${file.id}`} className="bg-gray-50">
       {/* File header */}
-      <button
-        className="w-full flex items-center gap-2 px-6 py-2.5 hover:bg-gray-100 transition-colors text-left"
+      <Button
+        variant="ghost"
+        size="none"
+        className="w-full justify-start gap-2 px-6 py-2.5 rounded-none text-left font-normal"
         onClick={() => setExpanded((v) => !v)}
       >
         <FileText className="w-4 h-4 text-orange-500 shrink-0" />
@@ -42,7 +45,7 @@ export function FileSection({ file, walkthroughId }: FileSectionProps) {
         ) : (
           <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
         )}
-      </button>
+      </Button>
 
       {/* Diff — animated collapse */}
       <div

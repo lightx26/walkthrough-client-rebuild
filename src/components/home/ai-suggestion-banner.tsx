@@ -1,4 +1,5 @@
 import { Sparkles, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface AiSuggestionBannerProps {
   onDismiss: () => void;
@@ -20,15 +21,21 @@ export function AiSuggestionBanner({ onDismiss }: AiSuggestionBannerProps) {
         </p>
       </div>
       <div className="flex items-center gap-2 shrink-0">
-        <button className="text-sm font-semibold text-violet-700 hover:text-violet-900 flex items-center gap-0.5 transition-colors">
+        <Button
+          variant="link"
+          size="none"
+          className="text-sm font-semibold text-violet-700 hover:text-violet-900 gap-0.5 no-underline hover:no-underline"
+        >
           Review <span className="ml-0.5">→</span>
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="ghost"
+          size="none"
           onClick={onDismiss}
-          className="p-0.5 text-violet-300 hover:text-violet-600 transition-colors"
+          className="p-0.5 text-violet-300 hover:text-violet-600 hover:bg-transparent"
         >
           <X className="w-4 h-4" />
-        </button>
+        </Button>
       </div>
     </div>
   );

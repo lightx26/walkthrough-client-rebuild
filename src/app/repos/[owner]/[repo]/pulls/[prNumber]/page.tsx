@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import { UserAvatar } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import {
   PrStateBadge,
   WalkthroughCard,
@@ -166,27 +167,30 @@ export default function PrDetailPage() {
               Walkthroughs
             </h2>
             {!isLoading && isOwner && (
-              <Link
-                href={`/walkthroughs/new?owner=${owner}&repo=${repo}&prNumber=${prNumber}`}
-                className="inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-colors px-4 py-2 rounded-lg"
-              >
-                <Plus className="w-4 h-4" />
-                Create walkthrough
-              </Link>
+              <Button asChild variant="primary" size="default" className="gap-1.5">
+                <Link
+                  href={`/walkthroughs/new?owner=${owner}&repo=${repo}&prNumber=${prNumber}`}
+                >
+                  <Plus className="w-4 h-4" />
+                  Create walkthrough
+                </Link>
+              </Button>
             )}
           </div>
 
           {!isLoading && (
             <div className="flex items-center gap-0.5 px-5 border-b border-gray-100">
               {tabs.map((tab) => (
-                <button
+                <Button
                   key={tab.key}
+                  variant="ghost"
+                  size="none"
                   onClick={() => setActiveTab(tab.key)}
                   className={cn(
-                    "flex items-center gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 transition-colors",
+                    "gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 rounded-none hover:bg-transparent",
                     activeTab === tab.key
-                      ? "border-violet-600 text-violet-700"
-                      : "border-transparent text-gray-500 hover:text-gray-700",
+                      ? "border-primary text-primary-soft-foreground"
+                      : "border-transparent text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {tab.label}
@@ -194,13 +198,13 @@ export default function PrDetailPage() {
                     className={cn(
                       "text-xs px-1.5 py-0.5 rounded-full font-medium",
                       activeTab === tab.key
-                        ? "bg-violet-100 text-violet-700"
-                        : "bg-gray-100 text-gray-500",
+                        ? "bg-primary-soft text-primary-soft-foreground"
+                        : "bg-muted text-muted-foreground",
                     )}
                   >
                     {counts[tab.key]}
                   </span>
-                </button>
+                </Button>
               ))}
             </div>
           )}

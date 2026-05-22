@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import type { PullRequest, PullRequestState } from "@/types/github";
 import { PrRow } from "./pr-row";
 import { Skeleton } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 
 type TabKey = "all" | PullRequestState;
 
@@ -57,14 +58,16 @@ export function PrList({ prs, isLoading, owner, repo }: PrListProps) {
       <div className="flex items-center px-5 border-b border-gray-100">
         <div className="flex items-center gap-0.5">
           {tabs.map((tab) => (
-            <button
+            <Button
               key={tab.key}
+              variant="ghost"
+              size="none"
               onClick={() => setActiveTab(tab.key)}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 transition-colors",
+                "gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 rounded-none hover:bg-transparent",
                 activeTab === tab.key
-                  ? "border-violet-600 text-violet-700"
-                  : "border-transparent text-gray-500 hover:text-gray-700",
+                  ? "border-primary text-primary-soft-foreground"
+                  : "border-transparent text-muted-foreground hover:text-foreground",
               )}
             >
               {tab.label}
@@ -72,13 +75,13 @@ export function PrList({ prs, isLoading, owner, repo }: PrListProps) {
                 className={cn(
                   "text-xs px-1.5 py-0.5 rounded-full font-medium",
                   activeTab === tab.key
-                    ? "bg-violet-100 text-violet-700"
-                    : "bg-gray-100 text-gray-500",
+                    ? "bg-primary-soft text-primary-soft-foreground"
+                    : "bg-muted text-muted-foreground",
                 )}
               >
                 {counts[tab.key]}
               </span>
-            </button>
+            </Button>
           ))}
         </div>
       </div>

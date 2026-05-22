@@ -10,6 +10,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { UserAvatar } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import type { ChapterAttention } from "@/types/analytics";
 import { AttentionBadge } from "./attention-badge";
 
@@ -39,10 +40,12 @@ export function ChapterAttentionRow({ chapter }: { chapter: ChapterAttention }) 
 
   return (
     <div className="border border-gray-100 rounded-lg overflow-hidden">
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="none"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between gap-3 px-3 py-2.5 hover:bg-gray-50"
+        className="w-full justify-between gap-3 px-3 py-2.5 rounded-none font-normal hover:bg-gray-50"
       >
         <div className="flex items-center gap-2 min-w-0">
           <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-600 text-[11px] font-semibold flex items-center justify-center shrink-0">
@@ -66,7 +69,7 @@ export function ChapterAttentionRow({ chapter }: { chapter: ChapterAttention }) 
             <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
           )}
         </div>
-      </button>
+      </Button>
 
       {open && hasReaders && (
         <div className="bg-gray-50/60 border-t border-gray-100 divide-y divide-gray-100">

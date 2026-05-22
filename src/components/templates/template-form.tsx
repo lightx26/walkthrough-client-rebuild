@@ -23,6 +23,7 @@ import type {
 } from "@/types/template";
 import { PR_TYPE_OPTIONS } from "./pr-type-badge";
 import { RequireAsterisk } from "../ui";
+import { Button } from "@/components/ui/button";
 
 const DRAG_TYPE_CHAPTER = "TEMPLATE_CHAPTER";
 
@@ -104,13 +105,14 @@ function DraggableChapter({
           placeholder="Chapter title"
           className="flex-1 text-gray-600 text-sm border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
         />
-        <button
+        <Button
+          variant="destructiveGhost"
+          size="iconSm"
           onClick={onRemove}
-          className="inline-flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 w-8 h-8 rounded-md transition-colors"
           aria-label="Remove chapter"
         >
           <Trash2 className="w-3.5 h-3.5" />
-        </button>
+        </Button>
       </div>
       <div className="pl-[38px]">
         <textarea
@@ -224,13 +226,15 @@ export function TemplateForm({ mode, initial }: Props) {
     <DndProvider backend={HTML5Backend}>
       {/* Sub-Header */}
       <div className="flex items-center gap-3 px-5 py-3 border-b border-gray-200 bg-white shrink-0">
-        <button
+        <Button
+          variant="muted"
+          size="none"
           onClick={() => router.push("/templates")}
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors shrink-0"
+          className="gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent shrink-0"
         >
           <ArrowLeft className="w-4 h-4" />
           Templates
-        </button>
+        </Button>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
@@ -244,25 +248,23 @@ export function TemplateForm({ mode, initial }: Props) {
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => router.push("/templates")}
-              className="inline-flex items-cente bg-white gap-1.5 text-sm text-gray-600 border border-gray-200 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
               onClick={onSubmit}
               disabled={!isValid || isSaving}
-              className={cn(
-                "inline-flex items-center gap-1.5 text-sm text-white px-3 py-2 rounded-md transition-colors bg-violet-600",
-                isValid && !isSaving
-                  ? " hover:bg-violet-700 cursor-pointer"
-                  : "opacity-50",
-              )}
+              className="gap-1.5"
             >
               <Save className="w-3.5 h-3.5" />
               {mode === "create" ? "Create template" : "Save changes"}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -348,13 +350,15 @@ export function TemplateForm({ mode, initial }: Props) {
           ))}
         </div>
 
-        <button
+        <Button
+          variant="dashed"
+          size="none"
           onClick={addChapter}
-          className="w-full flex items-center justify-center gap-1.5 text-sm text-gray-500 hover:text-violet-600 border-2 border-dashed border-gray-200 hover:border-violet-300 rounded-xl py-3 transition-colors mb-4"
+          className="w-full gap-1.5 rounded-xl py-3 text-sm mb-4"
         >
           <Plus className="w-4 h-4" />
           Add chapter
-        </button>
+        </Button>
 
         <div className="flex items-start gap-2.5 bg-violet-50 border border-violet-100 rounded-xl px-4 py-3">
           <LayoutTemplate className="w-4 h-4 text-violet-600 shrink-0 mt-0.5" />

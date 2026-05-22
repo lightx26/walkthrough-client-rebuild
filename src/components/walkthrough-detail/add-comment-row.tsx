@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 import { UserAvatar } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { useCreateFileComment } from "@/hooks/use-walkthrough";
 
@@ -41,16 +42,18 @@ export function AddCommentRow({ walkthroughId, fileId, diffPosition, onClose }: 
               }
             }}
           />
-          <button
+          <Button
+            variant="primarySoft"
+            size="none"
             onClick={() => text.trim() && addComment.mutate(
               { content: text, walkthroughFileId: fileId, diffPosition },
               { onSuccess: () => { setText(""); onClose(); } },
             )}
             disabled={!text.trim() || addComment.isPending}
-            className="p-1.5 rounded-md bg-violet-100 text-violet-600 hover:bg-violet-200 disabled:opacity-40 transition-colors"
+            className="p-1.5"
           >
             <Send className="w-3.5 h-3.5" />
-          </button>
+          </Button>
         </div>
       </td>
     </tr>

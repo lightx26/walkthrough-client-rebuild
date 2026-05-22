@@ -5,6 +5,7 @@ import { languageColor } from "@/utils/language-color";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { usePinRepo, useUnpinRepo } from "@/hooks/use-starred";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export function RepoCard({ repo }: { repo: Repository }) {
   const isPinned = repo.pinned;
@@ -89,10 +90,12 @@ export function RepoCard({ repo }: { repo: Repository }) {
       </div>
 
       <div className="flex items-center gap-8 shrink-0">
-        <button
+        <Button
+          variant="ghost"
+          size="none"
           onClick={handleTogglePin}
           className={cn(
-            "p-1.5 rounded-md transition-colors",
+            "p-1.5 hover:bg-transparent",
             isPinned
               ? "text-violet-500 hover:text-violet-600"
               : "text-gray-300 hover:text-violet-400",
@@ -100,7 +103,7 @@ export function RepoCard({ repo }: { repo: Repository }) {
           title={isPinned ? "Unpin repository" : "Pin repository"}
         >
           <Pin className={cn("w-4 h-4", isPinned && "fill-current")} />
-        </button>
+        </Button>
         <div className="text-center">
           <p className="text-xl font-bold text-gray-900">{repo.openPrsCount}</p>
           <p className="text-xs text-gray-400">open PRs</p>

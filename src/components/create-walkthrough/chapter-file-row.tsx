@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { FileText, GripVertical, Eye, X, FileCode2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { PrFile } from "@/types/github";
 import {
   DRAG_TYPE_PR_FILE,
@@ -110,11 +111,16 @@ export function ChapterFileRow({
         <GripVertical className="w-4 h-4 text-gray-300 hover:text-gray-500" />
       </div>
       {getFileIcon(file.filename)}
-      <button className="flex-1 min-w-0 text-left" onClick={onViewDiff}>
-        <span className="text-sm font-medium text-violet-600 hover:underline truncate block">
+      <Button
+        variant="link"
+        size="none"
+        className="flex-1 min-w-0 justify-start text-left no-underline"
+        onClick={onViewDiff}
+      >
+        <span className="text-sm font-medium truncate block hover:underline">
           {baseName(file.filename)}
         </span>
-      </button>
+      </Button>
       {dir && (
         <span className="text-xs text-gray-400 font-mono shrink-0 hidden sm:block truncate max-w-[120px]">
           {dir}
@@ -134,20 +140,24 @@ export function ChapterFileRow({
       >
         {badge.label}
       </span>
-      <button
+      <Button
+        variant="ghost"
+        size="none"
         onClick={onViewDiff}
-        className="p-1 rounded text-gray-300 hover:text-gray-500 transition-colors shrink-0"
+        className="p-1 text-gray-300 hover:bg-transparent hover:text-gray-500 shrink-0"
         title="View diff"
       >
         <Eye className="w-3.5 h-3.5" />
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="destructiveGhost"
+        size="none"
         onClick={onRemove}
-        className="p-1 rounded text-gray-300 hover:text-red-400 transition-colors shrink-0"
+        className="p-1 text-gray-300 hover:bg-transparent shrink-0"
         title="Remove"
       >
         <X className="w-3.5 h-3.5" />
-      </button>
+      </Button>
     </div>
   );
 }

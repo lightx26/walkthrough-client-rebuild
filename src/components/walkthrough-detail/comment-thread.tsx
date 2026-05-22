@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Send, CornerDownLeft } from "lucide-react";
 import { UserAvatar } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { useCreateFileComment } from "@/hooks/use-walkthrough";
 import { formatRelativeTime } from "@/utils/date-diff";
@@ -42,13 +43,15 @@ export function CommentThread({ comments, walkthroughId, fileId, diffPosition }:
                   <SyncStatusIcon status={c.syncStatus} />
                 </div>
                 <p className="text-xs text-gray-700 ml-8 leading-relaxed wrap-break-word whitespace-pre-wrap">{c.content}</p>
-                <button
+                <Button
+                  variant="ghost"
+                  size="none"
                   onClick={() => setReplyTargetId(replyTargetId === c.id ? null : c.id)}
-                  className="ml-8 mt-1 flex items-center gap-1 text-xs text-gray-400 hover:text-violet-600 transition-colors"
+                  className="ml-8 mt-1 gap-1 px-0 py-0 text-xs font-normal text-gray-400 hover:bg-transparent hover:text-violet-600"
                 >
                   <CornerDownLeft className="w-3 h-3" />
                   Reply
-                </button>
+                </Button>
                 {/* Replies */}
                 {c.replies.length > 0 && (
                   <div className="ml-8 mt-2 space-y-2 pl-3 border-l border-gray-200">
@@ -89,16 +92,18 @@ export function CommentThread({ comments, walkthroughId, fileId, diffPosition }:
                       }
                     }}
                   />
-                  <button
+                  <Button
+                    variant="primarySoft"
+                    size="none"
                     onClick={() => replyText.trim() && addReply.mutate(
                       { content: replyText, walkthroughFileId: fileId, diffPosition, parentId: c.id },
                       { onSuccess: () => { setReplyText(""); setReplyTargetId(null); } },
                     )}
                     disabled={!replyText.trim() || addReply.isPending}
-                    className="p-1.5 rounded-md bg-violet-100 text-violet-600 hover:bg-violet-200 disabled:opacity-40 transition-colors"
+                    className="p-1.5"
                   >
                     <Send className="w-3.5 h-3.5" />
-                  </button>
+                  </Button>
                 </div>
               </td>
             </tr>

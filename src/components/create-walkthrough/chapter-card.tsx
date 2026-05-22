@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useDrop } from "react-dnd";
 import { FileText, Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { PrFile } from "@/types/github";
 import { DRAG_TYPE_PR_FILE, DRAG_TYPE_PR_DIR } from "./file-utils";
 import {
@@ -96,13 +97,15 @@ export function ChapterCard({
           </span>
         )}
         {onDelete && (
-          <button
+          <Button
+            variant="destructiveGhost"
+            size="none"
             onClick={onDelete}
-            className="p-1 rounded text-gray-300 hover:text-red-400 transition-colors shrink-0"
+            className="p-1 text-gray-300 hover:bg-transparent shrink-0"
             title="Delete chapter"
           >
             <Trash2 className="w-3.5 h-3.5" />
-          </button>
+          </Button>
         )}
       </div>
 
