@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import {
   ArrowLeft,
   GripVertical,
@@ -12,17 +14,116 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  useCreateTemplate,
-  useUpdateTemplate,
-} from "@/hooks/use-templates";
+import { useCreateTemplate, useUpdateTemplate } from "@/hooks/use-templates";
 import type {
   CreateTemplateRequest,
   Template,
   TemplateChapterRequest,
   TemplatePrType,
 } from "@/types/template";
-import { PR_TYPE_OPTIONS, PrTypeBadge } from "./pr-type-badge";
+import { PR_TYPE_OPTIONS } from "./pr-type-badge";
+import { RequireAsterisk } from "../ui";
+
+const DRAG_TYPE_CHAPTER = "TEMPLATE_CHAPTER";
+
+interface ChapterDragItem {
+  type: typeof DRAG_TYPE_CHAPTER;
+  index: number;
+}
+
+interface DraggableChapterProps {
+  chapter: ChapterDraft;
+  index: number;
+  onRemove: () => void;
+  onUpdate: (field: "title" | "description", value: string) => void;
+  onMove: (fromIndex: number, toIndex: number) => void;
+}
+
+function DraggableChapter({
+  chapter,
+  index,
+  onRemove,
+  onUpdate,
+  onMove,
+}: DraggableChapterProps) {
+  const [{ isDragging }, drag, dragPreview] = useDrag<
+    ChapterDragItem,
+    void,
+    { isDragging: boolean }
+  >({
+    type: DRAG_TYPE_CHAPTER,
+    item: { type: DRAG_TYPE_CHAPTER, index },
+    collect: (monitor) => ({ isDragging: monitor.isDragging() }),
+  });
+
+  const [, drop] = useDrop<ChapterDragItem, void>({
+    accept: DRAG_TYPE_CHAPTER,
+    hover(item) {
+      if (item.index === index) return;
+      onMove(item.index, index);
+      item.index = index;
+    },
+  });
+
+  const rowRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      dragPreview(drop(node));
+    },
+    [dragPreview, drop],
+  );
+
+  const gripRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      drag(node);
+    },
+    [drag],
+  );
+
+  return (
+    <div
+      ref={rowRef}
+      className={cn(
+        "bg-white border border-gray-200 rounded-xl px-4 py-4 transition-opacity",
+        isDragging && "opacity-40",
+      )}
+    >
+      <div className="flex items-center gap-3 mb-3">
+        <div
+          ref={gripRef}
+          className="cursor-grab active:cursor-grabbing p-0.5 shrink-0"
+        >
+          <GripVertical className="w-4 h-4 text-gray-300 hover:text-gray-500" />
+        </div>
+        <span className="w-7 h-7 rounded-md bg-violet-50 text-violet-600 text-xs font-bold flex items-center justify-center shrink-0">
+          {index + 1}
+        </span>
+        <input
+          type="text"
+          value={chapter.title}
+          onChange={(e) => onUpdate("title", e.target.value)}
+          placeholder="Chapter title"
+          className="flex-1 text-gray-600 text-sm border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
+        />
+        <button
+          onClick={onRemove}
+          className="inline-flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 w-8 h-8 rounded-md transition-colors"
+          aria-label="Remove chapter"
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+        </button>
+      </div>
+      <div className="pl-[38px]">
+        <textarea
+          value={chapter.description}
+          onChange={(e) => onUpdate("description", e.target.value)}
+          placeholder="Guidance for the author — what should this chapter cover? (optional)"
+          rows={2}
+          className="w-full text-sm text-gray-600 border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100 resize-none"
+        />
+      </div>
+    </div>
+  );
+}
 
 interface ChapterDraft {
   key: string;
@@ -67,10 +168,7 @@ export function TemplateForm({ mode, initial }: Props) {
   const isValid = name.trim().length > 0;
 
   const addChapter = () => {
-    setChapters((cs) => [
-      ...cs,
-      { key: newKey(), title: "", description: "" },
-    ]);
+    setChapters((cs) => [...cs, { key: newKey(), title: "", description: "" }]);
   };
 
   const removeChapter = (key: string) => {
@@ -86,6 +184,15 @@ export function TemplateForm({ mode, initial }: Props) {
       cs.map((c) => (c.key === key ? { ...c, [field]: value } : c)),
     );
   };
+
+  const moveChapter = useCallback((fromIndex: number, toIndex: number) => {
+    setChapters((prev) => {
+      const next = [...prev];
+      const [moved] = next.splice(fromIndex, 1);
+      next.splice(toIndex, 0, moved);
+      return next;
+    });
+  }, []);
 
   const onSubmit = () => {
     if (!isValid) return;
@@ -114,173 +221,150 @@ export function TemplateForm({ mode, initial }: Props) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <button
-        onClick={() => router.push("/templates")}
-        className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
-      >
-        <ArrowLeft className="w-3.5 h-3.5" />
-        Templates
-      </button>
-
-      <div className="flex items-start justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-violet-600 text-white flex items-center justify-center">
-            <LayoutTemplate className="w-5 h-5" />
-          </div>
-          <h1 className="text-[22px] font-bold text-gray-900">
-            {mode === "create" ? "Create template" : "Edit template"}
-          </h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => router.push("/templates")}
-            className="inline-flex items-center gap-1.5 text-sm text-gray-600 border border-gray-200 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors"
-          >
-            <X className="w-3.5 h-3.5" />
-            Cancel
-          </button>
-          <button
-            onClick={onSubmit}
-            disabled={!isValid || isSaving}
-            className={cn(
-              "inline-flex items-center gap-1.5 text-sm text-white px-3 py-2 rounded-md transition-colors",
-              isValid && !isSaving
-                ? "bg-violet-600 hover:bg-violet-700"
-                : "bg-gray-300 cursor-not-allowed",
-            )}
-          >
-            <Save className="w-3.5 h-3.5" />
-            {mode === "create" ? "Create template" : "Save changes"}
-          </button>
-        </div>
+    <DndProvider backend={HTML5Backend}>
+      {/* Sub-Header */}
+      <div className="flex items-center gap-3 px-5 py-3 border-b border-gray-200 bg-white shrink-0">
+        <button
+          onClick={() => router.push("/templates")}
+          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors shrink-0"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Templates
+        </button>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl px-6 py-5 mb-6 space-y-5">
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
-            Template name <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Full-stack feature with frontend"
-            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
-            Description
-          </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="What kind of PR is this template designed for? When should an author use it?"
-            rows={3}
-            className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100 resize-none"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
-            PR type
-          </label>
-          <div className="relative">
-            <select
-              value={prType}
-              onChange={(e) => setPrType(e.target.value as TemplatePrType | "")}
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100 bg-white appearance-none pr-8"
+      <div className="max-w-3xl mx-auto px-4 py-6">
+        <div className="flex items-start justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-violet-600 text-white flex items-center justify-center">
+              <LayoutTemplate className="w-5 h-5" />
+            </div>
+            <h1 className="text-[22px] font-bold text-gray-900">
+              {mode === "create" ? "Create template" : "Edit template"}
+            </h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => router.push("/templates")}
+              className="inline-flex items-cente bg-white gap-1.5 text-sm text-gray-600 border border-gray-200 hover:bg-gray-50 px-3 py-2 rounded-md transition-colors"
             >
-              <option value="">— No type —</option>
-              {PR_TYPE_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            {prType && (
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-2 bg-white pl-0 pr-2">
-                <PrTypeBadge prType={prType as TemplatePrType} />
-                <span className="text-sm text-gray-900">
-                  {PR_TYPE_OPTIONS.find((o) => o.value === prType)?.label}
-                </span>
-              </div>
-            )}
+              Cancel
+            </button>
+            <button
+              onClick={onSubmit}
+              disabled={!isValid || isSaving}
+              className={cn(
+                "inline-flex items-center gap-1.5 text-sm text-white px-3 py-2 rounded-md transition-colors bg-violet-600",
+                isValid && !isSaving
+                  ? " hover:bg-violet-700 cursor-pointer"
+                  : "opacity-50",
+              )}
+            >
+              <Save className="w-3.5 h-3.5" />
+              {mode === "create" ? "Create template" : "Save changes"}
+            </button>
           </div>
         </div>
-      </div>
 
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <h2 className="font-semibold text-gray-900 text-base">Chapters</h2>
-          <span className="text-xs text-violet-600 bg-violet-50 px-1.5 py-0.5 rounded font-semibold">
-            {chapters.length}
-          </span>
-        </div>
-        <span className="text-xs text-gray-400">Drag to reorder</span>
-      </div>
+        <div className="bg-white border border-gray-200 rounded-xl px-6 py-5 mb-6 space-y-5">
+          <div>
+            <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-1.5">
+              Template name <RequireAsterisk />
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Full-stack feature with frontend"
+              className="w-full text-gray-600 text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
+            />
+          </div>
 
-      <div className="space-y-3 mb-4">
-        {chapters.map((chapter, idx) => (
-          <div
-            key={chapter.key}
-            className="bg-white border border-gray-200 rounded-xl px-4 py-4"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <span className="w-7 h-7 rounded-md bg-violet-50 text-violet-600 text-xs font-bold flex items-center justify-center shrink-0">
-                {idx + 1}
-              </span>
-              <input
-                type="text"
-                value={chapter.title}
+          <div>
+            <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-1.5">
+              Description
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="What kind of PR is this template designed for? When should an author use it?"
+              rows={3}
+              className="w-full text-gray-600 text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100 resize-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-1.5">
+              PR type
+            </label>
+            <div className="relative">
+              <select
+                value={prType}
                 onChange={(e) =>
-                  updateChapter(chapter.key, "title", e.target.value)
+                  setPrType(e.target.value as TemplatePrType | "")
                 }
-                placeholder="Chapter title"
-                className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
-              />
-              <button
-                onClick={() => removeChapter(chapter.key)}
-                className="inline-flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 w-8 h-8 rounded-md transition-colors"
-                aria-label="Remove chapter"
+                className="w-full text-gray-400 text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100 bg-white appearance-none pr-8"
               >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
-            <div className="flex items-start gap-3">
-              <GripVertical className="w-4 h-4 text-gray-300 mt-2 shrink-0 cursor-grab" />
-              <textarea
-                value={chapter.description}
-                onChange={(e) =>
-                  updateChapter(chapter.key, "description", e.target.value)
-                }
-                placeholder="Guidance for the author — what should this chapter cover? (optional)"
-                rows={2}
-                className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100 resize-none"
-              />
+                <option value="">— No type —</option>
+                {PR_TYPE_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+              {prType && (
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-2 bg-white pl-0 pr-2">
+                  <span className="text-sm text-gray-600">
+                    {PR_TYPE_OPTIONS.find((o) => o.value === prType)?.label}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <button
-        onClick={addChapter}
-        className="w-full flex items-center justify-center gap-1.5 text-sm text-gray-500 hover:text-violet-600 border-2 border-dashed border-gray-200 hover:border-violet-300 rounded-xl py-3 transition-colors mb-4"
-      >
-        <Plus className="w-4 h-4" />
-        Add chapter
-      </button>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <h2 className="font-semibold text-gray-900 text-base">Chapters</h2>
+            <span className="text-xs text-violet-600 bg-violet-50 px-1.5 py-0.5 rounded font-semibold">
+              {chapters.length}
+            </span>
+          </div>
+          <span className="text-xs text-gray-400">Drag to reorder</span>
+        </div>
 
-      <div className="flex items-start gap-2.5 bg-violet-50 border border-violet-100 rounded-xl px-4 py-3">
-        <LayoutTemplate className="w-4 h-4 text-violet-600 shrink-0 mt-0.5" />
-        <p className="text-sm text-violet-700">
-          Chapter titles and descriptions are pre-filled into the walkthrough
-          builder. Authors can rename or delete them — the template is only a
-          starting point.
-        </p>
+        <div className="space-y-3 mb-4">
+          {chapters.map((chapter, idx) => (
+            <DraggableChapter
+              key={chapter.key}
+              chapter={chapter}
+              index={idx}
+              onRemove={() => removeChapter(chapter.key)}
+              onUpdate={(field, value) =>
+                updateChapter(chapter.key, field, value)
+              }
+              onMove={moveChapter}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={addChapter}
+          className="w-full flex items-center justify-center gap-1.5 text-sm text-gray-500 hover:text-violet-600 border-2 border-dashed border-gray-200 hover:border-violet-300 rounded-xl py-3 transition-colors mb-4"
+        >
+          <Plus className="w-4 h-4" />
+          Add chapter
+        </button>
+
+        <div className="flex items-start gap-2.5 bg-violet-50 border border-violet-100 rounded-xl px-4 py-3">
+          <LayoutTemplate className="w-4 h-4 text-violet-600 shrink-0 mt-0.5" />
+          <p className="text-sm text-violet-700">
+            Chapter titles and descriptions are pre-filled into the walkthrough
+            builder. Authors can rename or delete them — the template is only a
+            starting point.
+          </p>
+        </div>
       </div>
-    </div>
+    </DndProvider>
   );
 }
