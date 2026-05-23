@@ -16,7 +16,7 @@ export default function EditTemplatePage({ params }: PageProps) {
 
   return (
     <DashboardLayout>
-      <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
+      <main className="flex-1 overflow-y-auto min-w-0">
         {isLoading ? (
           <div className="max-w-3xl mx-auto space-y-4">
             <Skeleton className="h-8 w-48" />

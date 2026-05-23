@@ -17,3 +17,8 @@ export {
   statusBadge,
   baseName,
 } from "./file-utils";
+export {
+  WalkthroughEditor,
+  type WalkthroughEditorProps,
+  type WalkthroughFormData,
+} from "./walkthrough-editor";
