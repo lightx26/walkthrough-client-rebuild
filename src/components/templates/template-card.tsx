@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   BookOpen,
   ChevronDown,
+  ChevronRight,
   ChevronUp,
   Copy,
   LayoutTemplate,
@@ -177,38 +178,47 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
         >
           {expanded ? (
             <>
-              <ChevronUp className="w-3.5 h-3.5" />
+              <ChevronDown className="w-3.5 h-3.5" />
               Hide chapters
             </>
           ) : (
             <>
-              <ChevronDown className="w-3.5 h-3.5" />
+              <ChevronRight className="w-3.5 h-3.5" />
               Preview chapters
             </>
           )}
         </Button>
       )}
 
-      {expanded && template.chapters && template.chapters.length > 0 && (
-        <ul className="mt-3 ml-14 space-y-2 border-t border-gray-100 pt-3">
-          {template.chapters.map((chapter, idx) => (
-            <li key={chapter.id} className="flex items-start gap-3">
-              <span className="w-5 h-5 shrink-0 rounded-full bg-violet-100 text-violet-600 text-[10px] font-bold flex items-center justify-center mt-0.5">
-                {idx + 1}
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-gray-900">
-                  {chapter.title}
-                </p>
-                {chapter.description && (
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    {chapter.description}
-                  </p>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+      {template.chapters && template.chapters.length > 0 && (
+        <div
+          className={cn(
+            "grid transition-[grid-template-rows,opacity] duration-300 ease-in-out",
+            expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+          )}
+        >
+          <div className="overflow-hidden">
+            <ul className="mt-3 ml-14 space-y-2 border-t border-gray-100 pt-3">
+              {template.chapters.map((chapter, idx) => (
+                <li key={chapter.id} className="flex items-start gap-3">
+                  <span className="w-5 h-5 shrink-0 rounded-full bg-violet-100 text-violet-600 text-[10px] font-bold flex items-center justify-center mt-0.5">
+                    {idx + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-900">
+                      {chapter.title}
+                    </p>
+                    {chapter.description && (
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {chapter.description}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       )}
     </div>
   );

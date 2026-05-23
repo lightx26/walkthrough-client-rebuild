@@ -140,12 +140,12 @@ export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
                       >
                         {isOpen ? (
                           <>
-                            <ChevronUp className="w-3 h-3" />
+                            <ChevronDown className="w-3 h-3" />
                             Hide chapters
                           </>
                         ) : (
                           <>
-                            <ChevronDown className="w-3 h-3" />
+                            <ChevronRight className="w-3 h-3" />
                             Preview chapters
                           </>
                         )}
@@ -165,26 +165,35 @@ export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
                     </div>
                   </div>
 
-                  {isOpen && tpl.chapters && tpl.chapters.length > 0 && (
-                    <ul className="px-3 pb-3 pl-14 space-y-1.5 border-t border-gray-100 pt-2">
-                      {tpl.chapters.map((c, idx) => (
-                        <li key={c.id} className={cn("flex items-start gap-2")}>
-                          <span className="w-4 h-4 rounded-full bg-violet-100 text-violet-600 text-[9px] font-bold flex items-center justify-center mt-0.5 shrink-0">
-                            {idx + 1}
-                          </span>
-                          <div className="min-w-0">
-                            <p className="text-xs font-medium text-gray-900">
-                              {c.title}
-                            </p>
-                            {c.description && (
-                              <p className="text-[11px] text-gray-500 mt-0.5">
-                                {c.description}
-                              </p>
-                            )}
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
+                  {tpl.chapters && tpl.chapters.length > 0 && (
+                    <div
+                      className={cn(
+                        "grid transition-[grid-template-rows,opacity] duration-300 ease-in-out",
+                        isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+                      )}
+                    >
+                      <div className="overflow-hidden">
+                        <ul className="px-3 pb-3 pl-14 space-y-1.5 border-t border-gray-100 pt-2">
+                          {tpl.chapters.map((c, idx) => (
+                            <li key={c.id} className={cn("flex items-start gap-2")}>
+                              <span className="w-4 h-4 rounded-full bg-violet-100 text-violet-600 text-[9px] font-bold flex items-center justify-center mt-0.5 shrink-0">
+                                {idx + 1}
+                              </span>
+                              <div className="min-w-0">
+                                <p className="text-xs font-medium text-gray-900">
+                                  {c.title}
+                                </p>
+                                {c.description && (
+                                  <p className="text-[11px] text-gray-500 mt-0.5">
+                                    {c.description}
+                                  </p>
+                                )}
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   )}
                 </div>
               );
