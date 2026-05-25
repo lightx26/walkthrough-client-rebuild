@@ -6,6 +6,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {ArrowLeft, BookOpen, LayoutTemplate, Plus, Save, Send} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ApplyTemplateDialog } from "./apply-template-dialog";
 import { ChangedFilesPanel } from "./changed-files-panel";
 import { ChapterCard, type ChapterDraft } from "./chapter-card";
@@ -76,6 +77,7 @@ export function WalkthroughEditor({
   );
   const [activeFileDiff, setActiveFileDiff] = useState<PrFile | null>(null);
   const [showApplyTemplate, setShowApplyTemplate] = useState(false);
+  const [pendingTemplate, setPendingTemplate] = useState<Template | null>(null);
 
   const assignedFilenames = useMemo(() => {
     const set = new Set<string>();
@@ -103,7 +105,7 @@ export function WalkthroughEditor({
     ]);
   };
 
-  const handleApplyTemplate = (template: Template) => {
+  const applyTemplate = (template: Template) => {
     const sorted = [...(template.chapters ?? [])].sort(
       (a, b) => a.sortOrder - b.sortOrder,
     );
@@ -118,6 +120,15 @@ export function WalkthroughEditor({
         : [{ id: crypto.randomUUID(), title: "", description: "", files: [] }],
     );
     setShowApplyTemplate(false);
+    setPendingTemplate(null);
+  };
+
+  const handleApplyTemplate = (template: Template) => {
+    if (assignedFilenames.size > 0) {
+      setPendingTemplate(template);
+      return;
+    }
+    applyTemplate(template);
   };
 
   const handleSave = (status: "DRAFT" | "PUBLISHED") => {
@@ -298,6 +309,24 @@ export function WalkthroughEditor({
         open={showApplyTemplate}
         onClose={() => setShowApplyTemplate(false)}
         onApply={handleApplyTemplate}
+      />
+
+      <ConfirmDialog
+        open={!!pendingTemplate}
+        title="Replace current chapters?"
+        description={
+          <>
+            You have <strong>{assignedFilenames.size}</strong> file
+            {assignedFilenames.size === 1 ? "" : "s"} assigned to chapters.
+            Applying{pendingTemplate ? ` "${pendingTemplate.name}"` : ""} will
+            replace all chapters and unassign these files.
+          </>
+        }
+        tone="warning"
+        confirmLabel="Apply template"
+        cancelLabel="Keep current"
+        onConfirm={() => pendingTemplate && applyTemplate(pendingTemplate)}
+        onCancel={() => setPendingTemplate(null)}
       />
     </DndProvider>
   );
