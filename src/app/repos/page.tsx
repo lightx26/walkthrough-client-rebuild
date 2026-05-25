@@ -6,7 +6,7 @@ import { Skeleton, Pagination } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { useRepositories } from "@/hooks/use-github";
 import { RepoCard } from "@/components/repos";
-import { Filter, X } from "lucide-react";
+import {Database, Filter, X} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PER_PAGE = 20;
@@ -93,15 +93,20 @@ export default function RepositoriesPage() {
   return (
     <DashboardLayout>
       <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
-        <div className="mb-6">
-          <h1 className="text-[22px] font-bold text-gray-900 mb-1">
-            Repositories
-          </h1>
-          <p className="text-sm text-gray-400">
-            {isLoading
-              ? "Loading repositories…"
-              : `${totalElements} ${totalElements === 1 ? "repository" : "repositories"} connected to your account`}
-          </p>
+        <div className="flex items-start gap-3 mb-6">
+          <div className="w-10 h-10 rounded-lg bg-violet-600 text-white flex items-center justify-center shrink-0">
+            <Database className="w-5 h-5" />
+          </div>
+          <div>
+            <h1 className="text-[22px] font-bold text-gray-900 mb-1">
+              Repositories
+            </h1>
+              <p className="text-sm text-gray-500">
+                {isLoading
+                  ? "Loading repositories…"
+                  : `${totalElements} ${totalElements === 1 ? "repository" : "repositories"} connected to your account`}
+              </p>
+          </div>
         </div>
 
         {/* Filters */}
