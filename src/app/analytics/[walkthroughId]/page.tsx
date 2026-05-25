@@ -31,7 +31,8 @@ export default function AnalyticsDetailPage({
   const { walkthroughId } = use(params);
 
   const { data: wtData } = useWalkthrough(walkthroughId);
-  const { data: rpData, isLoading: rpLoading } = useReviewProgress(walkthroughId);
+  const { data: rpData, isLoading: rpLoading } =
+    useReviewProgress(walkthroughId);
   const { data: caData, isLoading: caLoading } =
     useChapterAttention(walkthroughId);
   const { data: usData } = useUnreadSummary(walkthroughId);
@@ -107,8 +108,7 @@ export default function AnalyticsDetailPage({
           <span className="text-gray-300">·</span>
           <span className="inline-flex items-center gap-1.5">
             <MessageSquare className="w-3.5 h-3.5" />
-            {totalComments}{" "}
-            {totalComments === 1 ? "comment" : "comments"}
+            {totalComments} {totalComments === 1 ? "comment" : "comments"}
           </span>
         </div>
 

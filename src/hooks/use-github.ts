@@ -22,7 +22,8 @@ export function useRepositories({
 }: UseRepositoriesParams = {}) {
   return useQuery({
     queryKey: ["repos", page, perPage, sort, q, type, language],
-    queryFn: () => githubService.getRepositories({ page, perPage, sort, q, type, language }),
+    queryFn: () =>
+      githubService.getRepositories({ page, perPage, sort, q, type, language }),
   });
 }
 

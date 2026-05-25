@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, notFound } from "next/navigation";
 import { BarChart2, BookOpen, Users } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import {
@@ -9,6 +9,8 @@ import {
   AuthorView,
   TeamLeadView,
 } from "@/components/analytics";
+import { useRepository } from "@/hooks/use-github";
+import { isNotFoundError } from "@/lib/error";
 
 type Tab = "author" | "team";
 
@@ -18,6 +20,11 @@ export default function AnalyticsPage() {
   const owner = searchParams.get("owner") ?? undefined;
   const repo = searchParams.get("repo") ?? undefined;
   const scopedRepo = owner && repo ? { owner, repo } : undefined;
+
+  const { error: scopedRepoError } = useRepository(owner ?? "", repo ?? "");
+  if (scopedRepo && isNotFoundError(scopedRepoError)) {
+    notFound();
+  }
 
   return (
     <DashboardLayout>

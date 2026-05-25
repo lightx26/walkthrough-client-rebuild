@@ -26,8 +26,7 @@ const buttonVariants = cva(
         // Text-only color-shift link (no bg). Use for "view all" / nav-style buttons.
         link: "text-primary hover:text-primary-hover underline-offset-4 hover:underline",
         // Muted text that brightens on hover. Use for tertiary text actions.
-        muted:
-          "text-muted-foreground hover:text-foreground hover:bg-accent",
+        muted: "text-muted-foreground hover:text-foreground hover:bg-accent",
         // Destructive filled.
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive-hover",

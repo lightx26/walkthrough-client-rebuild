@@ -21,7 +21,9 @@ export function CommentSection({ walkthroughId }: CommentSectionProps) {
 
   const { data } = useWalkthroughComments(walkthroughId);
 
-  const comments = (data?.data?.items ?? []).filter((c) => !c.chapterId && !c.walkthroughFileId && !c.parentId);
+  const comments = (data?.data?.items ?? []).filter(
+    (c) => !c.chapterId && !c.walkthroughFileId && !c.parentId,
+  );
 
   const addComment = useCreateWalkthroughComment(walkthroughId);
 
@@ -47,7 +49,13 @@ export function CommentSection({ walkthroughId }: CommentSectionProps) {
 
       {/* Comment input */}
       <div className="flex items-start gap-3 px-6 py-4 border-b border-gray-100">
-        <UserAvatar src={user?.avatarUrl} displayName={user?.displayName} username={user?.username} size="sm" className="mt-0.5 shrink-0" />
+        <UserAvatar
+          src={user?.avatarUrl}
+          displayName={user?.displayName}
+          username={user?.username}
+          size="sm"
+          className="mt-0.5 shrink-0"
+        />
         <div className="flex-1 min-w-0 flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
           <textarea
             rows={1}
@@ -83,10 +91,16 @@ export function CommentSection({ walkthroughId }: CommentSectionProps) {
               />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-medium text-gray-900">{comment.username}</span>
-                  <span className="text-xs text-gray-400">{formatRelativeTime(comment.createdAt)}</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {comment.username}
+                  </span>
+                  <span className="text-xs text-gray-400">
+                    {formatRelativeTime(comment.createdAt)}
+                  </span>
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed wrap-break-word">{comment.content}</p>
+                <p className="text-sm text-gray-700 leading-relaxed wrap-break-word">
+                  {comment.content}
+                </p>
               </div>
             </div>
           ))}

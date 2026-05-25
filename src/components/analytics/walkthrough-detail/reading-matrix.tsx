@@ -27,9 +27,7 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
           <Users className="w-4 h-4 text-violet-600" />
           Reading matrix
         </h3>
-        <p className="text-xs text-gray-500">
-          Who read which chapter
-        </p>
+        <p className="text-xs text-gray-500">Who read which chapter</p>
       </div>
 
       <div className="overflow-x-auto">
@@ -38,10 +36,7 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
             <tr className="text-[10px] uppercase tracking-wider text-gray-400">
               <th className="text-left font-medium pb-3 pr-3">Reviewer</th>
               {chapters.map((c, i) => (
-                <th
-                  key={c.chapterId}
-                  className="font-medium pb-3 px-1 w-18"
-                >
+                <th key={c.chapterId} className="font-medium pb-3 px-1 w-18">
                   <div className="flex flex-col items-center gap-0.5">
                     <span className="text-gray-500">{i + 1}</span>
                     <span className="font-normal normal-case tracking-normal text-gray-400 truncate max-w-24 block">
@@ -103,7 +98,9 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
                   </span>
                 </td>
                 <td className="py-3 pl-3 text-xs text-gray-500 whitespace-nowrap">
-                  {r.lastActiveAt ? formatRelativeTime(r.lastActiveAt) : "Never"}
+                  {r.lastActiveAt
+                    ? formatRelativeTime(r.lastActiveAt)
+                    : "Never"}
                 </td>
               </tr>
             ))}
@@ -128,7 +125,10 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
         <MatrixLegendBadge color="emerald" icon={<Check className="w-3 h-3" />}>
           Read fully
         </MatrixLegendBadge>
-        <MatrixLegendBadge color="amber" icon={<AlertCircle className="w-3 h-3" />}>
+        <MatrixLegendBadge
+          color="amber"
+          icon={<AlertCircle className="w-3 h-3" />}
+        >
           Read, not scrolled to end
         </MatrixLegendBadge>
         <span className="inline-flex items-center gap-1.5">

@@ -1,6 +1,11 @@
 import { useState } from "react";
 import Link from "next/link";
-import { BookOpen, MessageSquare, PanelRightClose, PanelRightOpen } from "lucide-react";
+import {
+  BookOpen,
+  MessageSquare,
+  PanelRightClose,
+  PanelRightOpen,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import type { RecentlyReviewedWalkthrough } from "@/types/walkthrough";
@@ -19,21 +24,21 @@ export function WeekSummaryPanel({
   const [collapsed, setCollapsed] = useState(false);
 
   const summaryData = [
-  {
-    icon: BookOpen,
-    iconColor: "text-blue-500",
-    bg: "bg-blue-50",
-    label: "Walkthroughs",
-    value: walkthroughCount,
-  },
-  {
-    icon: MessageSquare,
-    iconColor: "text-violet-500",
-    bg: "bg-violet-50",
-    label: "Comments",
-    value: commentCount,
-  },
-];
+    {
+      icon: BookOpen,
+      iconColor: "text-blue-500",
+      bg: "bg-blue-50",
+      label: "Walkthroughs",
+      value: walkthroughCount,
+    },
+    {
+      icon: MessageSquare,
+      iconColor: "text-violet-500",
+      bg: "bg-violet-50",
+      label: "Comments",
+      value: commentCount,
+    },
+  ];
 
   if (collapsed) {
     return (

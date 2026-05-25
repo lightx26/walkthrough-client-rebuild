@@ -89,7 +89,8 @@ function DirNode({ node, depth }: DirRowProps) {
   const childDirs: TreeNode[] = [];
   const childLeaves: TreeNode[] = [];
   for (const child of node.children.values()) {
-    if (child.leaves.length > 0 && child.children.size === 0) childLeaves.push(child);
+    if (child.leaves.length > 0 && child.children.size === 0)
+      childLeaves.push(child);
     else childDirs.push(child);
   }
   childDirs.sort((a, b) => a.name.localeCompare(b.name));
@@ -110,7 +111,9 @@ function DirNode({ node, depth }: DirRowProps) {
             open && "rotate-90",
           )}
         />
-        <span className="text-xs font-medium text-gray-700 truncate">{node.name}</span>
+        <span className="text-xs font-medium text-gray-700 truncate">
+          {node.name}
+        </span>
       </Button>
       {open && (
         <>
@@ -141,7 +144,9 @@ interface FileLeafProps {
 
 function FileLeaf({ name, leaf, depth }: FileLeafProps) {
   const badge = statusBadge(leaf.file.fileStatus);
-  const stats = leaf.file.rawPatch ? computeDiffStats(leaf.file.rawPatch) : null;
+  const stats = leaf.file.rawPatch
+    ? computeDiffStats(leaf.file.rawPatch)
+    : null;
   return (
     <Button
       variant="ghost"
@@ -160,11 +165,18 @@ function FileLeaf({ name, leaf, depth }: FileLeafProps) {
       >
         {leaf.chapterIndex + 1}
       </span>
-      <span className={cn("text-[10px] font-bold px-1 py-0.5 rounded shrink-0", badge.cls)}>
+      <span
+        className={cn(
+          "text-[10px] font-bold px-1 py-0.5 rounded shrink-0",
+          badge.cls,
+        )}
+      >
         {badge.label}
       </span>
       {stats && (
-        <span className="text-[10px] font-mono text-green-600 shrink-0">+{stats.added}</span>
+        <span className="text-[10px] font-mono text-green-600 shrink-0">
+          +{stats.added}
+        </span>
       )}
     </Button>
   );
@@ -178,12 +190,16 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
   const [open, setOpen] = useState(false);
   const root = useMemo(() => buildTree(walkthrough), [walkthrough]);
 
-  const totalFiles = walkthrough.chapters.reduce((n, ch) => n + ch.files.length, 0);
+  const totalFiles = walkthrough.chapters.reduce(
+    (n, ch) => n + ch.files.length,
+    0,
+  );
 
   const topDirs: TreeNode[] = [];
   const topLeaves: TreeNode[] = [];
   for (const child of root.children.values()) {
-    if (child.leaves.length > 0 && child.children.size === 0) topLeaves.push(child);
+    if (child.leaves.length > 0 && child.children.size === 0)
+      topLeaves.push(child);
     else topDirs.push(child);
   }
   topDirs.sort((a, b) => a.name.localeCompare(b.name));
@@ -207,7 +223,9 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
         <div className="fixed right-6 top-22 z-40 w-80 bg-white border border-gray-200 rounded-xl shadow-xl flex flex-col max-h-[calc(100vh-7rem)]">
           <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 shrink-0">
             <FolderTree className="w-4 h-4 text-gray-500" />
-            <span className="font-semibold text-sm text-gray-900 flex-1">Original Tree</span>
+            <span className="font-semibold text-sm text-gray-900 flex-1">
+              Original Tree
+            </span>
             <span className="text-xs font-semibold text-white bg-blue-500 rounded-full px-1.5 py-0.5 min-w-5 text-center">
               {totalFiles}
             </span>
@@ -227,7 +245,12 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
             ))}
             {topLeaves.map((child) =>
               child.leaves.map((leaf) => (
-                <FileLeaf key={leaf.file.id} name={child.name} leaf={leaf} depth={0} />
+                <FileLeaf
+                  key={leaf.file.id}
+                  name={child.name}
+                  leaf={leaf}
+                  depth={0}
+                />
               )),
             )}
           </div>

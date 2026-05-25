@@ -35,7 +35,8 @@ export function useUnpinRepo() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (repoFullName: string) => pinnedRepoService.unpinRepo(repoFullName),
+    mutationFn: (repoFullName: string) =>
+      pinnedRepoService.unpinRepo(repoFullName),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pinned-repos"] });
       queryClient.invalidateQueries({ queryKey: ["repos"] });

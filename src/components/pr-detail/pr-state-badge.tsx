@@ -1,8 +1,4 @@
-import {
-  GitMerge,
-  GitPullRequest,
-  GitPullRequestClosed,
-} from "lucide-react";
+import { GitMerge, GitPullRequest, GitPullRequestClosed } from "lucide-react";
 import type { PullRequestState } from "@/types/github";
 
 export function PrStateBadge({ state }: { state: PullRequestState }) {

@@ -8,34 +8,34 @@
   --card-foreground: #18181b;
 
   /* Brand */
-  --primary: #7c3aed;          /* violet-600 */
-  --primary-hover: #6d28d9;    /* violet-700 */
+  --primary: #7c3aed; /* violet-600 */
+  --primary-hover: #6d28d9; /* violet-700 */
   --primary-foreground: #ffffff;
-  --primary-soft: #ede9fe;     /* violet-100 — soft tinted bg */
+  --primary-soft: #ede9fe; /* violet-100 — soft tinted bg */
   --primary-soft-foreground: #6d28d9;
 
   /* Neutral / secondary (dark filled buttons like GitHub login) */
-  --secondary: #18181b;        /* gray-900 */
-  --secondary-hover: #27272a;  /* gray-800 */
+  --secondary: #18181b; /* gray-900 */
+  --secondary-hover: #27272a; /* gray-800 */
   --secondary-foreground: #ffffff;
 
   /* Muted / accent surfaces */
-  --muted: #f4f4f5;            /* gray-100 */
+  --muted: #f4f4f5; /* gray-100 */
   --muted-foreground: #71717a; /* gray-500 */
-  --accent: #f4f4f5;           /* gray-100 — hover bg */
+  --accent: #f4f4f5; /* gray-100 — hover bg */
   --accent-foreground: #18181b;
 
   /* Destructive */
-  --destructive: #dc2626;          /* red-600 */
-  --destructive-hover: #b91c1c;    /* red-700 */
+  --destructive: #dc2626; /* red-600 */
+  --destructive-hover: #b91c1c; /* red-700 */
   --destructive-foreground: #ffffff;
-  --destructive-soft: #fef2f2;     /* red-50 */
+  --destructive-soft: #fef2f2; /* red-50 */
   --destructive-soft-foreground: #dc2626;
 
   /* Borders / inputs / focus ring */
-  --border: #e4e4e7;     /* gray-200 */
+  --border: #e4e4e7; /* gray-200 */
   --input: #e4e4e7;
-  --ring: #8b5cf6;       /* violet-500 */
+  --ring: #8b5cf6; /* violet-500 */
 }
 
 @theme inline {

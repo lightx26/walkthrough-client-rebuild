@@ -9,7 +9,11 @@ export type ConfirmDialogTone = "warning" | "danger" | "info";
 
 const TONE_STYLES: Record<
   ConfirmDialogTone,
-  { iconBg: string; iconColor: string; confirmVariant: "primary" | "destructive" }
+  {
+    iconBg: string;
+    iconColor: string;
+    confirmVariant: "primary" | "destructive";
+  }
 > = {
   warning: {
     iconBg: "bg-amber-50",
@@ -110,11 +114,7 @@ export function ConfirmDialog({
           <Button variant="outline" size="sm" onClick={onCancel}>
             {cancelLabel}
           </Button>
-          <Button
-            variant={styles.confirmVariant}
-            size="sm"
-            onClick={onConfirm}
-          >
+          <Button variant={styles.confirmVariant} size="sm" onClick={onConfirm}>
             {confirmLabel}
           </Button>
         </div>

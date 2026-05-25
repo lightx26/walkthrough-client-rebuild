@@ -27,7 +27,9 @@ export function SearchRepoItem({ repo, query, selected, onClick }: Props) {
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm text-gray-900 truncate flex items-center gap-1.5">
-          {repo.isPrivate && <Lock className="w-3 h-3 text-gray-400 shrink-0" />}
+          {repo.isPrivate && (
+            <Lock className="w-3 h-3 text-gray-400 shrink-0" />
+          )}
           <HighlightText text={repo.fullName} query={query} />
         </p>
         {repo.description && (

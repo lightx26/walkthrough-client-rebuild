@@ -4,7 +4,9 @@ export function ReviewsPerMemberChart({ members }: { members: RepoMember[] }) {
   const max = Math.max(1, ...members.map((m) => m.walkthroughsReviewed));
   return (
     <div className="bg-white border border-gray-200 rounded-xl px-5 py-4">
-      <h3 className="text-sm font-semibold text-gray-900">Reviews per member</h3>
+      <h3 className="text-sm font-semibold text-gray-900">
+        Reviews per member
+      </h3>
       <p className="text-xs text-gray-500 mb-3">
         Completed vs. partial across all walkthroughs
       </p>

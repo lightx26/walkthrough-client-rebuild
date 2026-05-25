@@ -28,7 +28,11 @@ function isSkim(entry: ChapterAttention["attention"][number]) {
   return !entry.scrolledToBottom && entry.timeSpentSec < 60;
 }
 
-export function ChapterAttentionRow({ chapter }: { chapter: ChapterAttention }) {
+export function ChapterAttentionRow({
+  chapter,
+}: {
+  chapter: ChapterAttention;
+}) {
   const hasReaders = chapter.attention.length > 0;
   const [open, setOpen] = useState(hasReaders);
 

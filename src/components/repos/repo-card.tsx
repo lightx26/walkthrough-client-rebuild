@@ -1,6 +1,17 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { BarChart2, Building2, ChevronRight, GitBranch, GitFork, Globe, Lock, Pin, Star, User } from "lucide-react";
+import {
+  BarChart2,
+  Building2,
+  ChevronRight,
+  GitBranch,
+  GitFork,
+  Globe,
+  Lock,
+  Pin,
+  Star,
+  User,
+} from "lucide-react";
 import type { Repository } from "@/types/github";
 import { languageColor } from "@/utils/language-color";
 import { formatRelativeTime } from "@/utils/date-diff";

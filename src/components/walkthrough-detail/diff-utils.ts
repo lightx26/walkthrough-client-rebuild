@@ -25,13 +25,21 @@ export function parsePatch(rawPatch: string): DiffLine[] {
     } else if (line.startsWith("-")) {
       result.push({ type: "del", content: line.slice(1), oldNo: oldLine++ });
     } else if (line.startsWith(" ") || line === "") {
-      result.push({ type: "ctx", content: line.slice(1), oldNo: oldLine++, newNo: newLine++ });
+      result.push({
+        type: "ctx",
+        content: line.slice(1),
+        oldNo: oldLine++,
+        newNo: newLine++,
+      });
     }
   }
   return result;
 }
 
-export function computeDiffStats(rawPatch: string): { added: number; removed: number } {
+export function computeDiffStats(rawPatch: string): {
+  added: number;
+  removed: number;
+} {
   let added = 0;
   let removed = 0;
   for (const line of rawPatch.split("\n")) {

@@ -72,7 +72,8 @@ export default function WalkthroughDetailPage() {
                     size="sm"
                   />
                   <span className="text-sm text-gray-700 font-medium">
-                    {walkthrough.creatorDisplayName || walkthrough.creatorUsername}
+                    {walkthrough.creatorDisplayName ||
+                      walkthrough.creatorUsername}
                   </span>
                   <span className="text-xs text-gray-400">
                     {formatRelativeTime(walkthrough.updatedAt)}
@@ -80,7 +81,12 @@ export default function WalkthroughDetailPage() {
                 </div>
 
                 {isOwner && (
-                  <Button asChild variant="primary" size="sm" className="gap-1.5">
+                  <Button
+                    asChild
+                    variant="primary"
+                    size="sm"
+                    className="gap-1.5"
+                  >
                     <Link href={`/walkthroughs/${walkthrough.id}/edit`}>
                       <Pencil className="w-3.5 h-3.5" />
                       Edit
@@ -121,7 +127,8 @@ export default function WalkthroughDetailPage() {
                         Review Progress
                       </span>
                       <span className="text-xs text-gray-500">
-                        {progress.readChapters}/{progress.totalChapters} chapters
+                        {progress.readChapters}/{progress.totalChapters}{" "}
+                        chapters
                       </span>
                     </div>
                     <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -137,7 +144,12 @@ export default function WalkthroughDetailPage() {
 
                 {/* Chapters */}
                 {walkthrough.chapters.map((chapter, idx) => (
-                  <ChapterSection key={chapter.id} chapter={chapter} index={idx} walkthroughId={walkthrough.id} />
+                  <ChapterSection
+                    key={chapter.id}
+                    chapter={chapter}
+                    index={idx}
+                    walkthroughId={walkthrough.id}
+                  />
                 ))}
 
                 {/* General Discussion */}

@@ -26,7 +26,10 @@ interface FilesPanelProps {
 export function FilesPanel({ walkthrough }: FilesPanelProps) {
   const [open, setOpen] = useState(false);
 
-  const totalFiles = walkthrough.chapters.reduce((n, ch) => n + ch.files.length, 0);
+  const totalFiles = walkthrough.chapters.reduce(
+    (n, ch) => n + ch.files.length,
+    0,
+  );
 
   return (
     <>
@@ -49,7 +52,9 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
           {/* Header */}
           <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 shrink-0">
             <LayoutList className="w-4 h-4 text-gray-500" />
-            <span className="font-semibold text-sm text-gray-900 flex-1">Walkthrough files</span>
+            <span className="font-semibold text-sm text-gray-900 flex-1">
+              Walkthrough files
+            </span>
             <span className="text-xs font-semibold text-white bg-blue-500 rounded-full px-1.5 py-0.5 min-w-5 text-center">
               {totalFiles}
             </span>
@@ -72,14 +77,19 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
                   <span className="shrink-0 w-5 h-5 rounded-full bg-violet-600 text-white text-[10px] font-bold flex items-center justify-center">
                     {chIdx + 1}
                   </span>
-                  <span className="text-xs font-medium text-gray-700 truncate">{chapter.title}</span>
+                  <span className="text-xs font-medium text-gray-700 truncate">
+                    {chapter.title}
+                  </span>
                 </div>
 
                 {/* File rows */}
                 {chapter.files.map((file) => {
                   const badge = statusBadge(file.fileStatus);
-                  const stats = file.rawPatch ? computeDiffStats(file.rawPatch) : null;
-                  const shortName = file.filename.split("/").pop() ?? file.filename;
+                  const stats = file.rawPatch
+                    ? computeDiffStats(file.rawPatch)
+                    : null;
+                  const shortName =
+                    file.filename.split("/").pop() ?? file.filename;
 
                   return (
                     <Button
@@ -95,7 +105,12 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
                       <span className="text-xs text-gray-600 group-hover:text-violet-700 truncate flex-1 font-mono">
                         {shortName}
                       </span>
-                      <span className={cn("text-[10px] font-bold px-1 py-0.5 rounded shrink-0", badge.cls)}>
+                      <span
+                        className={cn(
+                          "text-[10px] font-bold px-1 py-0.5 rounded shrink-0",
+                          badge.cls,
+                        )}
+                      >
                         {badge.label}
                       </span>
                       {stats && (

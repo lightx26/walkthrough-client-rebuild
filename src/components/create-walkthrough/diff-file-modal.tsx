@@ -5,10 +5,7 @@ import { X, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import type { PrFile } from "@/types/github";
-import {
-  parsePatch,
-  computeDiffStats,
-} from "@/components/walkthrough-detail";
+import { parsePatch, computeDiffStats } from "@/components/walkthrough-detail";
 import { useSyntaxHighlight } from "@/hooks/use-syntax-highlight";
 import { baseName } from "./file-utils";
 

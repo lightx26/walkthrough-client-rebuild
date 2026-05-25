@@ -16,9 +16,10 @@ interface RepoMetricsParams {
 }
 
 export const analyticsService = {
-  async authorSummary(params?: { owner?: string; repo?: string }): Promise<
-    DataResponse<ListData<AuthorWalkthroughSummary>>
-  > {
+  async authorSummary(params?: {
+    owner?: string;
+    repo?: string;
+  }): Promise<DataResponse<ListData<AuthorWalkthroughSummary>>> {
     const { data } = await apiClient.get<
       DataResponse<ListData<AuthorWalkthroughSummary>>
     >("/v1/analytics/author-summary", { params });

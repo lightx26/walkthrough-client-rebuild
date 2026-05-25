@@ -4,9 +4,10 @@ import type { PinnedRepo, PinRepoRequest } from "@/types/starred";
 
 export const pinnedRepoService = {
   async getPinnedRepos(): Promise<DataResponse<ListData<PinnedRepo>>> {
-    const { data } = await apiClient.get<DataResponse<ListData<PinnedRepo>>>(
-      "/v1/pinned-repos",
-    );
+    const { data } =
+      await apiClient.get<DataResponse<ListData<PinnedRepo>>>(
+        "/v1/pinned-repos",
+      );
     return data;
   },
 

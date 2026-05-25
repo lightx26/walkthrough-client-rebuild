@@ -98,7 +98,9 @@ export function PrList({ prs, isLoading, owner, repo }: PrListProps) {
             No pull requests.
           </div>
         ) : (
-          filtered.map((pr) => <PrRow key={pr.number} pr={pr} owner={owner} repo={repo} />)
+          filtered.map((pr) => (
+            <PrRow key={pr.number} pr={pr} owner={owner} repo={repo} />
+          ))
         )}
       </div>
     </div>

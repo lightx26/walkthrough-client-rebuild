@@ -25,7 +25,10 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
   if (!displayStatus) return null;
 
   return (
-    <Link href={`/walkthroughs/${wt.id}`} className="flex items-start gap-3 py-3.5 border-b border-gray-100 last:border-0 group">
+    <Link
+      href={`/walkthroughs/${wt.id}`}
+      className="flex items-start gap-3 py-3.5 border-b border-gray-100 last:border-0 group"
+    >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 mb-1.5">
           <span

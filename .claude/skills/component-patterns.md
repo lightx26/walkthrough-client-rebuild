@@ -57,7 +57,11 @@ export { ProgressDots } from "./progress-dots";
 
 ```tsx
 // Good
-import { AuthorView, TeamLeadView, AnalyticsTabButton } from "@/components/analytics";
+import {
+  AuthorView,
+  TeamLeadView,
+  AnalyticsTabButton,
+} from "@/components/analytics";
 
 // Bad
 import { AuthorView } from "@/components/analytics/author/author-view";

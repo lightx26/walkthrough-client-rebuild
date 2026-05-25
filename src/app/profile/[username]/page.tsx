@@ -9,7 +9,12 @@ import {
   WalkthroughsTab,
 } from "@/components/profile";
 import type { ProfileTab } from "@/components/profile";
-import { useProfile, useProfileReviewing, useProfileStats, useUserWalkthroughs } from "@/hooks/use-profile";
+import {
+  useProfile,
+  useProfileReviewing,
+  useProfileStats,
+  useUserWalkthroughs,
+} from "@/hooks/use-profile";
 
 export default function ProfilePage({
   params,
@@ -21,8 +26,10 @@ export default function ProfilePage({
 
   const { data: profile, isLoading: profileLoading } = useProfile(username);
   const { data: stats } = useProfileStats(username);
-  const { data: walkthroughs, isLoading: walkthroughsLoading } = useUserWalkthroughs(username);
-  const { data: reviewing, isLoading: reviewingLoading } = useProfileReviewing(username);
+  const { data: walkthroughs, isLoading: walkthroughsLoading } =
+    useUserWalkthroughs(username);
+  const { data: reviewing, isLoading: reviewingLoading } =
+    useProfileReviewing(username);
 
   if (profileLoading || !profile) {
     return (
@@ -67,7 +74,9 @@ export default function ProfilePage({
               isLoading={walkthroughsLoading}
             />
           )}
-          {activeTab === "repositories" && <RepositoriesTab username={username} />}
+          {activeTab === "repositories" && (
+            <RepositoriesTab username={username} />
+          )}
         </div>
       </div>
     </DashboardLayout>

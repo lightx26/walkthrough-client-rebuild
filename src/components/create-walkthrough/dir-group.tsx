@@ -18,7 +18,9 @@ export function DirGroup({ dir, files, assignedFilenames }: DirGroupProps) {
   const [expanded, setExpanded] = useState(true);
   const dragRef = useRef<HTMLDivElement>(null);
 
-  const unassignedFiles = files.filter((f) => !assignedFilenames.has(f.filename));
+  const unassignedFiles = files.filter(
+    (f) => !assignedFilenames.has(f.filename),
+  );
   const assignedCount = files.length - unassignedFiles.length;
   const dirLabel = dir ? dir.replace(/\/$/, "") : "(root)";
 

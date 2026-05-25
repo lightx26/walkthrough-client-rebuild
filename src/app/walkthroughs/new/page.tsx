@@ -28,7 +28,10 @@ function CreateWalkthroughContent() {
   const allFiles = filesData?.data?.items ?? [];
   const createWalkthrough = useCreateWalkthrough();
 
-  const handleSave = (data: WalkthroughFormData, status: "DRAFT" | "PUBLISHED") => {
+  const handleSave = (
+    data: WalkthroughFormData,
+    status: "DRAFT" | "PUBLISHED",
+  ) => {
     const request: CreateWalkthroughRequest = {
       owner,
       repo,

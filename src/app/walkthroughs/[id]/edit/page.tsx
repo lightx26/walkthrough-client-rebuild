@@ -12,7 +12,10 @@ import {
   type WalkthroughFormData,
 } from "@/components/create-walkthrough";
 import type { PrFile, PrFileStatus } from "@/types/github";
-import type { UpdateWalkthroughRequest, Walkthrough } from "@/types/walkthrough";
+import type {
+  UpdateWalkthroughRequest,
+  Walkthrough,
+} from "@/types/walkthrough";
 
 function normalizeStatus(fileStatus: string): PrFileStatus {
   const s = fileStatus.toLowerCase();
@@ -85,7 +88,10 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
     prNumber,
   });
 
-  const allFiles = useMemo(() => filesData?.data?.items ?? [], [filesData?.data?.items]);
+  const allFiles = useMemo(
+    () => filesData?.data?.items ?? [],
+    [filesData?.data?.items],
+  );
 
   const [initialized, setInitialized] = useState(false);
   const [initialChapters, setInitialChapters] = useState<ChapterDraft[]>();
@@ -101,7 +107,10 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
     });
   }, [walkthrough, allFiles, filesLoading, initialized]);
 
-  const handleSave = (data: WalkthroughFormData, status: "DRAFT" | "PUBLISHED") => {
+  const handleSave = (
+    data: WalkthroughFormData,
+    status: "DRAFT" | "PUBLISHED",
+  ) => {
     const request: UpdateWalkthroughRequest = {
       title: data.title,
       description: data.description,

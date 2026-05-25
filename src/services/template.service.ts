@@ -10,7 +10,9 @@ import type {
 } from "@/types/template";
 
 export const templateService = {
-  async list(prType?: TemplatePrType): Promise<DataResponse<ListData<Template>>> {
+  async list(
+    prType?: TemplatePrType,
+  ): Promise<DataResponse<ListData<Template>>> {
     const { data } = await apiClient.get<DataResponse<ListData<Template>>>(
       "/v1/templates",
       { params: prType ? { prType } : undefined },
@@ -25,7 +27,9 @@ export const templateService = {
     return data;
   },
 
-  async create(request: CreateTemplateRequest): Promise<DataResponse<Template>> {
+  async create(
+    request: CreateTemplateRequest,
+  ): Promise<DataResponse<Template>> {
     const { data } = await apiClient.post<DataResponse<Template>>(
       "/v1/templates",
       request,
@@ -62,10 +66,9 @@ export const templateService = {
   async topDuplicated(
     limit = 5,
   ): Promise<DataResponse<ListData<TemplateSummary>>> {
-    const { data } = await apiClient.get<DataResponse<ListData<TemplateSummary>>>(
-      "/v1/templates/stats/top-duplicated",
-      { params: { limit } },
-    );
+    const { data } = await apiClient.get<
+      DataResponse<ListData<TemplateSummary>>
+    >("/v1/templates/stats/top-duplicated", { params: { limit } });
     return data;
   },
 };

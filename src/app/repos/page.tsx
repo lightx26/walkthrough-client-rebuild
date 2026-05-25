@@ -6,7 +6,7 @@ import { Skeleton, Pagination } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { useRepositories } from "@/hooks/use-github";
 import { RepoCard } from "@/components/repos";
-import {Database, Filter, X} from "lucide-react";
+import { Database, Filter, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PER_PAGE = 20;
@@ -70,9 +70,7 @@ export default function RepositoriesPage() {
 
   // Extract unique languages from current page for the language quick-picks
   const uniqueLanguages = useMemo(() => {
-    const langs = repos
-      .map((r) => r.language)
-      .filter((l): l is string => !!l);
+    const langs = repos.map((r) => r.language).filter((l): l is string => !!l);
     return [...new Set(langs)].sort();
   }, [repos]);
 
@@ -101,11 +99,11 @@ export default function RepositoriesPage() {
             <h1 className="text-[22px] font-bold text-gray-900 mb-1">
               Repositories
             </h1>
-              <p className="text-sm text-gray-500">
-                {isLoading
-                  ? "Loading repositories…"
-                  : `${totalElements} ${totalElements === 1 ? "repository" : "repositories"} connected to your account`}
-              </p>
+            <p className="text-sm text-gray-500">
+              {isLoading
+                ? "Loading repositories…"
+                : `${totalElements} ${totalElements === 1 ? "repository" : "repositories"} connected to your account`}
+            </p>
           </div>
         </div>
 
@@ -173,7 +171,9 @@ export default function RepositoriesPage() {
             <option value="">All owners</option>
             {uniqueOwners.map((owner) => (
               <option key={owner.login} value={owner.login}>
-                {owner.type === "Organization" ? `🏢 ${owner.login}` : `👤 ${owner.login}`}
+                {owner.type === "Organization"
+                  ? `🏢 ${owner.login}`
+                  : `👤 ${owner.login}`}
               </option>
             ))}
           </select>
@@ -209,7 +209,11 @@ export default function RepositoriesPage() {
 
         {!isLoading && totalPages > 1 && (
           <div className="flex justify-center mt-6">
-            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
           </div>
         )}
       </main>

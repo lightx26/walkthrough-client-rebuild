@@ -31,11 +31,12 @@ export const searchService = {
     await apiClient.post("/v1/search/history", { query });
   },
 
-  async searchUsers(q: string): Promise<DataResponse<ListData<UserSearchResult>>> {
-    const { data } = await apiClient.get<DataResponse<ListData<UserSearchResult>>>(
-      "/v1/users/search",
-      { params: { q } },
-    );
+  async searchUsers(
+    q: string,
+  ): Promise<DataResponse<ListData<UserSearchResult>>> {
+    const { data } = await apiClient.get<
+      DataResponse<ListData<UserSearchResult>>
+    >("/v1/users/search", { params: { q } });
     return data;
   },
 
@@ -47,11 +48,13 @@ export const searchService = {
     return data;
   },
 
-  async searchPRs(q: string, perPage = 10): Promise<DataResponse<ListData<RecentPRResult>>> {
-    const { data } = await apiClient.get<DataResponse<ListData<RecentPRResult>>>(
-      "/v1/github/pulls/search",
-      { params: { q, perPage } },
-    );
+  async searchPRs(
+    q: string,
+    perPage = 10,
+  ): Promise<DataResponse<ListData<RecentPRResult>>> {
+    const { data } = await apiClient.get<
+      DataResponse<ListData<RecentPRResult>>
+    >("/v1/github/pulls/search", { params: { q, perPage } });
     return data;
   },
 };

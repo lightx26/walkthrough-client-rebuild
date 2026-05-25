@@ -8,7 +8,11 @@ import { DraggableChapter } from "./draggable-chapter";
 interface TemplateFormChaptersProps {
   chapters: ChapterDraft[];
   onRemove: (key: string) => void;
-  onUpdate: (key: string, field: "title" | "description", value: string) => void;
+  onUpdate: (
+    key: string,
+    field: "title" | "description",
+    value: string,
+  ) => void;
   onMove: (fromIndex: number, toIndex: number) => void;
   onAdd: () => void;
 }

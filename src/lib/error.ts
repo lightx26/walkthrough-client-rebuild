@@ -16,3 +16,11 @@ export function getErrorMessage(
   if (error instanceof Error) return error.message;
   return fallback;
 }
+
+export function isHttpStatusError(error: unknown, status: number): boolean {
+  return axios.isAxiosError(error) && error.response?.status === status;
+}
+
+export function isNotFoundError(error: unknown): boolean {
+  return isHttpStatusError(error, 404);
+}

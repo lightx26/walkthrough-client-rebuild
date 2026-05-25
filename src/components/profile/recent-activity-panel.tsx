@@ -72,7 +72,9 @@ export function RecentActivityPanel() {
               {activityIcon[activity.type]}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-700 leading-snug">{activity.text}</p>
+              <p className="text-xs text-gray-700 leading-snug">
+                {activity.text}
+              </p>
               <p className="text-[11px] text-gray-400 mt-0.5">
                 {formatRelativeTime(activity.occurredAt)}
               </p>

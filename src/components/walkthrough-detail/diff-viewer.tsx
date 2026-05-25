@@ -21,7 +21,13 @@ interface DiffViewerProps {
   comments?: WalkthroughComment[];
 }
 
-export function DiffViewer({ rawPatch, walkthroughId, fileId, filename, comments = [] }: DiffViewerProps) {
+export function DiffViewer({
+  rawPatch,
+  walkthroughId,
+  fileId,
+  filename,
+  comments = [],
+}: DiffViewerProps) {
   const [activeLineIdx, setActiveLineIdx] = useState<number | null>(null);
   const { tokens } = useSyntaxHighlight(rawPatch, filename);
 
@@ -71,7 +77,10 @@ export function DiffViewer({ rawPatch, walkthroughId, fileId, filename, comments
             return (
               <React.Fragment key={i}>
                 <tr
-                  className={cn(rowBg, "group cursor-pointer hover:brightness-95 transition-[filter]")}
+                  className={cn(
+                    rowBg,
+                    "group cursor-pointer hover:brightness-95 transition-[filter]",
+                  )}
                   onClick={() => setActiveLineIdx(isAddingComment ? null : i)}
                 >
                   <td className="w-10 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-100 min-w-10">
@@ -82,7 +91,11 @@ export function DiffViewer({ rawPatch, walkthroughId, fileId, filename, comments
                   </td>
                   <td className={cn("px-3 py-0.5 whitespace-pre", textCls)}>
                     <span className="select-none mr-1 text-gray-400">
-                      {line.type === "add" ? "+" : line.type === "del" ? "-" : " "}
+                      {line.type === "add"
+                        ? "+"
+                        : line.type === "del"
+                          ? "-"
+                          : " "}
                     </span>
                     {lineTokens
                       ? lineTokens.map((token, j) => (

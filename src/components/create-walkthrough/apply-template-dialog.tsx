@@ -105,7 +105,9 @@ export function ApplyTemplateDialog({ open, onClose, onApply }: Props) {
                         <Button
                           variant="link"
                           size="none"
-                          onClick={() => setPreviewId(isPreview ? null : tpl.id)}
+                          onClick={() =>
+                            setPreviewId(isPreview ? null : tpl.id)
+                          }
                           className="gap-1 text-xs font-medium no-underline hover:no-underline"
                         >
                           {isPreview ? (

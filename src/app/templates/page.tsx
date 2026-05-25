@@ -7,10 +7,7 @@ import { DashboardLayout } from "@/components/layout";
 import { Skeleton } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { useTemplates } from "@/hooks/use-templates";
-import {
-  BuiltInTemplatesDialog,
-  TemplateCard,
-} from "@/components/templates";
+import { BuiltInTemplatesDialog, TemplateCard } from "@/components/templates";
 import type { Template } from "@/types/template";
 
 export default function TemplatesPage() {

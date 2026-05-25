@@ -100,7 +100,9 @@ export function PrRow({ pr, owner, repo, showRepoInfo }: PrRowProps) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           {showRepoInfo && (
-            <span className="text-xs text-gray-400 shrink-0">{owner}/{repo}</span>
+            <span className="text-xs text-gray-400 shrink-0">
+              {owner}/{repo}
+            </span>
           )}
           <span className="text-sm font-semibold text-gray-900 truncate">
             {pr.title}

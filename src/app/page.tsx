@@ -58,9 +58,7 @@ export default function HomePage() {
             {getGreeting(firstName)}
           </h1>
           <div className="flex items-center gap-3 flex-wrap">
-            <p className="text-sm text-gray-400">
-              {dateStr}
-            </p>
+            <p className="text-sm text-gray-400">{dateStr}</p>
             <div className="flex items-center gap-2 flex-wrap">
               {draftCount > 0 && (
                 <span className="flex items-center gap-1.5 text-xs text-gray-500 bg-white border border-gray-200 rounded-full px-2.5 py-1 shadow-[0_1px_2px_rgba(0,0,0,.04)]">
@@ -92,7 +90,10 @@ export default function HomePage() {
 
       <WeekSummaryPanel
         walkthroughCount={walkthroughs.length}
-        commentCount={walkthroughs.reduce((sum, w) => sum + (w.commentCount ?? 0), 0)}
+        commentCount={walkthroughs.reduce(
+          (sum, w) => sum + (w.commentCount ?? 0),
+          0,
+        )}
         recentlyReviewed={recentlyReviewed}
       />
     </DashboardLayout>

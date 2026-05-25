@@ -48,7 +48,9 @@ export function SearchPRItem({ pr, query, selected, onClick }: Props) {
         </p>
       </div>
       <div className="shrink-0 flex items-center gap-2">
-        <span className="text-xs text-gray-400">{formatRelativeTime(pr.createdAt)}</span>
+        <span className="text-xs text-gray-400">
+          {formatRelativeTime(pr.createdAt)}
+        </span>
         <span
           className={cn(
             "text-xs px-1.5 py-0.5 rounded font-medium",

@@ -19,9 +19,20 @@ function reviewStatus(item: ProfileReviewingItem): {
     item.totalChapters > 0
       ? Math.round((item.readChapters / item.totalChapters) * 100)
       : 0;
-  if (pct >= 100) return { label: "Done", className: "bg-green-50 text-green-700 border border-green-200" };
-  if (pct > 0) return { label: "In progress", className: "bg-blue-50 text-blue-700 border border-blue-200" };
-  return { label: "Not started", className: "bg-gray-100 text-gray-500 border border-gray-200" };
+  if (pct >= 100)
+    return {
+      label: "Done",
+      className: "bg-green-50 text-green-700 border border-green-200",
+    };
+  if (pct > 0)
+    return {
+      label: "In progress",
+      className: "bg-blue-50 text-blue-700 border border-blue-200",
+    };
+  return {
+    label: "Not started",
+    className: "bg-gray-100 text-gray-500 border border-gray-200",
+  };
 }
 
 function pct(item: ProfileReviewingItem): number {
@@ -52,7 +63,9 @@ export function ReviewingPanel({ items, isLoading }: ReviewingPanelProps) {
           ))}
         </div>
       ) : !items || items.length === 0 ? (
-        <p className="text-sm text-gray-400 mt-4">Not reviewing anything yet.</p>
+        <p className="text-sm text-gray-400 mt-4">
+          Not reviewing anything yet.
+        </p>
       ) : (
         <div>
           {items.map((item) => {
@@ -88,10 +101,11 @@ export function ReviewingPanel({ items, isLoading }: ReviewingPanelProps) {
                       </span>
                     </div>
                     <p className="text-[11px] text-gray-400 mt-0.5">
-                      by {item.creatorDisplayName} &middot;{" "}
-                      {item.owner}/{item.repo} &middot; #{item.prNumber} &middot;{" "}
+                      by {item.creatorDisplayName} &middot; {item.owner}/
+                      {item.repo} &middot; #{item.prNumber} &middot;{" "}
                       {item.totalChapters} ch &middot;{" "}
-                      <Clock className="inline w-3 h-3" /> {formatTime(item.timeSpentSec)}
+                      <Clock className="inline w-3 h-3" />{" "}
+                      {formatTime(item.timeSpentSec)}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                       <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">

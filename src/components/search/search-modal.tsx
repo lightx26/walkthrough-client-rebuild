@@ -2,12 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Search,
-  X,
-  Clock,
-  GitPullRequest,
-} from "lucide-react";
+import { Search, X, Clock, GitPullRequest } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +12,13 @@ import {
   useSearchHistory,
   useSaveSearchHistory,
 } from "@/hooks/use-search";
-import type { RecentPRResult, SearchFilters, SearchHit, SearchTab, UserSearchResult } from "@/types/search";
+import type {
+  RecentPRResult,
+  SearchFilters,
+  SearchHit,
+  SearchTab,
+  UserSearchResult,
+} from "@/types/search";
 import type { Repository } from "@/types/github";
 import {
   SearchAuthorDropdown,
@@ -48,8 +49,13 @@ export function SearchModal({ onClose }: Props) {
   const [query, setQuery] = useState("");
   const [activeTab, setActiveTab] = useState<SearchTab>("all");
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedAuthor, setSelectedAuthor] = useState<UserSearchResult | null>(null);
-  const [dateRange, setDateRange] = useState<SearchDateRange>({ from: "", to: "" });
+  const [selectedAuthor, setSelectedAuthor] = useState<UserSearchResult | null>(
+    null,
+  );
+  const [dateRange, setDateRange] = useState<SearchDateRange>({
+    from: "",
+    to: "",
+  });
 
   const { data: historyData } = useSearchHistory();
   const recentSearches = historyData?.data?.items ?? [];
@@ -87,24 +93,28 @@ export function SearchModal({ onClose }: Props) {
   const allRepoHits = repoData?.data?.items ?? [];
 
   const walkthroughHits = useMemo(
-    () => (activeTab === "prs" || activeTab === "repos" ? [] : allWalkthroughHits),
+    () =>
+      activeTab === "prs" || activeTab === "repos" ? [] : allWalkthroughHits,
     [activeTab, allWalkthroughHits],
   );
   const repoHits = useMemo(
-    () => (activeTab === "walkthroughs" || activeTab === "prs" ? [] : allRepoHits),
+    () =>
+      activeTab === "walkthroughs" || activeTab === "prs" ? [] : allRepoHits,
     [activeTab, allRepoHits],
   );
   const prHits = useMemo(
-    () => (activeTab === "walkthroughs" || activeTab === "repos" ? [] : allPrHits),
+    () =>
+      activeTab === "walkthroughs" || activeTab === "repos" ? [] : allPrHits,
     [activeTab, allPrHits],
   );
 
   const totalResults = walkthroughHits.length + repoHits.length + prHits.length;
 
   const isFetching =
-    (activeTab === "all" || activeTab === "walkthroughs") && walkthroughFetching ||
-    (activeTab === "all" || activeTab === "repos") && repoFetching ||
-    (activeTab === "all" || activeTab === "prs") && prFetching;
+    ((activeTab === "all" || activeTab === "walkthroughs") &&
+      walkthroughFetching) ||
+    ((activeTab === "all" || activeTab === "repos") && repoFetching) ||
+    ((activeTab === "all" || activeTab === "prs") && prFetching);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -164,13 +174,12 @@ export function SearchModal({ onClose }: Props) {
 
   const showEmpty = query.trim().length === 0;
   const showNoResults =
-    !showEmpty &&
-    !isFetching &&
-    !isWaitingForDebounce &&
-    totalResults === 0;
+    !showEmpty && !isFetching && !isWaitingForDebounce && totalResults === 0;
   const showResults = !showEmpty && totalResults > 0;
   const isLoading =
-    (isFetching || isWaitingForDebounce) && query.trim().length > 0 && totalResults === 0;
+    (isFetching || isWaitingForDebounce) &&
+    query.trim().length > 0 &&
+    totalResults === 0;
 
   return (
     <div
@@ -297,7 +306,9 @@ export function SearchModal({ onClose }: Props) {
                       className="w-full justify-start gap-3 px-3 py-2 rounded-lg text-left font-normal hover:bg-gray-50"
                     >
                       <Clock className="w-4 h-4 text-gray-400 shrink-0" />
-                      <span className="text-sm text-gray-700">{item.query}</span>
+                      <span className="text-sm text-gray-700">
+                        {item.query}
+                      </span>
                     </Button>
                   ))}
                 </div>
@@ -310,7 +321,9 @@ export function SearchModal({ onClose }: Props) {
               <p className="text-sm font-semibold text-gray-700">
                 No results for &ldquo;{query}&rdquo;
               </p>
-              <p className="text-xs text-gray-400">Try a different search term</p>
+              <p className="text-xs text-gray-400">
+                Try a different search term
+              </p>
             </div>
           )}
 

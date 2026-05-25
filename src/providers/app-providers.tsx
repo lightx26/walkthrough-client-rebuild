@@ -22,6 +22,8 @@ const queryClient = new QueryClient({
     onError: (error) => {
       // 401s are handled by the axios interceptor (session expiry toast + logout dispatch)
       if (axios.isAxiosError(error) && error.response?.status === 401) return;
+      // 404s surface as a not-found page on the route — skip the toast
+      if (axios.isAxiosError(error) && error.response?.status === 404) return;
       toast.error(getErrorMessage(error));
     },
   }),
@@ -34,7 +36,13 @@ const queryClient = new QueryClient({
   }),
   defaultOptions: {
     queries: {
-      retry: 1,
+      retry: (failureCount, error) => {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status;
+          if (status && status >= 400 && status < 500) return false;
+        }
+        return failureCount < 1;
+      },
       staleTime: 5 * 60 * 1000,
     },
   },

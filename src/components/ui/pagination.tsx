@@ -9,7 +9,12 @@ interface PaginationProps {
   className?: string;
 }
 
-export function Pagination({ page, totalPages, onPageChange, className }: PaginationProps) {
+export function Pagination({
+  page,
+  totalPages,
+  onPageChange,
+  className,
+}: PaginationProps) {
   if (totalPages <= 1) return null;
 
   const pages = buildPageRange(page, totalPages);
@@ -29,7 +34,10 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
 
       {pages.map((entry, i) =>
         entry === "..." ? (
-          <span key={`ellipsis-${i}`} className="w-8 text-center text-sm text-gray-400">
+          <span
+            key={`ellipsis-${i}`}
+            className="w-8 text-center text-sm text-gray-400"
+          >
             …
           </span>
         ) : (
@@ -42,7 +50,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
           >
             {entry}
           </Button>
-        )
+        ),
       )}
 
       <Button
@@ -63,6 +71,7 @@ function buildPageRange(current: number, total: number): (number | "...")[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
 
   if (current <= 4) return [1, 2, 3, 4, 5, "...", total];
-  if (current >= total - 3) return [1, "...", total - 4, total - 3, total - 2, total - 1, total];
+  if (current >= total - 3)
+    return [1, "...", total - 4, total - 3, total - 2, total - 1, total];
   return [1, "...", current - 1, current, current + 1, "...", total];
 }

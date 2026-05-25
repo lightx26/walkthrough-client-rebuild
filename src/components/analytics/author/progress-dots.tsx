@@ -1,12 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export function ProgressDots({
-  read,
-  total,
-}: {
-  read: number;
-  total: number;
-}) {
+export function ProgressDots({ read, total }: { read: number; total: number }) {
   if (total <= 0) return null;
   return (
     <div className="flex items-center gap-1">

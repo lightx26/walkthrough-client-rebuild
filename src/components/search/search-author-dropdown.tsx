@@ -56,7 +56,11 @@ export function SearchAuthorDropdown({
         ) : (
           "Author"
         )}
-        {open ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+        {open ? (
+          <ChevronUp className="w-3 h-3" />
+        ) : (
+          <ChevronDown className="w-3 h-3" />
+        )}
         {isActive && (
           <span
             role="button"
@@ -108,7 +112,8 @@ export function SearchAuthorDropdown({
                   }}
                   className={cn(
                     "w-full justify-start gap-2.5 px-3 py-2 rounded-none font-normal hover:bg-gray-50",
-                    selectedAuthor?.id === user.id && "bg-indigo-50 hover:bg-indigo-50",
+                    selectedAuthor?.id === user.id &&
+                      "bg-indigo-50 hover:bg-indigo-50",
                   )}
                 >
                   <UserAvatar
@@ -126,7 +131,9 @@ export function SearchAuthorDropdown({
           ) : authorQuery.trim() ? (
             <p className="px-3 py-3 text-xs text-gray-400">No users found</p>
           ) : (
-            <p className="px-3 py-3 text-xs text-gray-400">Type to search users</p>
+            <p className="px-3 py-3 text-xs text-gray-400">
+              Type to search users
+            </p>
           )}
         </div>
       )}

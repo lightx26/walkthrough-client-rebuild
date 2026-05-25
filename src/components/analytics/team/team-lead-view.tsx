@@ -23,8 +23,7 @@ export function TeamLeadView({ scopedRepo }: TeamLeadViewProps = {}) {
   const scopedFullName = scopedRepo
     ? `${scopedRepo.owner}/${scopedRepo.repo}`
     : null;
-  const fullName =
-    scopedFullName ?? selected ?? repos[0]?.repoFullName ?? null;
+  const fullName = scopedFullName ?? selected ?? repos[0]?.repoFullName ?? null;
   const [owner, repo] = fullName?.split("/") ?? [];
 
   const { data, isLoading } = useRepoMetrics({

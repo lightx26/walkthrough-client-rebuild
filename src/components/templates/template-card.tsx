@@ -17,10 +17,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  useDeleteTemplate,
-  useDuplicateTemplate,
-} from "@/hooks/use-templates";
+import { useDeleteTemplate, useDuplicateTemplate } from "@/hooks/use-templates";
 import type { Template } from "@/types/template";
 import { PrTypeBadge } from "./pr-type-badge";
 
@@ -203,7 +200,9 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
         <div
           className={cn(
             "grid transition-[grid-template-rows,opacity] duration-300 ease-in-out",
-            expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+            expanded
+              ? "grid-rows-[1fr] opacity-100"
+              : "grid-rows-[0fr] opacity-0",
           )}
         >
           <div className="overflow-hidden">

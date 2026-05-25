@@ -20,14 +20,37 @@ import React from "react";
 
 const mainNav = [
   { href: "/", icon: Home, label: "Home" },
-  { href: "/walkthroughs", icon: BookOpen, label: "Walkthroughs", count: 23, disabled: true },
-  { href: "/reviewing", icon: Eye, label: "Reviewing", count: 6, disabled: true },
-  { href: "/pulls", icon: GitPullRequest, label: "Pull Requests", count: 11, disabled: true },
+  {
+    href: "/walkthroughs",
+    icon: BookOpen,
+    label: "Walkthroughs",
+    count: 23,
+    disabled: true,
+  },
+  {
+    href: "/reviewing",
+    icon: Eye,
+    label: "Reviewing",
+    count: 6,
+    disabled: true,
+  },
+  {
+    href: "/pulls",
+    icon: GitPullRequest,
+    label: "Pull Requests",
+    count: 11,
+    disabled: true,
+  },
 ];
 
 const workspaceNav = [
   { href: "/repos", icon: Database, label: "Repositories", disabled: false },
-  { href: "/templates", icon: LayoutTemplate, label: "Templates", disabled: false },
+  {
+    href: "/templates",
+    icon: LayoutTemplate,
+    label: "Templates",
+    disabled: false,
+  },
 ];
 
 export function Sidebar() {
@@ -137,7 +160,10 @@ export function Sidebar() {
                 className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
               >
                 <span
-                  className={cn("w-2 h-2 rounded-full shrink-0", languageColor(repo.language ?? ""))}
+                  className={cn(
+                    "w-2 h-2 rounded-full shrink-0",
+                    languageColor(repo.language ?? ""),
+                  )}
                 />
                 <span className="truncate">{repo.repoName}</span>
               </Link>

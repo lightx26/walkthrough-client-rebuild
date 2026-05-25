@@ -66,7 +66,11 @@ export function SearchDateRangeDropdown({
         ) : (
           "Date range"
         )}
-        {open ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+        {open ? (
+          <ChevronUp className="w-3 h-3" />
+        ) : (
+          <ChevronDown className="w-3 h-3" />
+        )}
         {isActive && (
           <span
             role="button"

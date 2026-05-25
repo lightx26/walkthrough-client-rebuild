@@ -67,7 +67,8 @@ export function useUserSearch(query: string) {
 
 export function useRepoSearch(query: string) {
   const debouncedQuery = useDebounce(query, 300);
-  const isWaitingForDebounce = query.trim().length > 0 && query !== debouncedQuery;
+  const isWaitingForDebounce =
+    query.trim().length > 0 && query !== debouncedQuery;
 
   const searchQuery = useQuery({
     queryKey: ["search", "repos", debouncedQuery],
@@ -81,7 +82,8 @@ export function useRepoSearch(query: string) {
 
 export function usePRSearch(query: string) {
   const debouncedQuery = useDebounce(query, 300);
-  const isWaitingForDebounce = query.trim().length > 0 && query !== debouncedQuery;
+  const isWaitingForDebounce =
+    query.trim().length > 0 && query !== debouncedQuery;
 
   const { data, isFetching } = useQuery({
     queryKey: ["search", "prs", debouncedQuery],

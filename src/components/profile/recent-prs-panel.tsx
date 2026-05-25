@@ -22,7 +22,11 @@ function toPrRowItem(pr: RecentPullRequest): PrRowItem {
   };
 }
 
-export function RecentPrsPanel({ pullRequests, total, isLoading }: RecentPrsPanelProps) {
+export function RecentPrsPanel({
+  pullRequests,
+  total,
+  isLoading,
+}: RecentPrsPanelProps) {
   const items = pullRequests ?? [];
 
   return (
@@ -43,7 +47,9 @@ export function RecentPrsPanel({ pullRequests, total, isLoading }: RecentPrsPane
           ))}
         </div>
       ) : items.length === 0 ? (
-        <p className="text-sm text-gray-400 px-5 pb-5">No pull requests found.</p>
+        <p className="text-sm text-gray-400 px-5 pb-5">
+          No pull requests found.
+        </p>
       ) : (
         <div className="px-5 pb-2">
           {items.map((pr) => (

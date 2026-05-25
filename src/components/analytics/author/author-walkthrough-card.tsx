@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangle, BarChart2, BookOpen, CheckCircle2, MessageSquare } from "lucide-react";
+import {
+  AlertTriangle,
+  BarChart2,
+  BookOpen,
+  CheckCircle2,
+  MessageSquare,
+} from "lucide-react";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/ui";
@@ -15,8 +21,7 @@ export function AuthorWalkthroughCard({
   walkthrough: AuthorWalkthroughSummary;
 }) {
   const hasReviewActivity = walkthrough.reviewers.length > 0;
-  const allRead =
-    walkthrough.unreadChapterCount === 0 && hasReviewActivity;
+  const allRead = walkthrough.unreadChapterCount === 0 && hasReviewActivity;
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl px-5 py-4">

@@ -3,12 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import {
-  ArrowRight,
-  FileText,
-  GitCommitHorizontal,
-  Plus,
-} from "lucide-react";
+import { ArrowRight, FileText, GitCommitHorizontal, Plus } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import { UserAvatar } from "@/components/ui";
 import { Button } from "@/components/ui/button";
@@ -167,7 +162,12 @@ export default function PrDetailPage() {
               Walkthroughs
             </h2>
             {!isLoading && isOwner && (
-              <Button asChild variant="primary" size="default" className="gap-1.5">
+              <Button
+                asChild
+                variant="primary"
+                size="default"
+                className="gap-1.5"
+              >
                 <Link
                   href={`/walkthroughs/new?owner=${owner}&repo=${repo}&prNumber=${prNumber}`}
                 >
@@ -220,9 +220,7 @@ export default function PrDetailPage() {
                 No walkthroughs yet.
               </div>
             ) : (
-              filtered.map((wt) => (
-                <WalkthroughCard key={wt.id} wt={wt} />
-              ))
+              filtered.map((wt) => <WalkthroughCard key={wt.id} wt={wt} />)
             )}
           </div>
         </div>
