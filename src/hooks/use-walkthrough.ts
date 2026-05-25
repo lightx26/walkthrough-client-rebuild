@@ -67,6 +67,15 @@ export function useFileComments(walkthroughId: string, fileId: string) {
   });
 }
 
+export function useBatchFileComments(walkthroughId: string, fileIds: string[]) {
+  return useQuery({
+    queryKey: ["batch-file-comments", walkthroughId, fileIds],
+    queryFn: () =>
+      walkthroughService.listBatchFileComments(walkthroughId, fileIds),
+    enabled: !!walkthroughId && fileIds.length > 0,
+  });
+}
+
 export function useCreateWalkthrough() {
   const queryClient = useQueryClient();
 
@@ -129,7 +138,7 @@ export function useCreateFileComment(walkthroughId: string, fileId: string) {
       walkthroughService.createComment(walkthroughId, request),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["file-comments", walkthroughId, fileId],
+        queryKey: ["batch-file-comments", walkthroughId],
       });
     },
     onError: (error) => {

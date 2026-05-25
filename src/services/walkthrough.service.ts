@@ -41,7 +41,9 @@ export const walkthroughService = {
     owner,
     repo,
     prNumber,
-  }: ListWalkthroughsParams): Promise<DataResponse<ListData<WalkthroughSummary>>> {
+  }: ListWalkthroughsParams): Promise<
+    DataResponse<ListData<WalkthroughSummary>>
+  > {
     const { data } = await apiClient.get<
       DataResponse<ListData<WalkthroughSummary>>
     >("/v1/walkthroughs", { params: { owner, repo, prNumber } });
@@ -112,6 +114,16 @@ export const walkthroughService = {
     const { data } = await apiClient.get<
       DataResponse<ListData<WalkthroughComment>>
     >(`/v1/walkthroughs/${walkthroughId}/files/${fileId}/comments`);
+    return data;
+  },
+
+  async listBatchFileComments(
+    walkthroughId: string,
+    fileIds: string[],
+  ): Promise<DataResponse<Record<string, WalkthroughComment[]>>> {
+    const { data } = await apiClient.post<
+      DataResponse<Record<string, WalkthroughComment[]>>
+    >(`/v1/walkthroughs/${walkthroughId}/batch-file-comments`, fileIds);
     return data;
   },
 

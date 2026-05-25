@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { ChevronUp, ChevronDown, FileText } from "lucide-react";
-import type { WalkthroughFile } from "@/types/walkthrough";
-import { useFileComments } from "@/hooks/use-walkthrough";
+import type { WalkthroughFile, WalkthroughComment } from "@/types/walkthrough";
 import { Button } from "@/components/ui/button";
 import { DiffViewer } from "./diff-viewer";
 import { computeDiffStats } from "./diff-utils";
@@ -11,14 +10,16 @@ import { computeDiffStats } from "./diff-utils";
 interface FileSectionProps {
   file: WalkthroughFile;
   walkthroughId: string;
+  comments: WalkthroughComment[];
 }
 
-export function FileSection({ file, walkthroughId }: FileSectionProps) {
+export function FileSection({
+  file,
+  walkthroughId,
+  comments,
+}: FileSectionProps) {
   const [expanded, setExpanded] = useState(true);
   const stats = file.rawPatch ? computeDiffStats(file.rawPatch) : null;
-
-  const { data } = useFileComments(walkthroughId, file.id);
-  const comments = data?.data?.items ?? [];
 
   return (
     <div id={`file-${file.id}`} className="bg-gray-50">
@@ -30,13 +31,15 @@ export function FileSection({ file, walkthroughId }: FileSectionProps) {
         onClick={() => setExpanded((v) => !v)}
       >
         <FileText className="w-4 h-4 text-orange-500 shrink-0" />
-        <span className="text-sm font-medium text-gray-700 font-mono flex-1 truncate min-w-0">
+        <span
+          className="text-sm font-medium text-gray-700 font-mono flex-1 truncate min-w-0"
+          title={file.filename}
+        >
           {file.filename}
         </span>
         {stats && (
           <span className="text-xs font-mono font-medium shrink-0">
-            <span className="text-green-600">+{stats.added}</span>
-            {" "}
+            <span className="text-green-600">+{stats.added}</span>{" "}
             <span className="text-red-500">-{stats.removed}</span>
           </span>
         )}
@@ -65,7 +68,9 @@ export function FileSection({ file, walkthroughId }: FileSectionProps) {
               />
             </div>
           ) : (
-            <p className="px-6 pb-3 text-xs text-gray-400">No diff available.</p>
+            <p className="px-6 pb-3 text-xs text-gray-400">
+              No diff available.
+            </p>
           )}
         </div>
       </div>
