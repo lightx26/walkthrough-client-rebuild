@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import { LayoutTemplate, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronDown, ChevronRight, LayoutTemplate, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useTemplates } from "@/hooks/use-templates";
 import type { Template } from "@/types/template";
@@ -15,6 +16,7 @@ interface Props {
 
 export function ApplyTemplateDialog({ open, onClose, onApply }: Props) {
   const { data, isLoading } = useTemplates();
+  const [previewId, setPreviewId] = useState<string | null>(null);
 
   const myTemplates = useMemo(
     () => (data?.data.items ?? []).filter((t) => !t.isBuiltin),
@@ -73,33 +75,94 @@ export function ApplyTemplateDialog({ open, onClose, onApply }: Props) {
               </p>
             ) : myTemplates.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-8">
-                You don't have any templates yet.
+                You don&apos;t have any templates yet.
               </p>
             ) : (
               myTemplates.map((tpl) => {
                 const count = tpl.chapters?.length ?? 0;
+                const isPreview = previewId === tpl.id;
                 return (
-                  <button
+                  <div
                     key={tpl.id}
-                    type="button"
-                    onClick={() => onApply(tpl)}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 text-left transition-colors"
+                    className="border border-gray-200 rounded-lg bg-white"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-violet-50 text-violet-500 flex items-center justify-center shrink-0">
-                      <LayoutTemplate className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-semibold text-gray-900 truncate">
-                          {tpl.name}
-                        </p>
-                        <PrTypeBadge prType={tpl.prType} />
+                    <div className="flex items-center gap-3 px-3 py-2.5">
+                      <div className="w-9 h-9 rounded-lg bg-violet-50 text-violet-500 flex items-center justify-center shrink-0">
+                        <LayoutTemplate className="w-4 h-4" />
                       </div>
-                      <p className="text-xs text-gray-400 mt-0.5">
-                        {count} {count === 1 ? "chapter" : "chapters"}
-                      </p>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm font-semibold text-gray-900 truncate">
+                            {tpl.name}
+                          </p>
+                          <PrTypeBadge prType={tpl.prType} />
+                        </div>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          {count} {count === 1 ? "chapter" : "chapters"}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <Button
+                          variant="link"
+                          size="none"
+                          onClick={() => setPreviewId(isPreview ? null : tpl.id)}
+                          className="gap-1 text-xs font-medium no-underline hover:no-underline"
+                        >
+                          {isPreview ? (
+                            <>
+                              <ChevronDown className="w-3 h-3" />
+                              Hide
+                            </>
+                          ) : (
+                            <>
+                              <ChevronRight className="w-3 h-3" />
+                              Preview
+                            </>
+                          )}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="xs"
+                          onClick={() => onApply(tpl)}
+                        >
+                          Apply
+                        </Button>
+                      </div>
                     </div>
-                  </button>
+
+                    {tpl.chapters && tpl.chapters.length > 0 && (
+                      <div
+                        className={cn(
+                          "grid transition-[grid-template-rows,opacity] duration-300 ease-in-out",
+                          isPreview
+                            ? "grid-rows-[1fr] opacity-100"
+                            : "grid-rows-[0fr] opacity-0",
+                        )}
+                      >
+                        <div className="overflow-hidden">
+                          <ul className="px-3 pb-3 pl-14 space-y-1.5 border-t border-gray-100 pt-2">
+                            {tpl.chapters.map((c, idx) => (
+                              <li key={c.id} className="flex items-start gap-2">
+                                <span className="w-4 h-4 rounded-full bg-violet-100 text-violet-600 text-[9px] font-bold flex items-center justify-center mt-0.5 shrink-0">
+                                  {idx + 1}
+                                </span>
+                                <div className="min-w-0">
+                                  <p className="text-xs font-medium text-gray-900">
+                                    {c.title}
+                                  </p>
+                                  {c.description && (
+                                    <p className="text-[11px] text-gray-500 mt-0.5">
+                                      {c.description}
+                                    </p>
+                                  )}
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 );
               })
             )}
