@@ -6,3 +6,4 @@ export { Separator } from "./separator";
 export { Skeleton } from "./skeleton";
 export { UserAvatar } from "./user-avatar";
 export { RequireAsterisk } from "./require-asterisk";
+export { ApiErrorState } from "./api-error-state";

@@ -10,6 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
+import { ApiErrorState } from "@/components/ui";
 import {
   useChapterAttention,
   useReviewProgress,
@@ -30,12 +31,30 @@ export default function AnalyticsDetailPage({
 }) {
   const { walkthroughId } = use(params);
 
-  const { data: wtData } = useWalkthrough(walkthroughId);
+  const {
+    data: wtData,
+    error: wtError,
+    refetch: refetchWt,
+  } = useWalkthrough(walkthroughId);
   const { data: rpData, isLoading: rpLoading } =
     useReviewProgress(walkthroughId);
   const { data: caData, isLoading: caLoading } =
     useChapterAttention(walkthroughId);
   const { data: usData } = useUnreadSummary(walkthroughId);
+
+  if (wtError) {
+    return (
+      <DashboardLayout>
+        <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
+          <ApiErrorState
+            error={wtError}
+            resource="walkthrough"
+            onRetry={() => refetchWt()}
+          />
+        </main>
+      </DashboardLayout>
+    );
+  }
 
   const walkthrough = wtData?.data;
   const reviewProgress = rpData?.data;
@@ -51,14 +70,15 @@ export default function AnalyticsDetailPage({
   return (
     <DashboardLayout>
       <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
-        <Link
-          href="/analytics"
-          className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 mb-3"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Analytics
-        </Link>
-
+        {walkthrough && (
+          <Link
+            href={`/analytics?owner=${encodeURIComponent(walkthrough.owner)}&repo=${encodeURIComponent(walkthrough.repo)}`}
+            className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 mb-3"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Analytics
+          </Link>
+        )}
         <div className="flex items-start justify-between gap-4 mb-2 flex-wrap">
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">

@@ -58,7 +58,6 @@ export default function ProfilePage({
         <div className="px-8 py-6">
           {activeTab === "overview" && (
             <OverviewTab
-              username={username}
               walkthroughs={walkthroughs}
               walkthroughsLoading={walkthroughsLoading}
               totalWalkthroughs={stats?.walkthroughs}
@@ -69,7 +68,6 @@ export default function ProfilePage({
           )}
           {activeTab === "walkthroughs" && (
             <WalkthroughsTab
-              username={username}
               allWalkthroughs={walkthroughs}
               isLoading={walkthroughsLoading}
             />

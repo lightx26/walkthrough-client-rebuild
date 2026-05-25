@@ -4,7 +4,6 @@ import { WalkthroughList } from "@/components/home";
 import type { WalkthroughSummary } from "@/types/walkthrough";
 
 interface WalkthroughsTabProps {
-  username: string;
   allWalkthroughs?: WalkthroughSummary[];
   isLoading: boolean;
 }

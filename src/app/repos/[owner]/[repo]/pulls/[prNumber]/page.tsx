@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, FileText, GitCommitHorizontal, Plus } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
-import { UserAvatar } from "@/components/ui";
+import { ApiErrorState, UserAvatar } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import {
   PrStateBadge,
@@ -30,13 +30,32 @@ export default function PrDetailPage() {
   const currentUser = useAppSelector((state) => state.auth.user);
   const [activeTab, setActiveTab] = useState<TabKey>("all");
 
-  const { data: prData, isLoading: prLoading } = usePullRequest({
+  const {
+    data: prData,
+    isLoading: prLoading,
+    error: prError,
+    refetch: refetchPr,
+  } = usePullRequest({
     owner,
     repo,
     prNumber,
   });
   const { data: walkthroughsData, isLoading: walkthroughsLoading } =
     useWalkthroughs({ owner, repo, prNumber });
+
+  if (prError) {
+    return (
+      <DashboardLayout>
+        <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
+          <ApiErrorState
+            error={prError}
+            resource="pull request"
+            onRetry={() => refetchPr()}
+          />
+        </main>
+      </DashboardLayout>
+    );
+  }
 
   const isLoading = prLoading || walkthroughsLoading;
   const pr = prData?.data;

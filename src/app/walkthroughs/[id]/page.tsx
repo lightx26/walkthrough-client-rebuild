@@ -2,9 +2,9 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Pencil } from "lucide-react";
+import { ArrowLeft, BarChart2, BookOpen, Pencil } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
-import { UserAvatar, Skeleton } from "@/components/ui";
+import { ApiErrorState, UserAvatar, Skeleton } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { useWalkthrough, useReadProgress } from "@/hooks/use-walkthrough";
@@ -32,12 +32,26 @@ export default function WalkthroughDetailPage() {
   const router = useRouter();
   const user = useCurrentUser();
 
-  const { data, isLoading } = useWalkthrough(params.id);
+  const { data, isLoading, error, refetch } = useWalkthrough(params.id);
   const { data: progressData } = useReadProgress(params.id);
 
   const walkthrough = data?.data;
   const progress = progressData?.data;
   const isOwner = !!user && !!walkthrough && user.id === walkthrough.userId;
+
+  if (error) {
+    return (
+      <DashboardLayout>
+        <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
+          <ApiErrorState
+            error={error}
+            resource="walkthrough"
+            onRetry={() => refetch()}
+          />
+        </main>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -81,17 +95,32 @@ export default function WalkthroughDetailPage() {
                 </div>
 
                 {isOwner && (
+                  <>
+                  {walkthrough.status !== "DRAFT" && (
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 rounded-xl"
+                  >
+                    <Link href={`/analytics/${walkthrough.id}`}>
+                      <BarChart2 className="w-3.5 h-3.5" />
+                      Analytics
+                    </Link>
+                  </Button>
+                  )}
                   <Button
                     asChild
                     variant="primary"
                     size="sm"
-                    className="gap-1.5"
+                    className="gap-1.5 rounded-xl"
                   >
                     <Link href={`/walkthroughs/${walkthrough.id}/edit`}>
                       <Pencil className="w-3.5 h-3.5" />
                       Edit
                     </Link>
                   </Button>
+                  </>
                 )}
               </div>
             </>

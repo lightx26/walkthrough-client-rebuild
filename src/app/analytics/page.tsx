@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams, notFound } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { BarChart2, BookOpen, Users } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import {
@@ -10,7 +10,7 @@ import {
   TeamLeadView,
 } from "@/components/analytics";
 import { useRepository } from "@/hooks/use-github";
-import { isNotFoundError } from "@/lib/error";
+import { ApiErrorState } from "@/components/ui";
 
 type Tab = "author" | "team";
 
@@ -21,9 +21,23 @@ export default function AnalyticsPage() {
   const repo = searchParams.get("repo") ?? undefined;
   const scopedRepo = owner && repo ? { owner, repo } : undefined;
 
-  const { error: scopedRepoError } = useRepository(owner ?? "", repo ?? "");
-  if (scopedRepo && isNotFoundError(scopedRepoError)) {
-    notFound();
+  const { error: scopedRepoError, refetch: refetchScopedRepo } = useRepository(
+    owner ?? "",
+    repo ?? "",
+  );
+
+  if (scopedRepo && scopedRepoError) {
+    return (
+      <DashboardLayout>
+        <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
+          <ApiErrorState
+            error={scopedRepoError}
+            resource="repository"
+            onRetry={() => refetchScopedRepo()}
+          />
+        </main>
+      </DashboardLayout>
+    );
   }
 
   return (

@@ -1,16 +1,15 @@
 "use client";
 
-import { useParams, useRouter, notFound } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, BarChart2, GitBranch, GitFork, Star } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
-import { Skeleton } from "@/components/ui";
+import { ApiErrorState, Skeleton } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { PrList } from "@/components/repos";
 import { useRepository, useRepositoryPullRequests } from "@/hooks/use-github";
 import { languageColor } from "@/utils/language-color";
 import { formatRelativeTime } from "@/utils/date-diff";
-import { isNotFoundError } from "@/lib/error";
 
 function RepoHeaderSkeleton() {
   return (
@@ -45,16 +44,27 @@ export default function RepoDetailsPage() {
     data: repoData,
     isLoading: repoLoading,
     error: repoError,
+    refetch: refetchRepo,
   } = useRepository(owner, repo);
-
-  if (isNotFoundError(repoError)) {
-    notFound();
-  }
 
   const { data: prsData, isLoading: prsLoading } = useRepositoryPullRequests(
     owner,
     repo,
   );
+
+  if (repoError) {
+    return (
+      <DashboardLayout>
+        <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
+          <ApiErrorState
+            error={repoError}
+            resource="repository"
+            onRetry={() => refetchRepo()}
+          />
+        </main>
+      </DashboardLayout>
+    );
+  }
 
   const repoDetails = repoData?.data;
   const prs = prsData?.data?.items ?? [];
