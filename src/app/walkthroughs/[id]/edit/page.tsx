@@ -131,7 +131,7 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
   return (
     <WalkthroughEditor
       key={walkthroughId}
-      headerTitle="Edit walkthrough"
+      headerTitle={walkthrough.title}
       repo={repo}
       prNumber={prNumber}
       allFiles={allFiles}

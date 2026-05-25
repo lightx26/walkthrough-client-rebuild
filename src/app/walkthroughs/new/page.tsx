@@ -48,7 +48,7 @@ function CreateWalkthroughContent() {
 
   return (
     <WalkthroughEditor
-      headerTitle="New walkthrough"
+      headerTitle=""
       repo={repo}
       prNumber={prNumber}
       allFiles={allFiles}
