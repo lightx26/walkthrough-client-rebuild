@@ -8,6 +8,7 @@ import {
   ChevronUp,
   Copy,
   Lock,
+  TrendingUp,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -131,6 +132,13 @@ export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
                         <p className="text-xs text-gray-500 line-clamp-2">
                           {tpl.description}
                         </p>
+                      )}
+                      {tpl.duplicateCount > 0 && (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-violet-600 mt-1">
+                          <TrendingUp className="w-3 h-3" />
+                          Duplicated {tpl.duplicateCount}{" "}
+                          {tpl.duplicateCount === 1 ? "time" : "times"}
+                        </span>
                       )}
                       <Button
                         variant="link"

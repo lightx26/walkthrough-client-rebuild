@@ -58,6 +58,13 @@ export function useDeleteTemplate() {
   });
 }
 
+export function useTopDuplicatedTemplates(limit = 5) {
+  return useQuery({
+    queryKey: [...TEMPLATES_KEY, "stats", "top-duplicated", { limit }],
+    queryFn: () => templateService.topDuplicated(limit),
+  });
+}
+
 export function useDuplicateTemplate() {
   const queryClient = useQueryClient();
   return useMutation({

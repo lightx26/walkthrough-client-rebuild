@@ -19,8 +19,20 @@ export interface Template {
   description: string | null;
   prType: TemplatePrType | null;
   isBuiltin: boolean;
+  duplicateCount: number;
   chapters: TemplateChapter[];
   createdAt: string;
+  updatedAt: string;
+}
+
+export interface TemplateSummary {
+  id: string;
+  name: string;
+  description: string | null;
+  prType: TemplatePrType | null;
+  isBuiltin: boolean;
+  duplicateCount: number;
+  chapterCount: number;
   updatedAt: string;
 }
 

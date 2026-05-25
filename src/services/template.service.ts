@@ -5,6 +5,7 @@ import type {
   DuplicateTemplateRequest,
   Template,
   TemplatePrType,
+  TemplateSummary,
   UpdateTemplateRequest,
 } from "@/types/template";
 
@@ -54,6 +55,16 @@ export const templateService = {
     const { data } = await apiClient.post<DataResponse<Template>>(
       `/v1/templates/${id}/duplicate`,
       request ?? {},
+    );
+    return data;
+  },
+
+  async topDuplicated(
+    limit = 5,
+  ): Promise<DataResponse<ListData<TemplateSummary>>> {
+    const { data } = await apiClient.get<DataResponse<ListData<TemplateSummary>>>(
+      "/v1/templates/stats/top-duplicated",
+      { params: { limit } },
     );
     return data;
   },

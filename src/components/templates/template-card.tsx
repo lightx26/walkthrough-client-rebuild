@@ -12,6 +12,7 @@ import {
   Lock,
   Pencil,
   Trash2,
+  TrendingUp,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -90,6 +91,14 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
             </p>
           )}
 
+          {isBuiltin && template.duplicateCount > 0 && (
+            <span className="inline-flex items-center gap-1 text-xs text-violet-600 mt-1.5">
+              <TrendingUp className="w-3 h-3" />
+              Duplicated {template.duplicateCount}{" "}
+              {template.duplicateCount === 1 ? "time" : "times"}
+            </span>
+          )}
+
           {!isBuiltin && (
             <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
               <span className="flex items-center gap-1">
@@ -139,7 +148,7 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
                 variant="outline"
                 size="xs"
                 onClick={() => router.push(`/templates/${template.id}/edit`)}
-                className="gap-1.5"
+                className="gap-1.5 rounded-xl px-3.5"
               >
                 <Pencil className="w-3.5 h-3.5" />
                 Edit
@@ -149,7 +158,7 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
                 size="xs"
                 onClick={onDuplicate}
                 disabled={duplicateTemplate.isPending}
-                className="gap-1.5"
+                className="gap-1.5 rounded-xl px-3.5"
               >
                 <Copy className="w-3.5 h-3.5" />
                 Duplicate
@@ -159,7 +168,7 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
                 size="iconSm"
                 onClick={onDelete}
                 disabled={deleteTemplate.isPending}
-                className="w-7 h-7"
+                className="w-7 h-7 rounded-xl"
                 aria-label="Delete template"
               >
                 <Trash2 className="w-3.5 h-3.5" />
