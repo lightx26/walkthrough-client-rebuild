@@ -4,13 +4,15 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { ArrowLeft, BookOpen, Plus, Send } from "lucide-react";
+import {ArrowLeft, BookOpen, LayoutTemplate, Plus, Save, Send} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ApplyTemplateDialog } from "./apply-template-dialog";
 import { ChangedFilesPanel } from "./changed-files-panel";
 import { ChapterCard, type ChapterDraft } from "./chapter-card";
 import { DiffFileModal } from "./diff-file-modal";
 import type { PrFile } from "@/types/github";
 import type { ChapterRequest } from "@/types/walkthrough";
+import type { Template } from "@/types/template";
 import { toast } from "sonner";
 
 export interface WalkthroughFormData {
@@ -73,6 +75,7 @@ export function WalkthroughEditor({
     ],
   );
   const [activeFileDiff, setActiveFileDiff] = useState<PrFile | null>(null);
+  const [showApplyTemplate, setShowApplyTemplate] = useState(false);
 
   const assignedFilenames = useMemo(() => {
     const set = new Set<string>();
@@ -98,6 +101,23 @@ export function WalkthroughEditor({
       ...prev,
       { id: crypto.randomUUID(), title: "", description: "", files: [] },
     ]);
+  };
+
+  const handleApplyTemplate = (template: Template) => {
+    const sorted = [...(template.chapters ?? [])].sort(
+      (a, b) => a.sortOrder - b.sortOrder,
+    );
+    setChapters(
+      sorted.length > 0
+        ? sorted.map((ch) => ({
+            id: crypto.randomUUID(),
+            title: ch.title,
+            description: ch.description ?? "",
+            files: [],
+          }))
+        : [{ id: crypto.randomUUID(), title: "", description: "", files: [] }],
+    );
+    setShowApplyTemplate(false);
   };
 
   const handleSave = (status: "DRAFT" | "PUBLISHED") => {
@@ -146,36 +166,43 @@ export function WalkthroughEditor({
             </Button>
 
             <div className="flex items-center gap-2 flex-1 min-w-0">
-              <BookOpen className="w-4 h-4 text-gray-400 shrink-0" />
               <span className="text-sm font-semibold text-gray-900">
                 {headerTitle}
               </span>
-              {prNumber > 0 && (
-                <span className="text-sm text-gray-400 truncate">
-                  {repo} · #{prNumber}
-                </span>
-              )}
             </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleSave("DRAFT")}
-              disabled={isSaving}
-              className="shrink-0"
-            >
-              Save draft
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => handleSave("PUBLISHED")}
-              disabled={publishDisabled}
-              className="gap-1.5 shrink-0"
-            >
-              <Send className="w-3.5 h-3.5" />
-              Publish
-            </Button>
+            {/* Action buttons */}
+            <div className="flex items-center gap-2 shrink-0">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowApplyTemplate(true)}
+                className="gap-1.5"
+              >
+                <LayoutTemplate className="w-3.5 h-3.5" />
+                Apply template
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleSave("DRAFT")}
+                disabled={isSaving}
+                className="gap-1.5"
+              >
+                <Save className="w-3.5 h-3.5" />
+                Save draft
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => handleSave("PUBLISHED")}
+                disabled={publishDisabled}
+                className="gap-1.5"
+              >
+                <Send className="w-3.5 h-3.5" />
+                Publish
+              </Button>
+            </div>
           </div>
 
           {/* Scrollable form */}
@@ -266,6 +293,12 @@ export function WalkthroughEditor({
           onClose={() => setActiveFileDiff(null)}
         />
       )}
+
+      <ApplyTemplateDialog
+        open={showApplyTemplate}
+        onClose={() => setShowApplyTemplate(false)}
+        onApply={handleApplyTemplate}
+      />
     </DndProvider>
   );
 }
