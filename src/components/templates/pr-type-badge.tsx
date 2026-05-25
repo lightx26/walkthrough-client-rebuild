@@ -3,7 +3,7 @@ import type { TemplatePrType } from "@/types/template";
 
 const STYLES: Record<TemplatePrType, string> = {
   FEATURE: "bg-violet-50 text-violet-700 border-violet-200",
-  REFACTOR: "bg-violet-50 text-violet-700 border-violet-200",
+  REFACTOR: "bg-blue-50 text-blue-700 border-violet-200",
   HOTFIX: "bg-orange-50 text-orange-700 border-orange-200",
   BUGFIX: "bg-red-50 text-red-700 border-red-200",
   MIGRATION: "bg-emerald-50 text-emerald-700 border-emerald-200",

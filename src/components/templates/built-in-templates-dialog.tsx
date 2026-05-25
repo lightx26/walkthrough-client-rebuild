@@ -121,7 +121,7 @@ export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
                     <div className="w-8 h-8 rounded-md bg-gray-100 text-gray-400 flex items-center justify-center shrink-0">
                       <Lock className="w-3.5 h-3.5" />
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex flex-col flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
                         <p className="font-medium text-sm text-gray-900 truncate">
                           {tpl.name}
@@ -144,7 +144,7 @@ export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
                         variant="link"
                         size="none"
                         onClick={() => setExpandedId(isOpen ? null : tpl.id)}
-                        className="gap-1 text-xs mt-2 font-medium no-underline hover:no-underline"
+                        className="gap-1 text-xs mt-2 font-medium no-underline hover:no-underline self-start"
                       >
                         {isOpen ? (
                           <>

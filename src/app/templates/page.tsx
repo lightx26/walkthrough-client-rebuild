@@ -138,8 +138,7 @@ export default function TemplatesPage() {
             className="w-full gap-2 py-4 rounded-xl border border-primary-soft text-sm font-medium"
           >
             <Lock className="w-4 h-4" />
-            Browse {builtinTemplates.length} built-in template
-            {builtinTemplates.length === 1 ? "" : "s"}
+            Browse built-in templates
           </Button>
         </section>
 
