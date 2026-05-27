@@ -2,17 +2,17 @@ import { AlertCircle, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ReviewerChapter } from "@/types/analytics";
 
-type CellKind = "marked" | "not-marked" | "unread";
+type CellKind = "marked" | "viewed" | "untouched";
 
 function cellKind(c: ReviewerChapter): CellKind {
-  if (!c.read) return "unread";
   if (c.markedAsRead) return "marked";
-  return "not-marked";
+  if (c.viewCount > 0) return "viewed";
+  return "untouched";
 }
 
 export function MatrixCell({ chapter }: { chapter: ReviewerChapter }) {
   const kind = cellKind(chapter);
-  if (kind === "unread") {
+  if (kind === "untouched") {
     return (
       <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center">
         <span className="text-gray-300 text-sm">—</span>

@@ -8,7 +8,7 @@ import { MatrixCell } from "./matrix-cell";
 import { MatrixLegendBadge } from "./matrix-legend-badge";
 
 function formatDuration(sec: number): string {
-  if (!sec) return "—";
+  if (sec === null || sec === undefined) return "—";
   if (sec < 60) return `${sec}s`;
   const m = Math.floor(sec / 60);
   const s = sec % 60;
@@ -129,13 +129,13 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
           color="amber"
           icon={<AlertCircle className="w-3 h-3" />}
         >
-          Not marked as read
+          Viewed, not marked
         </MatrixLegendBadge>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-5 h-5 rounded-md bg-gray-50 border border-gray-100 text-gray-300 text-xs flex items-center justify-center">
             —
           </span>
-          Not read
+          Not visited
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-5 h-5 rounded-full bg-violet-600 text-white text-[9px] font-semibold flex items-center justify-center">

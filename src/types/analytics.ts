@@ -2,8 +2,7 @@ export interface ReviewerChapter {
   chapterId: string;
   chapterTitle: string;
   order: number;
-  read: boolean;
-  markedAsRead: boolean | null;
+  markedAsRead: boolean;
   timeSpentSec: number;
   commentCount: number;
   viewCount: number;
