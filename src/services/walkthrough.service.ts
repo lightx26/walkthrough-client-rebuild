@@ -149,6 +149,15 @@ export const walkthroughService = {
     );
   },
 
+  async unmarkChapter(
+    walkthroughId: string,
+    chapterId: string,
+  ): Promise<void> {
+    await apiClient.delete(
+      `/v1/walkthroughs/${walkthroughId}/chapter-view-events/${chapterId}`,
+    );
+  },
+
   async getReadProgress(
     walkthroughId: string,
   ): Promise<DataResponse<ReadProgress>> {

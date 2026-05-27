@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { useState, useMemo } from "react";
+import { ChevronUp, ChevronDown, CheckCircle2 } from "lucide-react";
 import type { Chapter } from "@/types/walkthrough";
 import {
   useRecordChapterView,
+  useUnmarkChapter,
   useBatchFileComments,
 } from "@/hooks/use-walkthrough";
 import { Button } from "@/components/ui/button";
@@ -14,16 +15,20 @@ interface ChapterSectionProps {
   chapter: Chapter;
   index: number;
   walkthroughId: string;
+  isOwner: boolean;
+  isRead: boolean;
 }
 
 export function ChapterSection({
   chapter,
   index,
   walkthroughId,
+  isOwner,
+  isRead,
 }: ChapterSectionProps) {
   const [expanded, setExpanded] = useState(index === 0);
-  const viewRecorded = useRef(false);
   const recordChapterView = useRecordChapterView(walkthroughId);
+  const unmarkChapter = useUnmarkChapter(walkthroughId);
 
   const fileIds = useMemo(
     () => chapter.files.map((f) => f.id),
@@ -32,17 +37,18 @@ export function ChapterSection({
   const { data: batchData } = useBatchFileComments(walkthroughId, fileIds);
   const commentsByFile = batchData?.data ?? {};
 
-  useEffect(() => {
-    if (expanded && !viewRecorded.current) {
-      viewRecorded.current = true;
+  const isPending = recordChapterView.isPending || unmarkChapter.isPending;
+
+  function handleToggleRead() {
+    if (isRead) {
+      unmarkChapter.mutate(chapter.id);
+    } else {
       recordChapterView.mutate({
         chapterId: chapter.id,
-        timeSpentSec: 0,
-        scrolledToBottom: false,
+        markedAsRead: true,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expanded, chapter.id]);
+  }
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -100,6 +106,35 @@ export function ChapterSection({
           </div>
         </div>
       </div>
+
+      {/* Mark as Read — always visible */}
+      {!isOwner && (
+        <div className="border-t border-gray-100 px-6 py-3 flex justify-end">
+          {isRead ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2 rounded-xl text-emerald-600 hover:text-red-600 hover:bg-red-50"
+              onClick={handleToggleRead}
+              disabled={isPending}
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              Read
+            </Button>
+          ) : (
+            <Button
+              variant="primary"
+              size="sm"
+              className="gap-2 rounded-xl"
+              onClick={handleToggleRead}
+              disabled={isPending}
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              Mark as read
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

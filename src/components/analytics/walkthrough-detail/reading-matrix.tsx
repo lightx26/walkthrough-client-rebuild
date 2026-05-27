@@ -123,13 +123,13 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
           Legend:
         </span>
         <MatrixLegendBadge color="emerald" icon={<Check className="w-3 h-3" />}>
-          Read fully
+          Marked as read
         </MatrixLegendBadge>
         <MatrixLegendBadge
           color="amber"
           icon={<AlertCircle className="w-3 h-3" />}
         >
-          Read, not scrolled to end
+          Not marked as read
         </MatrixLegendBadge>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-5 h-5 rounded-md bg-gray-50 border border-gray-100 text-gray-300 text-xs flex items-center justify-center">

@@ -2,12 +2,12 @@ import { AlertCircle, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ReviewerChapter } from "@/types/analytics";
 
-type CellKind = "read" | "skim" | "unread";
+type CellKind = "marked" | "not-marked" | "unread";
 
 function cellKind(c: ReviewerChapter): CellKind {
   if (!c.read) return "unread";
-  if (c.scrolledToBottom === false) return "skim";
-  return "read";
+  if (c.markedAsRead) return "marked";
+  return "not-marked";
 }
 
 export function MatrixCell({ chapter }: { chapter: ReviewerChapter }) {
@@ -24,12 +24,12 @@ export function MatrixCell({ chapter }: { chapter: ReviewerChapter }) {
       <div
         className={cn(
           "w-9 h-9 rounded-lg border flex items-center justify-center",
-          kind === "read"
+          kind === "marked"
             ? "bg-emerald-50 border-emerald-200 text-emerald-600"
             : "bg-amber-50 border-amber-200 text-amber-600",
         )}
       >
-        {kind === "read" ? (
+        {kind === "marked" ? (
           <Check className="w-4 h-4" />
         ) : (
           <AlertCircle className="w-4 h-4" />

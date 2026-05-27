@@ -3,7 +3,7 @@ export interface ReviewerChapter {
   chapterTitle: string;
   order: number;
   read: boolean;
-  scrolledToBottom: boolean | null;
+  markedAsRead: boolean | null;
   timeSpentSec: number;
   commentCount: number;
   viewCount: number;
@@ -34,7 +34,7 @@ export interface AttentionEntry {
   displayName: string | null;
   avatarUrl: string | null;
   timeSpentSec: number;
-  scrolledToBottom: boolean;
+  markedAsRead: boolean;
   commentCount: number;
   viewCount: number;
 }

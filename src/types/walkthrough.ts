@@ -93,6 +93,7 @@ export interface ReadProgress {
   totalChapters: number;
   timeSpentSec: number;
   readAt: string;
+  readChapterIds: string[];
 }
 
 export interface RecentlyReviewedWalkthrough {
@@ -191,5 +192,5 @@ export interface CreateCommentRequest {
 export interface RecordChapterViewRequest {
   chapterId: string;
   timeSpentSec?: number;
-  scrolledToBottom?: boolean;
+  markedAsRead?: boolean;
 }

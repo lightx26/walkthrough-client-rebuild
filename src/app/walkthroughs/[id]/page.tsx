@@ -178,6 +178,8 @@ export default function WalkthroughDetailPage() {
                     chapter={chapter}
                     index={idx}
                     walkthroughId={walkthrough.id}
+                    isOwner={isOwner}
+                    isRead={progress?.readChapterIds?.includes(chapter.id) ?? false}
                   />
                 ))}
 

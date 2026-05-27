@@ -24,10 +24,6 @@ function formatDuration(sec: number): string {
   return `${h}h ${m % 60}m`;
 }
 
-function isSkim(entry: ChapterAttention["attention"][number]) {
-  return !entry.scrolledToBottom && entry.timeSpentSec < 60;
-}
-
 export function ChapterAttentionRow({
   chapter,
 }: {
@@ -99,17 +95,15 @@ export function ChapterAttentionRow({
                 {formatDuration(entry.timeSpentSec)}
               </span>
 
-              {entry.scrolledToBottom ? (
-                <AttentionBadge color="emerald">Scrolled to end</AttentionBadge>
-              ) : isSkim(entry) ? (
+              {entry.markedAsRead ? (
+                <AttentionBadge color="emerald">Marked as read</AttentionBadge>
+              ) : (
                 <AttentionBadge
                   color="amber"
                   icon={<AlertTriangle className="w-3 h-3" />}
                 >
-                  Possibly skimmed
+                  Not marked as read
                 </AttentionBadge>
-              ) : (
-                <AttentionBadge color="gray">Read</AttentionBadge>
               )}
 
               {entry.commentCount > 0 && (

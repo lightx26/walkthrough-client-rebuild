@@ -171,3 +171,20 @@ export function useRecordChapterView(walkthroughId: string) {
     },
   });
 }
+
+export function useUnmarkChapter(walkthroughId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (chapterId: string) =>
+      walkthroughService.unmarkChapter(walkthroughId, chapterId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["read-progress", walkthroughId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["walkthroughs", "recently-reviewed"],
+      });
+    },
+  });
+}
