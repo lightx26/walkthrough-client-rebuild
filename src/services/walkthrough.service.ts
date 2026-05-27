@@ -149,12 +149,21 @@ export const walkthroughService = {
     );
   },
 
-  async unmarkChapter(
+  async markChapterRead(
+    walkthroughId: string,
+    chapterId: string,
+  ): Promise<void> {
+    await apiClient.post(
+      `/v1/walkthroughs/${walkthroughId}/chapters/${chapterId}/read`,
+    );
+  },
+
+  async unmarkChapterRead(
     walkthroughId: string,
     chapterId: string,
   ): Promise<void> {
     await apiClient.delete(
-      `/v1/walkthroughs/${walkthroughId}/chapter-view-events/${chapterId}`,
+      `/v1/walkthroughs/${walkthroughId}/chapters/${chapterId}/read`,
     );
   },
 

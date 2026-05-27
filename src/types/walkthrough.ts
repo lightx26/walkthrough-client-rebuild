@@ -192,5 +192,4 @@ export interface CreateCommentRequest {
 export interface RecordChapterViewRequest {
   chapterId: string;
   timeSpentSec?: number;
-  markedAsRead?: boolean;
 }

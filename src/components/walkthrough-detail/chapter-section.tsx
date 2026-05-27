@@ -4,8 +4,8 @@ import { useState, useMemo } from "react";
 import { ChevronUp, ChevronDown, CheckCircle2 } from "lucide-react";
 import type { Chapter } from "@/types/walkthrough";
 import {
-  useRecordChapterView,
-  useUnmarkChapter,
+  useMarkChapterRead,
+  useUnmarkChapterRead,
   useBatchFileComments,
 } from "@/hooks/use-walkthrough";
 import { Button } from "@/components/ui/button";
@@ -27,8 +27,8 @@ export function ChapterSection({
   isRead,
 }: ChapterSectionProps) {
   const [expanded, setExpanded] = useState(index === 0);
-  const recordChapterView = useRecordChapterView(walkthroughId);
-  const unmarkChapter = useUnmarkChapter(walkthroughId);
+  const markChapterRead = useMarkChapterRead(walkthroughId);
+  const unmarkChapterRead = useUnmarkChapterRead(walkthroughId);
 
   const fileIds = useMemo(
     () => chapter.files.map((f) => f.id),
@@ -37,16 +37,13 @@ export function ChapterSection({
   const { data: batchData } = useBatchFileComments(walkthroughId, fileIds);
   const commentsByFile = batchData?.data ?? {};
 
-  const isPending = recordChapterView.isPending || unmarkChapter.isPending;
+  const isPending = markChapterRead.isPending || unmarkChapterRead.isPending;
 
   function handleToggleRead() {
     if (isRead) {
-      unmarkChapter.mutate(chapter.id);
+      unmarkChapterRead.mutate(chapter.id);
     } else {
-      recordChapterView.mutate({
-        chapterId: chapter.id,
-        markedAsRead: true,
-      });
+      markChapterRead.mutate(chapter.id);
     }
   }
 
@@ -110,29 +107,26 @@ export function ChapterSection({
       {/* Mark as Read — always visible */}
       {!isOwner && (
         <div className="border-t border-gray-100 px-6 py-3 flex justify-end">
-          {isRead ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="gap-2 rounded-xl text-emerald-600 hover:text-red-600 hover:bg-red-50"
-              onClick={handleToggleRead}
-              disabled={isPending}
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              Read
-            </Button>
-          ) : (
-            <Button
-              variant="primary"
-              size="sm"
-              className="gap-2 rounded-xl"
-              onClick={handleToggleRead}
-              disabled={isPending}
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              Mark as read
-            </Button>
-          )}
+          <Button
+            variant={isRead ? "ghost" : "outline"}
+            size="xs"
+            className={`gap-2 rounded-xl transition-all duration-300 ease-in-out ${
+              isRead
+                ? "text-emerald-600 hover:text-emerald-600 hover:bg-emerald-50"
+                : "border-2 border-primary text-primary hover:bg-primary/10 hover:text-primary"
+            }`}
+            onClick={handleToggleRead}
+            disabled={isPending}
+          >
+            {isRead && (
+              <CheckCircle2
+                className={`w-4 h-4 transition-transform duration-300 ${isRead ? "scale-100" : "scale-0"}`}
+              />
+            )}
+            <span className="transition-opacity duration-200">
+              {isRead ? "Read" : "Mark as read"}
+            </span>
+          </Button>
         </div>
       )}
     </div>
