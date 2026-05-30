@@ -4,9 +4,9 @@ import Link from "next/link";
 import {
   AlertTriangle,
   BarChart2,
-  BookOpen,
   CheckCircle2,
   MessageSquare,
+  Waypoints,
 } from "lucide-react";
 import { formatRelativeTime } from "@/utils/date-diff";
 import { cn } from "@/lib/utils";
@@ -111,7 +111,7 @@ export function AuthorWalkthroughCard({
 
         <div className="flex items-end gap-1 text-[11px] text-gray-400 shrink-0">
           <span className="inline-flex items-center gap-1">
-            <BookOpen className="w-3 h-3" />
+            <Waypoints className="w-3 h-3" />
             {walkthrough.totalChapters} ch
           </span>
           <span className="inline-flex items-center gap-1">

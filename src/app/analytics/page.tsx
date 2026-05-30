@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { BarChart2, BookOpen, Users } from "lucide-react";
+import { BarChart2, Waypoints, Users } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import {
   AnalyticsTabButton,
@@ -61,7 +61,7 @@ export default function AnalyticsPage() {
           <AnalyticsTabButton
             active={tab === "author"}
             onClick={() => setTab("author")}
-            icon={<BookOpen className="w-3.5 h-3.5" />}
+            icon={<Waypoints className="w-3.5 h-3.5" />}
             label="Author view"
           />
           <AnalyticsTabButton

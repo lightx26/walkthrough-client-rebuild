@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { WalkthroughSummary } from "@/types/walkthrough";
 import { DisplayStatus, toDisplayStatus } from "@/utils/walkthrough";
-import { BookOpen, Clock } from "lucide-react";
+import { Clock, Waypoints } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function compactAge(iso: string): string {
@@ -53,7 +53,7 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
             v{wt.version}
           </span>
           <span className="flex items-center gap-1">
-            <BookOpen className="w-3 h-3" />
+            <Waypoints className="w-3 h-3" />
             {wt.chapterCount} ch
           </span>
           <span className="flex items-center gap-1">

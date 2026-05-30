@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { BookOpen, Eye, MessageSquare, PenLine } from "lucide-react";
+import { Eye, MessageSquare, PenLine, Waypoints } from "lucide-react";
 import { formatRelativeTime } from "@/utils/date-diff";
 
 interface MockActivity {
@@ -50,10 +50,10 @@ const MOCK_ACTIVITIES: MockActivity[] = [
 
 const activityIcon: Record<MockActivity["type"], ReactNode> = {
   comment: <MessageSquare className="w-3.5 h-3.5 text-violet-500" />,
-  publish: <BookOpen className="w-3.5 h-3.5 text-green-500" />,
+  publish: <Waypoints className="w-3.5 h-3.5 text-green-500" />,
   review: <Eye className="w-3.5 h-3.5 text-blue-500" />,
   annotate: <PenLine className="w-3.5 h-3.5 text-orange-400" />,
-  draft: <BookOpen className="w-3.5 h-3.5 text-amber-500" />,
+  draft: <Waypoints className="w-3.5 h-3.5 text-amber-500" />,
   reply: <MessageSquare className="w-3.5 h-3.5 text-gray-400" />,
 };
 

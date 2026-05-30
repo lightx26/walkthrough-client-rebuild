@@ -1,4 +1,4 @@
-import { BookOpen, CheckCircle2, Clock, Users } from "lucide-react";
+import { CheckCircle2, Clock, Users, Waypoints } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { RepoMetrics } from "@/types/analytics";
 
@@ -41,7 +41,7 @@ export function TeamOverviewCards({
       hint: s ? `${s.totalWalkthroughs} walkthroughs` : null,
     },
     {
-      icon: BookOpen,
+      icon: Waypoints,
       iconBg: "bg-violet-50",
       iconColor: "text-violet-600",
       label: "Avg chapters / walkthrough",

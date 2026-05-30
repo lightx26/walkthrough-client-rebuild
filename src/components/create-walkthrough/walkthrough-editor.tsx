@@ -4,14 +4,7 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import {
-  ArrowLeft,
-  BookOpen,
-  LayoutTemplate,
-  Plus,
-  Save,
-  Send,
-} from "lucide-react";
+import { ArrowLeft, LayoutTemplate, Plus, Save, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { ApplyTemplateDialog } from "./apply-template-dialog";

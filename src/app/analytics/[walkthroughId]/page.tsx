@@ -4,10 +4,10 @@ import { use } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  BookOpen,
   ExternalLink,
   MessageSquare,
   Users,
+  Waypoints,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import { ApiErrorState } from "@/components/ui";
@@ -122,7 +122,7 @@ export default function AnalyticsDetailPage({
           </span>
           <span className="text-gray-300">·</span>
           <span className="inline-flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
+            <Waypoints className="w-3.5 h-3.5" />
             {chapterCount} {chapterCount === 1 ? "chapter" : "chapters"}
           </span>
           <span className="text-gray-300">·</span>

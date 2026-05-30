@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, BarChart2, BookOpen, Pencil } from "lucide-react";
+import { ArrowLeft, BarChart2, Pencil, Waypoints } from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import { ApiErrorState, UserAvatar, Skeleton } from "@/components/ui";
 import { Button } from "@/components/ui/button";
@@ -71,7 +71,7 @@ export default function WalkthroughDetailPage() {
           {walkthrough ? (
             <>
               <div className="flex items-center gap-2 flex-1 min-w-0">
-                <BookOpen className="w-4 h-4 text-gray-400 shrink-0" />
+                <Waypoints className="w-4 h-4 text-gray-400 shrink-0" />
                 <h1 className="text-sm font-semibold text-gray-900 truncate">
                   {walkthrough.title}
                 </h1>
@@ -96,30 +96,30 @@ export default function WalkthroughDetailPage() {
 
                 {isOwner && (
                   <>
-                  {walkthrough.status !== "DRAFT" && (
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 rounded-xl"
-                  >
-                    <Link href={`/analytics/${walkthrough.id}`}>
-                      <BarChart2 className="w-3.5 h-3.5" />
-                      Analytics
-                    </Link>
-                  </Button>
-                  )}
-                  <Button
-                    asChild
-                    variant="primary"
-                    size="sm"
-                    className="gap-1.5 rounded-xl"
-                  >
-                    <Link href={`/walkthroughs/${walkthrough.id}/edit`}>
-                      <Pencil className="w-3.5 h-3.5" />
-                      Edit
-                    </Link>
-                  </Button>
+                    {walkthrough.status !== "DRAFT" && (
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="gap-1.5 rounded-xl"
+                      >
+                        <Link href={`/analytics/${walkthrough.id}`}>
+                          <BarChart2 className="w-3.5 h-3.5" />
+                          Analytics
+                        </Link>
+                      </Button>
+                    )}
+                    <Button
+                      asChild
+                      variant="primary"
+                      size="sm"
+                      className="gap-1.5 rounded-xl"
+                    >
+                      <Link href={`/walkthroughs/${walkthrough.id}/edit`}>
+                        <Pencil className="w-3.5 h-3.5" />
+                        Edit
+                      </Link>
+                    </Button>
                   </>
                 )}
               </div>
@@ -179,7 +179,9 @@ export default function WalkthroughDetailPage() {
                     index={idx}
                     walkthroughId={walkthrough.id}
                     isOwner={isOwner}
-                    isRead={progress?.readChapterIds?.includes(chapter.id) ?? false}
+                    isRead={
+                      progress?.readChapterIds?.includes(chapter.id) ?? false
+                    }
                   />
                 ))}
 

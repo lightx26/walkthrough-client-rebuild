@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, MessageSquare } from "lucide-react";
+import { MessageSquare, Waypoints } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toDisplayStatus } from "@/utils/walkthrough";
 import type { WalkthroughSummary } from "@/types/walkthrough";
@@ -45,7 +45,7 @@ export function ProfileWalkthroughItem({ wt }: { wt: WalkthroughSummary }) {
           iconBg[displayStatus],
         )}
       >
-        <BookOpen className="w-3.5 h-3.5 text-white" />
+        <Waypoints className="w-3.5 h-3.5 text-white" />
       </div>
 
       <div className="flex-1 min-w-0">
@@ -72,7 +72,7 @@ export function ProfileWalkthroughItem({ wt }: { wt: WalkthroughSummary }) {
           <span className="text-gray-200 text-xs">·</span>
           <span className="text-[11px] text-gray-400">#{wt.prNumber}</span>
           <span className="flex items-center gap-0.5 text-[11px] text-gray-400">
-            <BookOpen className="w-3 h-3" />
+            <Waypoints className="w-3 h-3" />
             {wt.chapterCount} ch
           </span>
           {(wt.commentCount ?? 0) > 0 && (

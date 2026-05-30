@@ -4,13 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BarChart2,
-  BookOpen,
   Database,
   Eye,
   GitPullRequest,
   Home,
   LayoutTemplate,
   Pin,
+  Waypoints,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui";
@@ -22,7 +22,7 @@ const mainNav = [
   { href: "/", icon: Home, label: "Home" },
   {
     href: "/walkthroughs",
-    icon: BookOpen,
+    icon: Waypoints,
     label: "Walkthroughs",
     count: 23,
     disabled: true,

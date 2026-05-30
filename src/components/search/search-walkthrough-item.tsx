@@ -1,4 +1,4 @@
-import { BookOpen, ArrowRight } from "lucide-react";
+import { ArrowRight, Waypoints } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { formatRelativeTime } from "@/utils/date-diff";
@@ -56,7 +56,7 @@ export function SearchWalkthroughItem({
       )}
     >
       <div className="shrink-0 w-8 h-8 rounded-md bg-indigo-100 flex items-center justify-center">
-        <BookOpen className="w-4 h-4 text-indigo-600" />
+        <Waypoints className="w-4 h-4 text-indigo-600" />
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm text-gray-900 truncate">

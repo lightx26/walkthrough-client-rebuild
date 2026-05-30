@@ -3,11 +3,12 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpen,
   ChevronRight,
   GitMerge,
   GitPullRequest,
   GitPullRequestClosed,
+  GitPullRequestDraft,
+  Waypoints,
 } from "lucide-react";
 import { UserAvatar } from "@/components/ui";
 import { formatRelativeTime } from "@/utils/date-diff";
@@ -46,7 +47,10 @@ function PrStateIcon({ state }: { state: PrState }) {
   if (state === "draft")
     return (
       <div className={cn(base, "bg-gray-100")}>
-        <GitPullRequest className="w-4 h-4 text-gray-400" strokeWidth={2} />
+        <GitPullRequestDraft
+          className="w-4 h-4 text-gray-400"
+          strokeWidth={2}
+        />
       </div>
     );
   return (
@@ -138,7 +142,7 @@ export function PrRow({ pr, owner, repo, showRepoInfo }: PrRowProps) {
       <div className="flex items-center gap-3 shrink-0">
         {pr.walkthroughsCount != null && pr.walkthroughsCount > 0 ? (
           <span className="flex items-center gap-1.5 text-xs text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
-            <BookOpen className="w-3.5 h-3.5 text-gray-400" />
+            <Waypoints className="w-3.5 h-3.5 text-gray-400" />
             {pr.walkthroughsCount === 1
               ? "1 walkthrough"
               : `${pr.walkthroughsCount} walkthroughs`}

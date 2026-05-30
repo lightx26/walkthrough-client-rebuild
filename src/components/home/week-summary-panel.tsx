@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  BookOpen,
   MessageSquare,
   PanelRightClose,
   PanelRightOpen,
+  Waypoints,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,7 @@ export function WeekSummaryPanel({
 
   const summaryData = [
     {
-      icon: BookOpen,
+      icon: Waypoints,
       iconColor: "text-blue-500",
       bg: "bg-blue-50",
       label: "Walkthroughs",
