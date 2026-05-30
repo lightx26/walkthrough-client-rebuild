@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, ChevronRight, MessageSquare } from "lucide-react";
+import { ChevronRight, MessageSquare, Waypoints } from "lucide-react";
 import { WalkthroughStatusBadge } from "./walkthrough-status-badge";
 import { cn } from "@/lib/utils";
 import { formatRelativeTime } from "@/utils/date-diff";
@@ -8,67 +8,79 @@ import type {
   WalkthroughSummary,
 } from "@/types/walkthrough";
 
-function walkthroughAccentColor(status: WalkthroughStatus) {
-  if (status === "PUBLISHED") return "#34d399";
-  if (status === "DRAFT") return "#fbbf24";
-  if (status === "OUTDATED") return "#9ca3af";
-  return "#d1d5db";
-}
-
-function walkthroughIconColor(status: WalkthroughStatus) {
-  if (status === "PUBLISHED") return "text-emerald-600";
-  if (status === "DRAFT") return "text-amber-600";
-  if (status === "OUTDATED") return "text-gray-500";
-  return "text-gray-400";
+function WalkthroughStatusIcon({ status }: { status: WalkthroughStatus }) {
+  const base = "w-9 h-9 rounded-full flex items-center justify-center shrink-0";
+  if (status === "PUBLISHED")
+    return (
+      <div className={cn(base, "bg-emerald-50")}>
+        <Waypoints className="w-4 h-4 text-emerald-600" strokeWidth={2} />
+      </div>
+    );
+  if (status === "DRAFT")
+    return (
+      <div className={cn(base, "bg-amber-50")}>
+        <Waypoints className="w-4 h-4 text-amber-600" strokeWidth={2} />
+      </div>
+    );
+  if (status === "OUTDATED")
+    return (
+      <div className={cn(base, "bg-gray-100")}>
+        <Waypoints className="w-4 h-4 text-gray-500" strokeWidth={2} />
+      </div>
+    );
+  return (
+    <div className={cn(base, "bg-gray-100")}>
+      <Waypoints className="w-4 h-4 text-gray-400" strokeWidth={2} />
+    </div>
+  );
 }
 
 export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
   return (
-    <div
-      className="flex items-start gap-4 px-5 py-4 rounded-xl border border-gray-200 bg-white"
-      style={{
-        borderLeftColor: walkthroughAccentColor(wt.status),
-        borderLeftWidth: 4,
-      }}
+    <Link
+      href={`/walkthroughs/${wt.id}`}
+      className="flex items-center gap-4 p-5 border-b border-gray-100 last:border-0 group cursor-pointer hover:bg-gray-100/50 -mx-5 transition-colors"
     >
-      <div className="shrink-0 pt-7.5">
-        <BookOpen
-          className={cn("w-5 h-5", walkthroughIconColor(wt.status))}
-          strokeWidth={1.75}
-        />
-      </div>
+      <WalkthroughStatusIcon status={wt.status} />
+
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-2">
-          <WalkthroughStatusBadge status={wt.status} />
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-sm font-semibold text-gray-900 truncate">
+            {wt.title}
+          </span>
         </div>
-        <p className="text-sm font-semibold text-gray-900 mb-2">{wt.title}</p>
-        {wt.description && (
-          <p className="text-xs text-gray-500 truncate mb-2">
-            {wt.description}
-          </p>
-        )}
-        <div className="flex items-center gap-3 text-xs text-gray-400">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400">
+          {wt.description && (
+            <>
+              <span className="truncate max-w-xs text-gray-500">
+                {wt.description}
+              </span>
+              <span>·</span>
+            </>
+          )}
           <span className="flex items-center gap-1">
-            <BookOpen className="w-3 h-3" />
+            <Waypoints className="w-3 h-3" />
             {wt.chapterCount} {wt.chapterCount === 1 ? "chapter" : "chapters"}
           </span>
           {wt.commentCount > 0 && (
-            <span className="flex items-center gap-1">
-              <MessageSquare className="w-3 h-3" />
-              {wt.commentCount} {wt.commentCount === 1 ? "comment" : "comments"}
-            </span>
+            <>
+              <span>·</span>
+              <span className="flex items-center gap-1">
+                <MessageSquare className="w-3 h-3" />
+                {wt.commentCount}
+              </span>
+            </>
           )}
-          <span>{formatRelativeTime(wt.updatedAt)}</span>
         </div>
       </div>
 
-      <Link
-        href={`/walkthroughs/${wt.id}`}
-        className="inline-flex items-center gap-1 text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-colors px-4 py-2 rounded-lg shrink-0"
-      >
-        Open
-        <ChevronRight className="w-4 h-4" />
-      </Link>
-    </div>
+      <div className="flex items-center gap-3 shrink-0">
+        <WalkthroughStatusBadge status={wt.status} />
+        <span className="text-xs text-gray-400 w-12 text-right">
+          {formatRelativeTime(wt.updatedAt)}
+        </span>
+        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-400 transition-colors" />
+      </div>
+    </Link>
   );
 }
