@@ -3,12 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  BookOpen,
   ChevronDown,
   ChevronRight,
-  ChevronUp,
   Copy,
   LayoutTemplate,
+  Waypoints,
   Lock,
   Pencil,
   Trash2,
@@ -17,6 +16,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useDeleteTemplate, useDuplicateTemplate } from "@/hooks/use-templates";
 import type { Template } from "@/types/template";
 import { PrTypeBadge } from "./pr-type-badge";
@@ -29,16 +29,12 @@ interface Props {
 export function TemplateCard({ template, defaultExpanded = false }: Props) {
   const router = useRouter();
   const [expanded, setExpanded] = useState(defaultExpanded);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteTemplate = useDeleteTemplate();
   const duplicateTemplate = useDuplicateTemplate();
 
   const isBuiltin = template.isBuiltin;
   const chapterCount = template.chapters?.length ?? 0;
-
-  const onDelete = () => {
-    if (!confirm(`Delete template "${template.name}"?`)) return;
-    deleteTemplate.mutate(template.id);
-  };
 
   const onDuplicate = () => {
     duplicateTemplate.mutate(
@@ -62,7 +58,7 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
       <div className="flex items-start gap-4">
         <div
           className={cn(
-            "w-10 h-10 rounded-lg shrink-0 flex items-center justify-center",
+            "size-9 rounded-lg shrink-0 flex items-center justify-center",
             isBuiltin
               ? "bg-gray-100 text-gray-400"
               : "bg-violet-50 text-violet-500",
@@ -99,7 +95,7 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
           {!isBuiltin && (
             <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
               <span className="flex items-center gap-1">
-                <BookOpen className="w-3 h-3" />
+                <Waypoints className="w-3 h-3" />
                 {chapterCount} {chapterCount === 1 ? "chapter" : "chapters"}
               </span>
               <span>
@@ -121,7 +117,7 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
                 onClick={() => setExpanded((v) => !v)}
                 className="gap-1.5"
               >
-                <BookOpen className="w-3.5 h-3.5" />
+                <Waypoints className="w-3.5 h-3.5" />
                 Preview
               </Button>
               <Button
@@ -163,7 +159,7 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
               <Button
                 variant="destructiveGhost"
                 size="iconSm"
-                onClick={onDelete}
+                onClick={() => setConfirmDelete(true)}
                 disabled={deleteTemplate.isPending}
                 className="w-7 h-7 rounded-xl"
                 aria-label="Delete template"
@@ -228,6 +224,19 @@ export function TemplateCard({ template, defaultExpanded = false }: Props) {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmDelete}
+        title={`Delete "${template.name}"?`}
+        description="This template will be permanently removed. This action cannot be undone."
+        tone="danger"
+        confirmLabel="Delete"
+        onConfirm={() => {
+          setConfirmDelete(false);
+          deleteTemplate.mutate(template.id);
+        }}
+        onCancel={() => setConfirmDelete(false)}
+      />
     </div>
   );
 }

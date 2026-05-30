@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   ChevronDown,
   ChevronRight,
-  ChevronUp,
   Copy,
   Lock,
   TrendingUp,
@@ -165,7 +164,7 @@ export function BuiltInTemplatesDialog({ open, templates, onClose }: Props) {
                         size="xs"
                         onClick={() => onDuplicate(tpl.id)}
                         disabled={duplicateTemplate.isPending}
-                        className="gap-1"
+                        className="gap-1.5 rounded-xl"
                       >
                         <Copy className="w-3.5 h-3.5" />
                         Duplicate
