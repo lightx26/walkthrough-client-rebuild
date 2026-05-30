@@ -7,7 +7,7 @@ export {
   computeDiffStats,
   type DiffLineType,
   type DiffLine,
-} from "./diff-utils";
+} from "../../utils/code-diff-utils";
 export { DiffViewer } from "./diff-viewer";
 export { FileSection } from "./file-section";
 export { FileTreePanel } from "./file-tree-panel";

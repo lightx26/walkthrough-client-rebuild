@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { WalkthroughComment } from "@/types/walkthrough";
 import { useSyntaxHighlight } from "@/hooks/use-syntax-highlight";
-import { parsePatch } from "./diff-utils";
+import { parsePatch } from "../../utils/code-diff-utils";
 import { CommentThread } from "./comment-thread";
 import { AddCommentRow } from "./add-comment-row";
 
-export { parsePatch, computeDiffStats } from "./diff-utils";
-export type { DiffLineType, DiffLine } from "./diff-utils";
+export { parsePatch, computeDiffStats } from "../../utils/code-diff-utils";
+export type { DiffLineType, DiffLine } from "../../utils/code-diff-utils";
 
 // ── Main DiffViewer ──────────────────────────────────────────────────────────
 

@@ -5,7 +5,7 @@ import { ChevronUp, ChevronDown, FileText } from "lucide-react";
 import type { WalkthroughFile, WalkthroughComment } from "@/types/walkthrough";
 import { Button } from "@/components/ui/button";
 import { DiffViewer } from "./diff-viewer";
-import { computeDiffStats } from "./diff-utils";
+import { computeDiffStats } from "../../utils/code-diff-utils";
 
 interface FileSectionProps {
   file: WalkthroughFile;
