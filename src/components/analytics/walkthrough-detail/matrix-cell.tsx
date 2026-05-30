@@ -1,4 +1,4 @@
-import { AlertCircle, Check } from "lucide-react";
+import { LoaderCircle, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ReviewerChapter } from "@/types/analytics";
 
@@ -14,13 +14,13 @@ export function MatrixCell({ chapter }: { chapter: ReviewerChapter }) {
   const kind = cellKind(chapter);
   if (kind === "untouched") {
     return (
-      <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center">
+      <div className="relative w-9 h-9 mx-auto rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center">
         <span className="text-gray-300 text-sm">—</span>
       </div>
     );
   }
   return (
-    <div className="flex items-center justify-center relative">
+    <div className="relative w-9 h-9 mx-auto">
       <div
         className={cn(
           "w-9 h-9 rounded-lg border flex items-center justify-center",
@@ -32,7 +32,7 @@ export function MatrixCell({ chapter }: { chapter: ReviewerChapter }) {
         {kind === "marked" ? (
           <Check className="w-4 h-4" />
         ) : (
-          <AlertCircle className="w-4 h-4" />
+          <LoaderCircle className="w-4 h-4" />
         )}
       </div>
       {chapter.commentCount > 0 && (

@@ -5,7 +5,7 @@ export function AttentionBadge({
   icon,
   children,
 }: {
-  color: "emerald" | "amber" | "violet" | "gray";
+  color: "emerald" | "amber" | "violet" | "gray" | "orange";
   icon?: React.ReactNode;
   children: React.ReactNode;
 }) {
@@ -18,6 +18,7 @@ export function AttentionBadge({
         color === "amber" && "text-amber-700 bg-amber-50 border-amber-200",
         color === "violet" && "text-violet-700 bg-violet-50 border-violet-200",
         color === "gray" && "text-gray-700 bg-gray-50 border-gray-200",
+        color === "orange" && "text-orange-700 bg-orange-50 border-orange-200",
       )}
     >
       {icon}

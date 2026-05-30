@@ -34,6 +34,7 @@ export interface AttentionEntry {
   avatarUrl: string | null;
   timeSpentSec: number;
   markedAsRead: boolean;
+  possiblySkimmed: boolean;
   commentCount: number;
   viewCount: number;
 }
@@ -44,6 +45,7 @@ export interface ChapterAttention {
   order: number;
   totalComments: number;
   allRead: boolean;
+  possiblySkimmedCount: number;
   attention: AttentionEntry[];
 }
 

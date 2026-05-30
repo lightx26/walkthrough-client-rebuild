@@ -1,6 +1,12 @@
 "use client";
 
-import { AlertCircle, Check, Clock, MessageSquare, Users } from "lucide-react";
+import {
+  LoaderCircle,
+  Check,
+  Clock,
+  MessageSquare,
+  Users,
+} from "lucide-react";
 import { UserAvatar } from "@/components/ui";
 import { formatRelativeTime } from "@/utils/date-diff";
 import type { ReviewProgress } from "@/types/analytics";
@@ -36,7 +42,10 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
             <tr className="text-[10px] uppercase tracking-wider text-gray-400">
               <th className="text-left font-medium pb-3 pr-3">Reviewer</th>
               {chapters.map((c, i) => (
-                <th key={c.chapterId} className="font-medium pb-3 px-1 w-18">
+                <th
+                  key={c.chapterId}
+                  className="font-medium pb-3 px-1 w-16 text-center"
+                >
                   <div className="flex flex-col items-center gap-0.5">
                     <span className="text-gray-500">{i + 1}</span>
                     <span className="font-normal normal-case tracking-normal text-gray-400 truncate max-w-24 block">
@@ -72,7 +81,10 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
                   </div>
                 </td>
                 {r.chapters.map((c) => (
-                  <td key={c.chapterId} className="py-3 px-1">
+                  <td
+                    key={c.chapterId}
+                    className="py-3 px-1 w-16 text-center align-middle"
+                  >
                     <MatrixCell chapter={c} />
                   </td>
                 ))}
@@ -122,14 +134,17 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
         <span className="font-medium text-gray-400 uppercase tracking-wider text-[10px]">
           Legend:
         </span>
-        <MatrixLegendBadge color="emerald" icon={<Check className="w-3 h-3" />}>
-          Marked as read
+        <MatrixLegendBadge
+          color="emerald"
+          icon={<Check className="w-3 h-3" />}
+        >
+          Read
         </MatrixLegendBadge>
         <MatrixLegendBadge
           color="amber"
-          icon={<AlertCircle className="w-3 h-3" />}
+          icon={<LoaderCircle className="w-3 h-3" />}
         >
-          Viewed, not marked
+          Not finished yet
         </MatrixLegendBadge>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-5 h-5 rounded-md bg-gray-50 border border-gray-100 text-gray-300 text-xs flex items-center justify-center">

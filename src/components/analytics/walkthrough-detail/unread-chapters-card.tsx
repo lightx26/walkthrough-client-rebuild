@@ -30,7 +30,7 @@ export function UnreadChaptersCard({ data }: { data: UnreadSummary }) {
           >
             <div className="flex items-center gap-2 min-w-0">
               <span className="w-5 h-5 rounded-full bg-amber-200 text-amber-800 text-[11px] font-semibold flex items-center justify-center shrink-0">
-                {c.order}
+                {c.order + 1}
               </span>
               <span className="text-sm text-gray-800 truncate">
                 {c.chapterTitle}

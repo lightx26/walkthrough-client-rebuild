@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import {
-  AlertTriangle,
+  LoaderCircle,
+  Check,
   ChevronDown,
   ChevronUp,
   Clock,
   MessageSquare,
   RefreshCw,
+  Zap,
 } from "lucide-react";
 import { UserAvatar } from "@/components/ui";
 import { Button } from "@/components/ui/button";
@@ -49,7 +51,7 @@ export function ChapterAttentionRow({
       >
         <div className="flex items-center gap-2 min-w-0">
           <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-600 text-[11px] font-semibold flex items-center justify-center shrink-0">
-            {chapter.order}
+            {chapter.order + 1}
           </span>
           <span className="text-sm text-gray-900 truncate">
             {chapter.chapterTitle}
@@ -96,13 +98,27 @@ export function ChapterAttentionRow({
               </span>
 
               {entry.markedAsRead ? (
-                <AttentionBadge color="emerald">Marked as read</AttentionBadge>
+                <AttentionBadge
+                  color="emerald"
+                  icon={<Check className="w-3 h-3" />}
+                >
+                  Read
+                </AttentionBadge>
               ) : (
                 <AttentionBadge
                   color="amber"
-                  icon={<AlertTriangle className="w-3 h-3" />}
+                  icon={<LoaderCircle className="w-3 h-3" />}
                 >
-                  Not marked as read
+                  Not finished yet
+                </AttentionBadge>
+              )}
+
+              {entry.possiblySkimmed && (
+                <AttentionBadge
+                  color="orange"
+                  icon={<Zap className="w-3 h-3" />}
+                >
+                  Possibly skimmed
                 </AttentionBadge>
               )}
 
