@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  LoaderCircle,
-  Check,
-  Clock,
-  MessageSquare,
-  Users,
-} from "lucide-react";
+import { LoaderCircle, Check, Clock, MessageSquare, Users } from "lucide-react";
 import { UserAvatar } from "@/components/ui";
 import { formatRelativeTime } from "@/utils/date-diff";
 import type { ReviewProgress } from "@/types/analytics";
@@ -134,10 +128,7 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
         <span className="font-medium text-gray-400 uppercase tracking-wider text-[10px]">
           Legend:
         </span>
-        <MatrixLegendBadge
-          color="emerald"
-          icon={<Check className="w-3 h-3" />}
-        >
+        <MatrixLegendBadge color="emerald" icon={<Check className="w-3 h-3" />}>
           Read
         </MatrixLegendBadge>
         <MatrixLegendBadge
