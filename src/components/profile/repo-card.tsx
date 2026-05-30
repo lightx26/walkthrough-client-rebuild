@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   Building2,
   ChevronRight,
+  Database,
   GitBranch,
   GitFork,
   Globe,
@@ -45,7 +46,7 @@ export function RepoCard({ repo }: { repo: Repository }) {
     >
       <div className="shrink-0">
         <div className="bg-[#EEF2FF] flex items-center justify-center w-9 h-9 rounded-lg">
-          <GitBranch className="text-violet-600 size-4" strokeWidth={2} />
+          <Database className="text-violet-600 size-4" strokeWidth={2} />
         </div>
       </div>
 

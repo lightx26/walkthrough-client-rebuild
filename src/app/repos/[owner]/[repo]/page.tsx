@@ -2,7 +2,14 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, BarChart2, GitBranch, GitFork, Star } from "lucide-react";
+import {
+  ArrowLeft,
+  BarChart2,
+  Database,
+  GitBranch,
+  GitFork,
+  Star,
+} from "lucide-react";
 import { DashboardLayout } from "@/components/layout";
 import { ApiErrorState, Skeleton } from "@/components/ui";
 import { Button } from "@/components/ui/button";
@@ -89,11 +96,8 @@ export default function RepoDetailsPage() {
             <RepoHeaderSkeleton />
           ) : repoDetails ? (
             <div className="bg-white border border-gray-200 rounded-xl px-8 py-6 flex items-center gap-6">
-              <div className="bg-[#EEF2FF] flex items-center justify-center w-12 h-12 rounded-xl shrink-0">
-                <GitBranch
-                  className="text-violet-600 w-5 h-5"
-                  strokeWidth={2}
-                />
+              <div className="bg-violet-50 flex items-center justify-center w-12 h-12 rounded-xl shrink-0">
+                <Database className="text-violet-600 w-5 h-5" strokeWidth={2} />
               </div>
 
               <div className="flex-1 min-w-0">

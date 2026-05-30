@@ -4,6 +4,7 @@ import {
   BarChart2,
   Building2,
   ChevronRight,
+  Database,
   GitBranch,
   GitFork,
   Globe,
@@ -47,8 +48,8 @@ export function RepoCard({ repo }: { repo: Repository }) {
       className="bg-white border border-gray-200 rounded-xl px-6 py-5 flex items-center gap-5 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer group"
     >
       <div className="shrink-0">
-        <div className="bg-[#EEF2FF] flex items-center justify-center w-9 h-9 rounded-lg">
-          <GitBranch className="text-violet-600 size-4" strokeWidth={2} />
+        <div className="bg-violet-50 flex items-center justify-center size-9 rounded-lg">
+          <Database className="text-violet-600 size-4" strokeWidth={2} />
         </div>
       </div>
 
