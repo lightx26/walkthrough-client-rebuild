@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import type { Walkthrough } from "@/types/walkthrough";
 import { computeDiffStats } from "./diff-viewer";
+import { useChapterExpand } from "./chapter-expand-context";
 
 function statusBadge(fileStatus: string) {
   const s = fileStatus?.toUpperCase();
@@ -14,17 +15,13 @@ function statusBadge(fileStatus: string) {
   return { label: "M", cls: "bg-blue-100 text-blue-700" };
 }
 
-function scrollToFile(fileId: string) {
-  const el = document.getElementById(`file-${fileId}`);
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 interface FilesPanelProps {
   walkthrough: Walkthrough;
 }
 
 export function FilesPanel({ walkthrough }: FilesPanelProps) {
   const [open, setOpen] = useState(false);
+  const chapterExpand = useChapterExpand();
 
   const totalFiles = walkthrough.chapters.reduce(
     (n, ch) => n + ch.files.length,
@@ -97,7 +94,10 @@ export function FilesPanel({ walkthrough }: FilesPanelProps) {
                       variant="ghost"
                       size="none"
                       onClick={() => {
-                        scrollToFile(file.id);
+                        chapterExpand?.expandAndScrollToFile(
+                          chapter.id,
+                          file.id,
+                        );
                       }}
                       className="w-full justify-start gap-2 pl-10 pr-4 py-1.5 rounded-none font-normal hover:bg-violet-50 group"
                     >

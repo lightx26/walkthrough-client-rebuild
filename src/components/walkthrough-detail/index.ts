@@ -1,4 +1,5 @@
 export { AddCommentRow } from "./add-comment-row";
+export { ChapterExpandProvider, useChapterExpand } from "./chapter-expand-context";
 export { ChapterSection } from "./chapter-section";
 export { CommentSection } from "./comment-section";
 export { CommentThread } from "./comment-thread";

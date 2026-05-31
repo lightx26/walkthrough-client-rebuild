@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { ChevronUp, ChevronDown, CheckCircle2 } from "lucide-react";
 import type { Chapter } from "@/types/walkthrough";
 import {
   useMarkChapterRead,
   useUnmarkChapterRead,
   useBatchFileComments,
+  useRecordChapterView,
 } from "@/hooks/use-walkthrough";
 import { Button } from "@/components/ui/button";
 import { FileSection } from "./file-section";
+import { useChapterExpand } from "./chapter-expand-context";
 
 interface ChapterSectionProps {
   chapter: Chapter;
@@ -29,6 +31,93 @@ export function ChapterSection({
   const [expanded, setExpanded] = useState(index === 0);
   const markChapterRead = useMarkChapterRead(walkthroughId);
   const unmarkChapterRead = useUnmarkChapterRead(walkthroughId);
+  const recordChapterView = useRecordChapterView(walkthroughId);
+
+  // Register expand function with context so file panels can open this chapter
+  const chapterExpand = useChapterExpand();
+  const expand = useCallback(() => setExpanded(true), []);
+  useEffect(() => {
+    return chapterExpand?.register(chapter.id, expand);
+  }, [chapterExpand, chapter.id, expand]);
+
+  // Visibility-based time tracking
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const activeStartRef = useRef<number | null>(null);
+  const accumulatedRef = useRef(0);
+
+  // Flush accumulated time to the server
+  const flushTime = useCallback(() => {
+    if (activeStartRef.current !== null) {
+      accumulatedRef.current += (Date.now() - activeStartRef.current) / 1000;
+      activeStartRef.current = null;
+    }
+    const secs = Math.round(accumulatedRef.current);
+    if (secs > 0) {
+      recordChapterView.mutate({
+        chapterId: chapter.id,
+        timeSpentSec: secs,
+      });
+      accumulatedRef.current = 0;
+    }
+  }, [chapter.id, recordChapterView]);
+
+  // Track visibility via IntersectionObserver (reviewers only)
+  const isVisibleRef = useRef(false);
+  useEffect(() => {
+    if (isOwner) return;
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && expanded) {
+          // Start tracking
+          if (activeStartRef.current === null) {
+            activeStartRef.current = Date.now();
+          }
+        } else {
+          // Stop tracking
+          if (activeStartRef.current !== null) {
+            accumulatedRef.current +=
+              (Date.now() - activeStartRef.current) / 1000;
+            activeStartRef.current = null;
+          }
+        }
+      },
+      { threshold: 0.3 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [expanded, isOwner]);
+
+  // When expanded changes, update tracking based on current visibility
+  useEffect(() => {
+    if (isOwner) return;
+    if (expanded && isVisibleRef.current) {
+      if (activeStartRef.current === null) {
+        activeStartRef.current = Date.now();
+      }
+    } else {
+      if (activeStartRef.current !== null) {
+        accumulatedRef.current +=
+          (Date.now() - activeStartRef.current) / 1000;
+        activeStartRef.current = null;
+      }
+    }
+  }, [expanded, isOwner]);
+
+  // Flush on unmount or when user leaves the page (reviewers only)
+  useEffect(() => {
+    if (isOwner) return;
+    const handleBeforeUnload = () => flushTime();
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      flushTime();
+    };
+  }, [flushTime, isOwner]);
 
   const fileIds = useMemo(
     () => chapter.files.map((f) => f.id),
@@ -48,7 +137,11 @@ export function ChapterSection({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div
+      ref={sectionRef}
+      id={`chapter-${chapter.id}`}
+      className="bg-white rounded-xl border border-gray-200 overflow-hidden"
+    >
       {/* Chapter header */}
       <Button
         variant="ghost"

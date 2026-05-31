@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import type { Walkthrough, WalkthroughFile } from "@/types/walkthrough";
 import { computeDiffStats } from "./diff-viewer";
+import { useChapterExpand } from "./chapter-expand-context";
 
 function statusBadge(fileStatus: string) {
   const s = fileStatus?.toUpperCase();
@@ -14,14 +15,10 @@ function statusBadge(fileStatus: string) {
   return { label: "M", cls: "bg-blue-100 text-blue-700" };
 }
 
-function scrollToFile(fileId: string) {
-  const el = document.getElementById(`file-${fileId}`);
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 interface LeafEntry {
   file: WalkthroughFile;
   chapterIndex: number;
+  chapterId: string;
 }
 
 interface TreeNode {
@@ -56,7 +53,7 @@ function buildTree(walkthrough: Walkthrough): TreeNode {
         leafNode = emptyNode(leafName);
         node.children.set(leafName, leafNode);
       }
-      leafNode.leaves.push({ file, chapterIndex });
+      leafNode.leaves.push({ file, chapterIndex, chapterId: chapter.id });
     }
   });
   collapseChains(root);
@@ -82,9 +79,10 @@ function collapseChains(node: TreeNode) {
 interface DirRowProps {
   node: TreeNode;
   depth: number;
+  onFileClick: (chapterId: string, fileId: string) => void;
 }
 
-function DirNode({ node, depth }: DirRowProps) {
+function DirNode({ node, depth, onFileClick }: DirRowProps) {
   const [open, setOpen] = useState(true);
   const childDirs: TreeNode[] = [];
   const childLeaves: TreeNode[] = [];
@@ -118,7 +116,7 @@ function DirNode({ node, depth }: DirRowProps) {
       {open && (
         <>
           {childDirs.map((child) => (
-            <DirNode key={child.name} node={child} depth={depth + 1} />
+            <DirNode key={child.name} node={child} depth={depth + 1} onFileClick={onFileClick} />
           ))}
           {childLeaves.map((child) =>
             child.leaves.map((leaf) => (
@@ -127,6 +125,7 @@ function DirNode({ node, depth }: DirRowProps) {
                 name={child.name}
                 leaf={leaf}
                 depth={depth + 1}
+                onFileClick={onFileClick}
               />
             )),
           )}
@@ -140,9 +139,10 @@ interface FileLeafProps {
   name: string;
   leaf: LeafEntry;
   depth: number;
+  onFileClick: (chapterId: string, fileId: string) => void;
 }
 
-function FileLeaf({ name, leaf, depth }: FileLeafProps) {
+function FileLeaf({ name, leaf, depth, onFileClick }: FileLeafProps) {
   const badge = statusBadge(leaf.file.fileStatus);
   const stats = leaf.file.rawPatch
     ? computeDiffStats(leaf.file.rawPatch)
@@ -151,7 +151,7 @@ function FileLeaf({ name, leaf, depth }: FileLeafProps) {
     <Button
       variant="ghost"
       size="none"
-      onClick={() => scrollToFile(leaf.file.id)}
+      onClick={() => onFileClick(leaf.chapterId, leaf.file.id)}
       className="w-full justify-start gap-2 pr-4 py-1 rounded-none font-normal hover:bg-violet-50 group"
       style={{ paddingLeft: 12 + depth * 12 + 16 }}
     >
@@ -188,7 +188,12 @@ interface FileTreePanelProps {
 
 export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
   const [open, setOpen] = useState(false);
+  const chapterExpand = useChapterExpand();
   const root = useMemo(() => buildTree(walkthrough), [walkthrough]);
+
+  const handleFileClick = (chapterId: string, fileId: string) => {
+    chapterExpand?.expandAndScrollToFile(chapterId, fileId);
+  };
 
   const totalFiles = walkthrough.chapters.reduce(
     (n, ch) => n + ch.files.length,
@@ -241,7 +246,7 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
 
           <div className="overflow-y-auto flex-1 py-2">
             {topDirs.map((node) => (
-              <DirNode key={node.name} node={node} depth={0} />
+              <DirNode key={node.name} node={node} depth={0} onFileClick={handleFileClick} />
             ))}
             {topLeaves.map((child) =>
               child.leaves.map((leaf) => (
@@ -250,6 +255,7 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
                   name={child.name}
                   leaf={leaf}
                   depth={0}
+                  onFileClick={handleFileClick}
                 />
               )),
             )}

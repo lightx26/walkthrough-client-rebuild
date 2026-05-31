@@ -15,6 +15,7 @@ import {
   FilesPanel,
   FileTreePanel,
 } from "@/components/walkthrough-detail";
+import { ChapterExpandProvider } from "@/components/walkthrough-detail/chapter-expand-context";
 
 function DetailSkeleton() {
   return (
@@ -171,28 +172,30 @@ export default function WalkthroughDetailPage() {
                   </div>
                 )}
 
-                {/* Chapters */}
-                {walkthrough.chapters.map((chapter, idx) => (
-                  <ChapterSection
-                    key={chapter.id}
-                    chapter={chapter}
-                    index={idx}
-                    walkthroughId={walkthrough.id}
-                    isOwner={isOwner}
-                    isRead={
-                      progress?.readChapterIds?.includes(chapter.id) ?? false
-                    }
-                  />
-                ))}
+                <ChapterExpandProvider>
+                  {/* Chapters */}
+                  {walkthrough.chapters.map((chapter, idx) => (
+                    <ChapterSection
+                      key={chapter.id}
+                      chapter={chapter}
+                      index={idx}
+                      walkthroughId={walkthrough.id}
+                      isOwner={isOwner}
+                      isRead={
+                        progress?.readChapterIds?.includes(chapter.id) ?? false
+                      }
+                    />
+                  ))}
+
+                  {/* Files navigation panel */}
+                  <FilesPanel walkthrough={walkthrough} />
+
+                  {/* Repo folder-tree panel */}
+                  <FileTreePanel walkthrough={walkthrough} />
+                </ChapterExpandProvider>
 
                 {/* General Discussion */}
                 <CommentSection walkthroughId={walkthrough.id} />
-
-                {/* Files navigation panel */}
-                <FilesPanel walkthrough={walkthrough} />
-
-                {/* Repo folder-tree panel */}
-                <FileTreePanel walkthrough={walkthrough} />
               </>
             ) : (
               <div className="text-center py-20 text-sm text-gray-400">
