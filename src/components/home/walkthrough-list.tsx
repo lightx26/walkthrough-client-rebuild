@@ -93,7 +93,7 @@ export function WalkthroughList({
           </Button>
         </div>
       </div>
-      <div className="px-5">
+      <div>
         {isLoading ? (
           <>
             <WalkthroughRowSkeleton />

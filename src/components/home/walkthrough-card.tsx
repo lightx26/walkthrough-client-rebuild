@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { WalkthroughSummary } from "@/types/walkthrough";
 import { DisplayStatus, toDisplayStatus } from "@/utils/walkthrough";
-import { Clock, Waypoints } from "lucide-react";
+import { ChevronRight, Clock, Waypoints } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { WalkthroughStatusIcon } from "@/components/ui/walkthrough-status-icon";
+import { WalkthroughStatusBadge } from "@/components/pr-detail";
+import { formatRelativeTime } from "@/utils/date-diff";
 
 function compactAge(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
@@ -27,10 +30,14 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
   return (
     <Link
       href={`/walkthroughs/${wt.id}`}
-      className="flex items-start gap-3 py-3.5 border-b border-gray-100 last:border-0 group"
+      className="flex items-center gap-4 p-4 border-b border-gray-100 last:border-0 group hover:bg-gray-100/50 transition-colors"
     >
+      <WalkthroughStatusIcon status={wt.status} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 mb-1.5">
+          <p className="text-sm font-medium text-gray-900 group-hover:text-violet-700 transition-colors leading-snug">
+            {wt.title}
+          </p>
           <span
             className={cn(
               "text-xs font-medium px-2 py-0.5 rounded-full",
@@ -40,9 +47,6 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
             {displayStatus}
           </span>
         </div>
-        <p className="text-sm font-medium text-gray-900 group-hover:text-violet-700 transition-colors leading-snug">
-          {wt.title}
-        </p>
         <div className="flex items-center gap-2 mt-1.5 text-xs text-gray-400 flex-wrap">
           <span className="truncate max-w-40">
             {wt.owner}/{wt.repo}
@@ -56,11 +60,15 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
             <Waypoints className="w-3 h-3" />
             {wt.chapterCount} ch
           </span>
-          <span className="flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            {compactAge(wt.updatedAt)}
-          </span>
         </div>
+      </div>
+
+      <div className="flex items-center gap-1 shrink-0">
+        <Clock className="text-gray-400 w-3 h-3" />
+        <span className="text-xs text-gray-400 w-12">
+          {formatRelativeTime(wt.updatedAt)}
+        </span>
+        <ChevronRight className="size-4 ml-2 text-gray-300 group-hover:text-gray-400 transition-colors" />
       </div>
     </Link>
   );

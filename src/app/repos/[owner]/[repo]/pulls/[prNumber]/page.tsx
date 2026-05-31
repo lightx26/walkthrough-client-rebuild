@@ -228,7 +228,7 @@ export default function PrDetailPage() {
             </div>
           )}
 
-          <div className="p-5 space-y-3">
+          <div className="px-5">
             {isLoading ? (
               <>
                 <WalkthroughCardSkeleton />

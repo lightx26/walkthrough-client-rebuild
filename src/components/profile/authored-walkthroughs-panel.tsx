@@ -21,8 +21,8 @@ export function AuthoredWalkthroughsPanel({
   const preview = walkthroughs?.slice(0, 3) ?? [];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5">
-      <div className="flex items-center justify-between mb-1">
+    <div className="bg-white border border-gray-200 rounded-lg">
+      <div className="flex items-center justify-between p-5">
         <h2 className="text-sm font-semibold text-gray-900">
           Authored walkthroughs
         </h2>

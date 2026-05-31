@@ -1,8 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Skeleton } from "@/components/ui";
-import { Button } from "@/components/ui/button";
+import { Skeleton, Pagination } from "@/components/ui";
 import { RepoCard } from "./repo-card";
 import type { Repository } from "@/types/github";
 
@@ -72,29 +70,12 @@ export function RepositoriesPanel({
         </div>
       )}
 
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 px-5 pb-5 pt-2">
-          <Button
-            variant="outline"
-            size="iconSm"
-            onClick={() => onPageChange(Math.max(1, page - 1))}
-            disabled={page <= 1}
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </Button>
-          <span className="text-sm text-gray-500">
-            Page {page} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="iconSm"
-            onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-            disabled={page >= totalPages}
-          >
-            <ChevronRight className="w-4 h-4" />
-          </Button>
-        </div>
-      )}
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+        className="px-5 pb-5 pt-2 justify-center"
+      />
     </div>
   );
 }
