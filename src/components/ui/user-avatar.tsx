@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
 
-type AvatarSize = "sm" | "md" | "lg" | "xl";
+import { cn } from '@/lib/utils';
+
+type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 const sizeClasses: Record<AvatarSize, string> = {
-  sm: "w-6 h-6 text-[10px]",
-  md: "w-8 h-8 text-xs",
-  lg: "w-10 h-10 text-sm",
-  xl: "w-16 h-16 text-xl",
+  sm: 'w-6 h-6 text-[10px]',
+  md: 'w-8 h-8 text-xs',
+  lg: 'w-10 h-10 text-sm',
+  xl: 'w-16 h-16 text-xl',
 };
 
 interface UserAvatarProps {
@@ -25,7 +26,7 @@ export function UserAvatar({
   src,
   displayName,
   username,
-  size = "md",
+  size = 'md',
   ring,
   className,
 }: UserAvatarProps) {
@@ -33,32 +34,31 @@ export function UserAvatar({
 
   const initials = displayName
     ? displayName
-        .split(" ")
+        .split(' ')
         .map((n) => n[0])
-        .join("")
+        .join('')
         .toUpperCase()
         .slice(0, 2)
-    : (username?.[0]?.toUpperCase() ?? "?");
+    : (username?.[0]?.toUpperCase() ?? '?');
 
   const showImage = !!src && !imgError;
 
   return (
     <div
       className={cn(
-        "rounded-full shrink-0 overflow-hidden",
-        !showImage &&
-          "bg-violet-600 flex items-center justify-center text-white font-semibold",
-        ring && "ring-4 ring-white",
+        'shrink-0 overflow-hidden rounded-full',
+        !showImage && 'flex items-center justify-center bg-violet-600 font-semibold text-white',
+        ring && 'ring-4 ring-white',
         sizeClasses[size],
-        className,
+        className
       )}
     >
       {showImage ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
-          alt={displayName || username || "User avatar"}
-          className="w-full h-full object-cover"
+          alt={displayName || username || 'User avatar'}
+          className="h-full w-full object-cover"
           referrerPolicy="no-referrer"
           onError={() => setImgError(true)}
         />

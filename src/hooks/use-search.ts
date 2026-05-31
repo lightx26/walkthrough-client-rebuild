@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { searchService } from "@/services/search.service";
-import type { SearchFilters } from "@/types/search";
+import { useEffect, useState } from 'react';
+
+import { searchService } from '@/services/search.service';
+import type { SearchFilters } from '@/types/search';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 function useDebounce(value: string, delay: number) {
   const [debounced, setDebounced] = useState(value);
@@ -16,11 +17,10 @@ function useDebounce(value: string, delay: number) {
 
 export function useWalkthroughSearch(query: string, filters?: SearchFilters) {
   const debouncedQuery = useDebounce(query, 300);
-  const isWaitingForDebounce =
-    query.trim().length > 0 && query !== debouncedQuery;
+  const isWaitingForDebounce = query.trim().length > 0 && query !== debouncedQuery;
 
   const searchQuery = useQuery({
-    queryKey: ["search", "walkthroughs", debouncedQuery, filters],
+    queryKey: ['search', 'walkthroughs', debouncedQuery, filters],
     queryFn: () =>
       searchService.searchWalkthroughs({
         query: debouncedQuery,
@@ -39,7 +39,7 @@ export function useWalkthroughSearch(query: string, filters?: SearchFilters) {
 
 export function useSearchHistory() {
   return useQuery({
-    queryKey: ["search", "history"],
+    queryKey: ['search', 'history'],
     queryFn: () => searchService.getHistory(),
     staleTime: 0,
   });
@@ -50,7 +50,7 @@ export function useSaveSearchHistory() {
   return useMutation({
     mutationFn: (query: string) => searchService.saveHistory(query),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["search", "history"] });
+      queryClient.invalidateQueries({ queryKey: ['search', 'history'] });
     },
   });
 }
@@ -58,7 +58,7 @@ export function useSaveSearchHistory() {
 export function useUserSearch(query: string) {
   const debouncedQuery = useDebounce(query, 200);
   return useQuery({
-    queryKey: ["users", "search", debouncedQuery],
+    queryKey: ['users', 'search', debouncedQuery],
     queryFn: () => searchService.searchUsers(debouncedQuery),
     enabled: debouncedQuery.trim().length > 0,
     placeholderData: (prev) => prev,
@@ -67,11 +67,10 @@ export function useUserSearch(query: string) {
 
 export function useRepoSearch(query: string) {
   const debouncedQuery = useDebounce(query, 300);
-  const isWaitingForDebounce =
-    query.trim().length > 0 && query !== debouncedQuery;
+  const isWaitingForDebounce = query.trim().length > 0 && query !== debouncedQuery;
 
   const searchQuery = useQuery({
-    queryKey: ["search", "repos", debouncedQuery],
+    queryKey: ['search', 'repos', debouncedQuery],
     queryFn: () => searchService.searchRepos(debouncedQuery),
     enabled: debouncedQuery.trim().length > 0,
     placeholderData: (prev) => prev,
@@ -82,11 +81,10 @@ export function useRepoSearch(query: string) {
 
 export function usePRSearch(query: string) {
   const debouncedQuery = useDebounce(query, 300);
-  const isWaitingForDebounce =
-    query.trim().length > 0 && query !== debouncedQuery;
+  const isWaitingForDebounce = query.trim().length > 0 && query !== debouncedQuery;
 
   const { data, isFetching } = useQuery({
-    queryKey: ["search", "prs", debouncedQuery],
+    queryKey: ['search', 'prs', debouncedQuery],
     queryFn: () => searchService.searchPRs(debouncedQuery),
     enabled: debouncedQuery.trim().length > 0,
     placeholderData: (prev) => prev,

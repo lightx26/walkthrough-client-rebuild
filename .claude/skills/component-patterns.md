@@ -15,9 +15,10 @@
 All interactive components must include `"use client"` as the first line:
 
 ```tsx
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
+
 // ...
 ```
 
@@ -46,9 +47,9 @@ Every component folder **must** have an `index.ts` barrel file that re-exports a
 
 ```ts
 // components/analytics/author/index.ts
-export { AuthorView } from "./author-view";
-export { AuthorWalkthroughCard } from "./author-walkthrough-card";
-export { ProgressDots } from "./progress-dots";
+export { AuthorView } from './author-view';
+export { AuthorWalkthroughCard } from './author-walkthrough-card';
+export { ProgressDots } from './progress-dots';
 ```
 
 - Use named re-exports (`export { X } from "./x"`) — no default exports in barrel files.
@@ -75,20 +76,17 @@ import { AuthorView } from "@/components/analytics/author/author-view";
 - **Icons**: `lucide-react` — sized with Tailwind `size-N` classes
 
 ```tsx
-const buttonVariants = cva("base-classes...", {
+const buttonVariants = cva('base-classes...', {
   variants: {
-    variant: { default: "...", outline: "...", ghost: "..." },
-    size: { sm: "...", default: "...", lg: "..." },
+    variant: { default: '...', outline: '...', ghost: '...' },
+    size: { sm: '...', default: '...', lg: '...' },
   },
-  defaultVariants: { variant: "default", size: "default" },
+  defaultVariants: { variant: 'default', size: 'default' },
 });
 
 function Button({ className, variant, size, ...props }) {
   return (
-    <ButtonPrimitive
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
+    <ButtonPrimitive className={cn(buttonVariants({ variant, size, className }))} {...props} />
   );
 }
 ```

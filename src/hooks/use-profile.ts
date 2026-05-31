@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { profileService } from "@/services/profile.service";
+import { profileService } from '@/services/profile.service';
+import { useQuery } from '@tanstack/react-query';
 
 export function useProfile(username: string) {
   return useQuery({
-    queryKey: ["profile", username],
+    queryKey: ['profile', username],
     queryFn: () => profileService.getByUsername(username),
     enabled: !!username,
   });
@@ -13,7 +13,7 @@ export function useProfile(username: string) {
 
 export function useProfileStats(username: string) {
   return useQuery({
-    queryKey: ["profile-stats", username],
+    queryKey: ['profile-stats', username],
     queryFn: () => profileService.getStats(username),
     enabled: !!username,
   });
@@ -21,7 +21,7 @@ export function useProfileStats(username: string) {
 
 export function useUserWalkthroughs(username: string, status?: string) {
   return useQuery({
-    queryKey: ["user-walkthroughs", username, status],
+    queryKey: ['user-walkthroughs', username, status],
     queryFn: () => profileService.getUserWalkthroughs(username, status),
     enabled: !!username,
   });
@@ -29,7 +29,7 @@ export function useUserWalkthroughs(username: string, status?: string) {
 
 export function useProfileActivity(username: string) {
   return useQuery({
-    queryKey: ["profile-activity", username],
+    queryKey: ['profile-activity', username],
     queryFn: () => profileService.getActivity(username),
     enabled: !!username,
   });
@@ -37,7 +37,7 @@ export function useProfileActivity(username: string) {
 
 export function useProfileReviewing(username: string) {
   return useQuery({
-    queryKey: ["profile-reviewing", username],
+    queryKey: ['profile-reviewing', username],
     queryFn: () => profileService.getReviewing(username),
     enabled: !!username,
   });
@@ -45,7 +45,7 @@ export function useProfileReviewing(username: string) {
 
 export function useRecentPullRequests(perPage = 10) {
   return useQuery({
-    queryKey: ["recent-prs", perPage],
+    queryKey: ['recent-prs', perPage],
     queryFn: () => profileService.getRecentPullRequests(perPage),
   });
 }

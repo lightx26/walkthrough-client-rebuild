@@ -1,9 +1,12 @@
-"use client";
+'use client';
 
-import { Suspense, useEffect, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useLoginWithGitHub } from "@/hooks/use-auth";
-import { Logo } from "@/components/ui";
+import { Suspense, useEffect, useRef } from 'react';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import { Logo } from '@/components/ui';
+
+import { useLoginWithGitHub } from '@/hooks/use-auth';
 
 function CallbackHandler() {
   const searchParams = useSearchParams();
@@ -15,15 +18,15 @@ function CallbackHandler() {
     if (called.current) return;
     called.current = true;
 
-    const code = searchParams.get("code");
+    const code = searchParams.get('code');
     if (!code) {
-      router.replace("/login");
+      router.replace('/login');
       return;
     }
 
     loginMutation.mutate(code, {
-      onSuccess: () => router.replace("/"),
-      onError: () => router.replace("/login"),
+      onSuccess: () => router.replace('/'),
+      onError: () => router.replace('/login'),
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -32,11 +35,11 @@ function CallbackHandler() {
 
 export default function AuthCallbackPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="text-center">
         <Logo size="md" className="mx-auto mb-5" />
-        <div className="w-6 h-6 border-2 border-violet-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-        <p className="text-gray-500 text-sm">Signing you in with GitHub…</p>
+        <div className="mx-auto mb-3 h-6 w-6 animate-spin rounded-full border-2 border-violet-600 border-t-transparent" />
+        <p className="text-sm text-gray-500">Signing you in with GitHub…</p>
         <Suspense>
           <CallbackHandler />
         </Suspense>

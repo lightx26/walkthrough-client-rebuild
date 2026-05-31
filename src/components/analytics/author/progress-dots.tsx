@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 export function ProgressDots({ read, total }: { read: number; total: number }) {
   if (total <= 0) return null;
@@ -7,10 +7,7 @@ export function ProgressDots({ read, total }: { read: number; total: number }) {
       {Array.from({ length: total }).map((_, i) => (
         <span
           key={i}
-          className={cn(
-            "w-2.5 h-2.5 rounded-full",
-            i < read ? "bg-violet-500" : "bg-gray-200",
-          )}
+          className={cn('h-2.5 w-2.5 rounded-full', i < read ? 'bg-violet-500' : 'bg-gray-200')}
         />
       ))}
     </div>

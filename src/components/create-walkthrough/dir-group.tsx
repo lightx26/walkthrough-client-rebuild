@@ -1,12 +1,14 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import { useDrag } from "react-dnd";
-import { ChevronDown, ChevronRight, Folder } from "lucide-react";
-import { cn } from "@/lib/utils";
-import type { PrFile } from "@/types/github";
-import { PanelFileRow } from "./panel-file-row";
-import { DRAG_TYPE_PR_DIR } from "./file-utils";
+import { useRef, useState } from 'react';
+
+import { cn } from '@/lib/utils';
+import type { PrFile } from '@/types/github';
+import { ChevronDown, ChevronRight, Folder } from 'lucide-react';
+import { useDrag } from 'react-dnd';
+
+import { DRAG_TYPE_PR_DIR } from './file-utils';
+import { PanelFileRow } from './panel-file-row';
 
 interface DirGroupProps {
   dir: string;
@@ -18,11 +20,9 @@ export function DirGroup({ dir, files, assignedFilenames }: DirGroupProps) {
   const [expanded, setExpanded] = useState(true);
   const dragRef = useRef<HTMLDivElement>(null);
 
-  const unassignedFiles = files.filter(
-    (f) => !assignedFilenames.has(f.filename),
-  );
+  const unassignedFiles = files.filter((f) => !assignedFilenames.has(f.filename));
   const assignedCount = files.length - unassignedFiles.length;
-  const dirLabel = dir ? dir.replace(/\/$/, "") : "(root)";
+  const dirLabel = dir ? dir.replace(/\/$/, '') : '(root)';
 
   const [{ isDragging }, drag] = useDrag({
     type: DRAG_TYPE_PR_DIR,
@@ -40,24 +40,22 @@ export function DirGroup({ dir, files, assignedFilenames }: DirGroupProps) {
         title={dirLabel}
         onClick={() => setExpanded((v) => !v)}
         className={cn(
-          "w-full flex items-center gap-1.5 px-3 py-1.5 hover:bg-gray-100 rounded-md transition-colors select-none",
-          unassignedFiles.length > 0
-            ? "cursor-grab active:cursor-grabbing"
-            : "cursor-pointer",
-          isDragging && "opacity-30",
+          'flex w-full items-center gap-1.5 rounded-md px-3 py-1.5 transition-colors select-none hover:bg-gray-100',
+          unassignedFiles.length > 0 ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer',
+          isDragging && 'opacity-30'
         )}
       >
         {expanded ? (
-          <ChevronDown className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+          <ChevronDown className="h-3.5 w-3.5 shrink-0 text-gray-400" />
         ) : (
-          <ChevronRight className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+          <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-400" />
         )}
-        <Folder className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-        <span className="text-xs font-medium text-gray-600 flex-1 text-left truncate">
+        <Folder className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+        <span className="flex-1 truncate text-left text-xs font-medium text-gray-600">
           {dirLabel}
         </span>
         {assignedCount > 0 && (
-          <span className="text-[10px] text-gray-400 shrink-0">
+          <span className="shrink-0 text-[10px] text-gray-400">
             {assignedCount}/{files.length}
           </span>
         )}

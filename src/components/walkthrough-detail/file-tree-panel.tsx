@@ -1,18 +1,21 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { ChevronRight, FileText, FolderTree, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import type { Walkthrough, WalkthroughFile } from "@/types/walkthrough";
-import { computeDiffStats } from "./diff-viewer";
-import { useChapterExpand } from "./chapter-expand-context";
+import { useMemo, useState } from 'react';
+
+import { cn } from '@/lib/utils';
+import type { Walkthrough, WalkthroughFile } from '@/types/walkthrough';
+import { ChevronRight, FileText, FolderTree, X } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+
+import { useChapterExpand } from './chapter-expand-context';
+import { computeDiffStats } from './diff-viewer';
 
 function statusBadge(fileStatus: string) {
   const s = fileStatus?.toUpperCase();
-  if (s === "ADDED") return { label: "A", cls: "bg-green-100 text-green-700" };
-  if (s === "DELETED") return { label: "D", cls: "bg-red-100 text-red-700" };
-  return { label: "M", cls: "bg-blue-100 text-blue-700" };
+  if (s === 'ADDED') return { label: 'A', cls: 'bg-green-100 text-green-700' };
+  if (s === 'DELETED') return { label: 'D', cls: 'bg-red-100 text-red-700' };
+  return { label: 'M', cls: 'bg-blue-100 text-blue-700' };
 }
 
 interface LeafEntry {
@@ -32,10 +35,10 @@ function emptyNode(name: string): TreeNode {
 }
 
 function buildTree(walkthrough: Walkthrough): TreeNode {
-  const root = emptyNode("");
+  const root = emptyNode('');
   walkthrough.chapters.forEach((chapter, chapterIndex) => {
     for (const file of chapter.files) {
-      const parts = file.filename.split("/").filter(Boolean);
+      const parts = file.filename.split('/').filter(Boolean);
       if (parts.length === 0) continue;
       let node = root;
       for (let i = 0; i < parts.length - 1; i++) {
@@ -87,8 +90,7 @@ function DirNode({ node, depth, onFileClick }: DirRowProps) {
   const childDirs: TreeNode[] = [];
   const childLeaves: TreeNode[] = [];
   for (const child of node.children.values()) {
-    if (child.leaves.length > 0 && child.children.size === 0)
-      childLeaves.push(child);
+    if (child.leaves.length > 0 && child.children.size === 0) childLeaves.push(child);
     else childDirs.push(child);
   }
   childDirs.sort((a, b) => a.name.localeCompare(b.name));
@@ -100,18 +102,13 @@ function DirNode({ node, depth, onFileClick }: DirRowProps) {
         variant="ghost"
         size="none"
         onClick={() => setOpen((v) => !v)}
-        className="w-full justify-start gap-1 py-1 rounded-none font-normal hover:bg-violet-50"
+        className="w-full justify-start gap-1 rounded-none py-1 font-normal hover:bg-violet-50"
         style={{ paddingLeft: 12 + depth * 12 }}
       >
         <ChevronRight
-          className={cn(
-            "w-3 h-3 text-gray-400 transition-transform shrink-0",
-            open && "rotate-90",
-          )}
+          className={cn('h-3 w-3 shrink-0 text-gray-400 transition-transform', open && 'rotate-90')}
         />
-        <span className="text-xs font-medium text-gray-700 truncate">
-          {node.name}
-        </span>
+        <span className="truncate text-xs font-medium text-gray-700">{node.name}</span>
       </Button>
       {open && (
         <>
@@ -127,7 +124,7 @@ function DirNode({ node, depth, onFileClick }: DirRowProps) {
                 depth={depth + 1}
                 onFileClick={onFileClick}
               />
-            )),
+            ))
           )}
         </>
       )}
@@ -144,39 +141,30 @@ interface FileLeafProps {
 
 function FileLeaf({ name, leaf, depth, onFileClick }: FileLeafProps) {
   const badge = statusBadge(leaf.file.fileStatus);
-  const stats = leaf.file.rawPatch
-    ? computeDiffStats(leaf.file.rawPatch)
-    : null;
+  const stats = leaf.file.rawPatch ? computeDiffStats(leaf.file.rawPatch) : null;
   return (
     <Button
       variant="ghost"
       size="none"
       onClick={() => onFileClick(leaf.chapterId, leaf.file.id)}
-      className="w-full justify-start gap-2 pr-4 py-1 rounded-none font-normal hover:bg-violet-50 group"
+      className="group w-full justify-start gap-2 rounded-none py-1 pr-4 font-normal hover:bg-violet-50"
       style={{ paddingLeft: 12 + depth * 12 + 16 }}
     >
-      <FileText className="w-3.5 h-3.5 text-orange-400 shrink-0" />
-      <span className="text-xs text-gray-600 group-hover:text-violet-700 truncate flex-1 font-mono">
+      <FileText className="h-3.5 w-3.5 shrink-0 text-orange-400" />
+      <span className="flex-1 truncate font-mono text-xs text-gray-600 group-hover:text-violet-700">
         {name}
       </span>
       <span
-        className="text-[10px] font-semibold text-violet-700 bg-violet-100 rounded px-1 shrink-0"
+        className="shrink-0 rounded bg-violet-100 px-1 text-[10px] font-semibold text-violet-700"
         title={`Chapter ${leaf.chapterIndex + 1}`}
       >
         {leaf.chapterIndex + 1}
       </span>
-      <span
-        className={cn(
-          "text-[10px] font-bold px-1 py-0.5 rounded shrink-0",
-          badge.cls,
-        )}
-      >
+      <span className={cn('shrink-0 rounded px-1 py-0.5 text-[10px] font-bold', badge.cls)}>
         {badge.label}
       </span>
       {stats && (
-        <span className="text-[10px] font-mono text-green-600 shrink-0">
-          +{stats.added}
-        </span>
+        <span className="shrink-0 font-mono text-[10px] text-green-600">+{stats.added}</span>
       )}
     </Button>
   );
@@ -195,16 +183,12 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
     chapterExpand?.expandAndScrollToFile(chapterId, fileId);
   };
 
-  const totalFiles = walkthrough.chapters.reduce(
-    (n, ch) => n + ch.files.length,
-    0,
-  );
+  const totalFiles = walkthrough.chapters.reduce((n, ch) => n + ch.files.length, 0);
 
   const topDirs: TreeNode[] = [];
   const topLeaves: TreeNode[] = [];
   for (const child of root.children.values()) {
-    if (child.leaves.length > 0 && child.children.size === 0)
-      topLeaves.push(child);
+    if (child.leaves.length > 0 && child.children.size === 0) topLeaves.push(child);
     else topDirs.push(child);
   }
   topDirs.sort((a, b) => a.name.localeCompare(b.name));
@@ -217,34 +201,32 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
           variant="outline"
           size="none"
           onClick={() => setOpen(true)}
-          className="fixed right-6 top-[calc(50%+3rem)] -translate-y-1/2 gap-1.5 px-3 py-2 shadow-md text-sm text-gray-600 hover:border-violet-400 hover:text-violet-700 font-medium z-30"
+          className="fixed top-[calc(50%+3rem)] right-6 z-30 -translate-y-1/2 gap-1.5 px-3 py-2 text-sm font-medium text-gray-600 shadow-md hover:border-violet-400 hover:text-violet-700"
         >
-          <FolderTree className="w-4 h-4" />
+          <FolderTree className="h-4 w-4" />
           <span>Tree</span>
         </Button>
       )}
 
       {open && (
-        <div className="fixed right-6 top-22 z-40 w-80 bg-white border border-gray-200 rounded-xl shadow-xl flex flex-col max-h-[calc(100vh-7rem)]">
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 shrink-0">
-            <FolderTree className="w-4 h-4 text-gray-500" />
-            <span className="font-semibold text-sm text-gray-900 flex-1">
-              Original Tree
-            </span>
-            <span className="text-xs font-semibold text-white bg-blue-500 rounded-full px-1.5 py-0.5 min-w-5 text-center">
+        <div className="fixed top-22 right-6 z-40 flex max-h-[calc(100vh-7rem)] w-80 flex-col rounded-xl border border-gray-200 bg-white shadow-xl">
+          <div className="flex shrink-0 items-center gap-2 border-b border-gray-100 px-4 py-3">
+            <FolderTree className="h-4 w-4 text-gray-500" />
+            <span className="flex-1 text-sm font-semibold text-gray-900">Original Tree</span>
+            <span className="min-w-5 rounded-full bg-blue-500 px-1.5 py-0.5 text-center text-xs font-semibold text-white">
               {totalFiles}
             </span>
             <Button
               variant="ghost"
               size="none"
               onClick={() => setOpen(false)}
-              className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 ml-1"
+              className="ml-1 p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="h-3.5 w-3.5" />
             </Button>
           </div>
 
-          <div className="overflow-y-auto flex-1 py-2">
+          <div className="flex-1 overflow-y-auto py-2">
             {topDirs.map((node) => (
               <DirNode key={node.name} node={node} depth={0} onFileClick={handleFileClick} />
             ))}
@@ -257,11 +239,11 @@ export function FileTreePanel({ walkthrough }: FileTreePanelProps) {
                   depth={0}
                   onFileClick={handleFileClick}
                 />
-              )),
+              ))
             )}
           </div>
 
-          <div className="border-t border-gray-100 px-4 py-3 shrink-0 flex justify-end">
+          <div className="flex shrink-0 justify-end border-t border-gray-100 px-4 py-3">
             <Button
               variant="primary"
               size="xs"

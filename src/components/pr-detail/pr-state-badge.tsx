@@ -1,24 +1,24 @@
-import { GitMerge, GitPullRequest, GitPullRequestClosed } from "lucide-react";
-import type { PullRequestState } from "@/types/github";
+import type { PullRequestState } from '@/types/github';
+import { GitMerge, GitPullRequest, GitPullRequestClosed } from 'lucide-react';
 
 export function PrStateBadge({ state }: { state: PullRequestState }) {
-  if (state === "open")
+  if (state === 'open')
     return (
-      <span className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-        <GitPullRequest className="w-3.5 h-3.5" strokeWidth={2} />
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+        <GitPullRequest className="h-3.5 w-3.5" strokeWidth={2} />
         Open
       </span>
     );
-  if (state === "merged")
+  if (state === 'merged')
     return (
-      <span className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full bg-violet-50 text-violet-700 border border-violet-200">
-        <GitMerge className="w-3.5 h-3.5" strokeWidth={2} />
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-sm font-medium text-violet-700">
+        <GitMerge className="h-3.5 w-3.5" strokeWidth={2} />
         Merged
       </span>
     );
   return (
-    <span className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full bg-red-50 text-red-600 border border-red-200">
-      <GitPullRequestClosed className="w-3.5 h-3.5" strokeWidth={2} />
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-600">
+      <GitPullRequestClosed className="h-3.5 w-3.5" strokeWidth={2} />
       Closed
     </span>
   );

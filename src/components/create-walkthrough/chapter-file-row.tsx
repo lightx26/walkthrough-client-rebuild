@@ -1,19 +1,17 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useDrag, useDrop } from "react-dnd";
-import { FileText, GripVertical, Eye, X, FileCode2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import type { PrFile } from "@/types/github";
-import {
-  DRAG_TYPE_PR_FILE,
-  DRAG_TYPE_PR_DIR,
-  statusBadge,
-  baseName,
-} from "./file-utils";
+import { useRef } from 'react';
 
-export const DRAG_TYPE_CHAPTER_FILE = "CHAPTER_FILE";
+import { cn } from '@/lib/utils';
+import type { PrFile } from '@/types/github';
+import { Eye, FileCode2, FileText, GripVertical, X } from 'lucide-react';
+import { useDrag, useDrop } from 'react-dnd';
+
+import { Button } from '@/components/ui/button';
+
+import { DRAG_TYPE_PR_DIR, DRAG_TYPE_PR_FILE, baseName, statusBadge } from './file-utils';
+
+export const DRAG_TYPE_CHAPTER_FILE = 'CHAPTER_FILE';
 
 export interface PrFileDragItem {
   type: typeof DRAG_TYPE_PR_FILE;
@@ -36,14 +34,13 @@ export interface ChapterFileDragItem {
 export type DragItem = PrFileDragItem | PrDirDragItem | ChapterFileDragItem;
 
 function getFileIcon(filename: string) {
-  const ext = filename.split(".").pop()?.toLowerCase();
-  if (ext === "sql")
-    return <FileCode2 className="w-4 h-4 text-blue-500 shrink-0" />;
-  return <FileText className="w-4 h-4 text-orange-400 shrink-0" />;
+  const ext = filename.split('.').pop()?.toLowerCase();
+  if (ext === 'sql') return <FileCode2 className="h-4 w-4 shrink-0 text-blue-500" />;
+  return <FileText className="h-4 w-4 shrink-0 text-orange-400" />;
 }
 
 function dirName(filename: string) {
-  const slash = filename.lastIndexOf("/");
+  const slash = filename.lastIndexOf('/');
   return slash === -1 ? null : filename.slice(0, slash + 1);
 }
 
@@ -97,66 +94,58 @@ export function ChapterFileRow({
     <div
       ref={rowRef}
       className={cn(
-        "flex items-center gap-2 px-3 py-2 bg-white rounded-lg border border-gray-100 group transition-opacity",
-        isDragging && "opacity-40",
+        'group flex items-center gap-2 rounded-lg border border-gray-100 bg-white px-3 py-2 transition-opacity',
+        isDragging && 'opacity-40'
       )}
     >
-      <span className="text-xs text-gray-400 w-4 text-center shrink-0 select-none">
+      <span className="w-4 shrink-0 text-center text-xs text-gray-400 select-none">
         {index + 1}
       </span>
-      <div
-        ref={gripRef}
-        className="cursor-grab active:cursor-grabbing p-0.5 shrink-0"
-      >
-        <GripVertical className="w-4 h-4 text-gray-300 hover:text-gray-500" />
+      <div ref={gripRef} className="shrink-0 cursor-grab p-0.5 active:cursor-grabbing">
+        <GripVertical className="h-4 w-4 text-gray-300 hover:text-gray-500" />
       </div>
       {getFileIcon(file.filename)}
       <Button
         variant="link"
         size="none"
-        className="flex-1 min-w-0 justify-start text-left no-underline"
+        className="min-w-0 flex-1 justify-start text-left no-underline"
         onClick={onViewDiff}
       >
-        <span className="text-sm font-medium truncate block hover:underline">
+        <span className="block truncate text-sm font-medium hover:underline">
           {baseName(file.filename)}
         </span>
       </Button>
       {dir && (
-        <span className="text-xs text-gray-400 font-mono shrink-0 hidden sm:block truncate max-w-[120px]">
+        <span className="hidden max-w-[120px] shrink-0 truncate font-mono text-xs text-gray-400 sm:block">
           {dir}
         </span>
       )}
       {(file.additions > 0 || file.deletions > 0) && (
-        <span className="text-xs font-mono shrink-0">
-          <span className="text-green-600">+{file.additions}</span>{" "}
+        <span className="shrink-0 font-mono text-xs">
+          <span className="text-green-600">+{file.additions}</span>{' '}
           <span className="text-red-500">-{file.deletions}</span>
         </span>
       )}
-      <span
-        className={cn(
-          "text-[10px] font-bold px-1 py-0.5 rounded shrink-0",
-          badge.cls,
-        )}
-      >
+      <span className={cn('shrink-0 rounded px-1 py-0.5 text-[10px] font-bold', badge.cls)}>
         {badge.label}
       </span>
       <Button
         variant="ghost"
         size="none"
         onClick={onViewDiff}
-        className="p-1 text-gray-300 hover:bg-transparent hover:text-gray-500 shrink-0"
+        className="shrink-0 p-1 text-gray-300 hover:bg-transparent hover:text-gray-500"
         title="View diff"
       >
-        <Eye className="w-3.5 h-3.5" />
+        <Eye className="h-3.5 w-3.5" />
       </Button>
       <Button
         variant="destructiveGhost"
         size="none"
         onClick={onRemove}
-        className="p-1 text-gray-300 hover:bg-transparent shrink-0"
+        className="shrink-0 p-1 text-gray-300 hover:bg-transparent"
         title="Remove"
       >
-        <X className="w-3.5 h-3.5" />
+        <X className="h-3.5 w-3.5" />
       </Button>
     </div>
   );

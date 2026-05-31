@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import { Calendar, Link as LinkIcon } from "lucide-react";
-import { UserAvatar } from "@/components/ui";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import type { Profile, ProfileStats } from "@/types/profile";
+import { cn } from '@/lib/utils';
+import type { Profile, ProfileStats } from '@/types/profile';
+import { Calendar, Link as LinkIcon } from 'lucide-react';
 
-export type ProfileTab = "overview" | "walkthroughs" | "repositories";
+import { UserAvatar } from '@/components/ui';
+import { Button } from '@/components/ui/button';
+
+export type ProfileTab = 'overview' | 'walkthroughs' | 'repositories';
 
 interface ProfileHeaderProps {
   profile: Profile;
@@ -16,22 +17,17 @@ interface ProfileHeaderProps {
 }
 
 function formatJoinDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "long",
-    year: "numeric",
+  return new Date(iso).toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
   });
 }
 
-export function ProfileHeader({
-  profile,
-  stats,
-  activeTab,
-  onTabChange,
-}: ProfileHeaderProps) {
+export function ProfileHeader({ profile, stats, activeTab, onTabChange }: ProfileHeaderProps) {
   const tabs: { id: ProfileTab; label: string; count?: number }[] = [
-    { id: "overview", label: "Overview" },
-    { id: "walkthroughs", label: "Walkthroughs" },
-    { id: "repositories", label: "Repositories" },
+    { id: 'overview', label: 'Overview' },
+    { id: 'walkthroughs', label: 'Walkthroughs' },
+    { id: 'repositories', label: 'Repositories' },
   ];
 
   return (
@@ -54,23 +50,21 @@ export function ProfileHeader({
             </div>
             <div className="pt-1">
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold text-gray-900">
-                  {profile.displayName}
-                </h1>
+                <h1 className="text-xl font-bold text-gray-900">{profile.displayName}</h1>
                 <span className="text-gray-400">@{profile.username}</span>
               </div>
-              <div className="flex items-center gap-4 mt-1.5 text-sm text-gray-400">
+              <div className="mt-1.5 flex items-center gap-4 text-sm text-gray-400">
                 <a
                   href={profile.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 hover:text-violet-600 transition-colors"
+                  className="flex items-center gap-1 transition-colors hover:text-violet-600"
                 >
-                  <LinkIcon className="w-3.5 h-3.5" />
+                  <LinkIcon className="h-3.5 w-3.5" />
                   github.com/{profile.username}
                 </a>
                 <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5" />
+                  <Calendar className="h-3.5 w-3.5" />
                   Joined {formatJoinDate(profile.joinedAt)}
                 </span>
               </div>
@@ -78,24 +72,20 @@ export function ProfileHeader({
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-10 text-center pt-1">
+          <div className="flex items-center gap-10 pt-1 text-center">
             <div>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats?.walkthroughs ?? 0}
-              </p>
+              <p className="text-2xl font-bold text-gray-900">{stats?.walkthroughs ?? 0}</p>
               <p className="text-sm text-gray-400">Walkthroughs</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats?.reviews ?? 0}
-              </p>
+              <p className="text-2xl font-bold text-gray-900">{stats?.reviews ?? 0}</p>
               <p className="text-sm text-gray-400">Reviews</p>
             </div>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-1 mt-5 border-b border-gray-200">
+        <div className="mt-5 flex items-center gap-1 border-b border-gray-200">
           {tabs.map((tab) => (
             <Button
               key={tab.id}
@@ -103,20 +93,20 @@ export function ProfileHeader({
               size="none"
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "gap-1.5 px-3 py-2 text-sm font-medium border-b-2 -mb-px rounded-none hover:bg-transparent",
+                '-mb-px gap-1.5 rounded-none border-b-2 px-3 py-2 text-sm font-medium hover:bg-transparent',
                 activeTab === tab.id
-                  ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground",
+                  ? 'border-primary text-primary'
+                  : 'text-muted-foreground hover:text-foreground border-transparent'
               )}
             >
               {tab.label}
               {tab.count != null && (
                 <span
                   className={cn(
-                    "text-xs px-1.5 py-0.5 rounded-full font-medium",
+                    'rounded-full px-1.5 py-0.5 text-xs font-medium',
                     activeTab === tab.id
-                      ? "bg-primary-soft text-primary-soft-foreground"
-                      : "bg-muted text-muted-foreground",
+                      ? 'bg-primary-soft text-primary-soft-foreground'
+                      : 'bg-muted text-muted-foreground'
                   )}
                 >
                   {tab.count}

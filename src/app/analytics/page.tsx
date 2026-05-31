@@ -1,35 +1,35 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { BarChart2, Waypoints, Users } from "lucide-react";
-import { DashboardLayout } from "@/components/layout";
-import {
-  AnalyticsTabButton,
-  AuthorView,
-  TeamLeadView,
-} from "@/components/analytics";
-import { useRepository } from "@/hooks/use-github";
-import { ApiErrorState } from "@/components/ui";
+import { useState } from 'react';
 
-type Tab = "author" | "team";
+import { useSearchParams } from 'next/navigation';
+
+import { BarChart2, Users, Waypoints } from 'lucide-react';
+
+import { AnalyticsTabButton, AuthorView, TeamLeadView } from '@/components/analytics';
+import { DashboardLayout } from '@/components/layout';
+import { ApiErrorState } from '@/components/ui';
+
+import { useRepository } from '@/hooks/use-github';
+
+type Tab = 'author' | 'team';
 
 export default function AnalyticsPage() {
-  const [tab, setTab] = useState<Tab>("author");
+  const [tab, setTab] = useState<Tab>('author');
   const searchParams = useSearchParams();
-  const owner = searchParams.get("owner") ?? undefined;
-  const repo = searchParams.get("repo") ?? undefined;
+  const owner = searchParams.get('owner') ?? undefined;
+  const repo = searchParams.get('repo') ?? undefined;
   const scopedRepo = owner && repo ? { owner, repo } : undefined;
 
   const { error: scopedRepoError, refetch: refetchScopedRepo } = useRepository(
-    owner ?? "",
-    repo ?? "",
+    owner ?? '',
+    repo ?? ''
   );
 
   if (scopedRepo && scopedRepoError) {
     return (
       <DashboardLayout>
-        <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
+        <main className="min-w-0 flex-1 overflow-y-auto px-8 py-7">
           <ApiErrorState
             error={scopedRepoError}
             resource="repository"
@@ -42,10 +42,10 @@ export default function AnalyticsPage() {
 
   return (
     <DashboardLayout>
-      <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-9 h-9 rounded-lg bg-violet-100 flex items-center justify-center">
-            <BarChart2 className="w-4 h-4 text-violet-600" />
+      <main className="min-w-0 flex-1 overflow-y-auto px-8 py-7">
+        <div className="mb-5 flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-100">
+            <BarChart2 className="h-4 w-4 text-violet-600" />
           </div>
           <h1 className="text-[22px] font-bold text-gray-900">
             Analytics
@@ -57,22 +57,22 @@ export default function AnalyticsPage() {
           </h1>
         </div>
 
-        <div className="inline-flex items-center p-1 mb-6">
+        <div className="mb-6 inline-flex items-center p-1">
           <AnalyticsTabButton
-            active={tab === "author"}
-            onClick={() => setTab("author")}
-            icon={<Waypoints className="w-3.5 h-3.5" />}
+            active={tab === 'author'}
+            onClick={() => setTab('author')}
+            icon={<Waypoints className="h-3.5 w-3.5" />}
             label="Author view"
           />
           <AnalyticsTabButton
-            active={tab === "team"}
-            onClick={() => setTab("team")}
-            icon={<Users className="w-3.5 h-3.5" />}
+            active={tab === 'team'}
+            onClick={() => setTab('team')}
+            icon={<Users className="h-3.5 w-3.5" />}
             label="Team lead view"
           />
         </div>
 
-        {tab === "author" ? (
+        {tab === 'author' ? (
           <AuthorView scopedRepo={scopedRepo} />
         ) : (
           <TeamLeadView scopedRepo={scopedRepo} />

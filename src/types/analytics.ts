@@ -1,3 +1,5 @@
+import type { WalkthroughStatus } from './walkthrough';
+
 export interface ReviewerChapter {
   chapterId: string;
   chapterTitle: string;
@@ -83,8 +85,6 @@ export interface ReviewerStatus {
   totalChapters: number;
   lastActiveAt: string | null;
 }
-
-import type { WalkthroughStatus } from "./walkthrough";
 
 export interface AuthorWalkthroughSummary {
   walkthroughId: string;

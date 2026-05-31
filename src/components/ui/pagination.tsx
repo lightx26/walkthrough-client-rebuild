@@ -1,6 +1,7 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { cn } from '@/lib/utils';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 interface PaginationProps {
   page: number;
@@ -9,18 +10,13 @@ interface PaginationProps {
   className?: string;
 }
 
-export function Pagination({
-  page,
-  totalPages,
-  onPageChange,
-  className,
-}: PaginationProps) {
+export function Pagination({ page, totalPages, onPageChange, className }: PaginationProps) {
   if (totalPages <= 1) return null;
 
   const pages = buildPageRange(page, totalPages);
 
   return (
-    <div className={cn("flex items-center gap-1", className)}>
+    <div className={cn('flex items-center gap-1', className)}>
       <Button
         variant="ghost"
         size="iconSm"
@@ -29,28 +25,25 @@ export function Pagination({
         aria-label="Previous page"
         className="text-gray-500"
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="h-4 w-4" />
       </Button>
 
       {pages.map((entry, i) =>
-        entry === "..." ? (
-          <span
-            key={`ellipsis-${i}`}
-            className="w-8 text-center text-sm text-gray-400"
-          >
+        entry === '...' ? (
+          <span key={`ellipsis-${i}`} className="w-8 text-center text-sm text-gray-400">
             …
           </span>
         ) : (
           <Button
             key={entry}
-            variant={entry === page ? "primary" : "ghost"}
+            variant={entry === page ? 'primary' : 'ghost'}
             size="iconSm"
             onClick={() => onPageChange(entry as number)}
-            className={entry === page ? "shadow-none" : "text-gray-600"}
+            className={entry === page ? 'shadow-none' : 'text-gray-600'}
           >
             {entry}
           </Button>
-        ),
+        )
       )}
 
       <Button
@@ -61,17 +54,16 @@ export function Pagination({
         aria-label="Next page"
         className="text-gray-500"
       >
-        <ChevronRight className="w-4 h-4" />
+        <ChevronRight className="h-4 w-4" />
       </Button>
     </div>
   );
 }
 
-function buildPageRange(current: number, total: number): (number | "...")[] {
+function buildPageRange(current: number, total: number): (number | '...')[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
 
-  if (current <= 4) return [1, 2, 3, 4, 5, "...", total];
-  if (current >= total - 3)
-    return [1, "...", total - 4, total - 3, total - 2, total - 1, total];
-  return [1, "...", current - 1, current, current + 1, "...", total];
+  if (current <= 4) return [1, 2, 3, 4, 5, '...', total];
+  if (current >= total - 3) return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+  return [1, '...', current - 1, current, current + 1, '...', total];
 }

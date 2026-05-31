@@ -1,10 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuthIsLoading, useIsAuthenticated } from "@/hooks/use-auth";
-import { Sidebar } from "./sidebar";
-import { Navbar } from "./navbar";
+import { useEffect } from 'react';
+
+import { useRouter } from 'next/navigation';
+
+import { useAuthIsLoading, useIsAuthenticated } from '@/hooks/use-auth';
+
+import { Navbar } from './navbar';
+import { Sidebar } from './sidebar';
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useIsAuthenticated();
@@ -13,14 +16,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push("/login");
+      router.push('/login');
     }
   }, [isLoading, isAuthenticated, router]);
 
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="w-8 h-8 border-2 border-violet-600 border-t-transparent rounded-full animate-spin" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-violet-600 border-t-transparent" />
       </div>
     );
   }
@@ -28,11 +31,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-gray-50">
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col">
         <Navbar />
-        <div className="flex-1 flex min-h-0">{children}</div>
+        <div className="flex min-h-0 flex-1">{children}</div>
       </div>
     </div>
   );

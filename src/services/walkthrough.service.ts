@@ -1,5 +1,5 @@
-import apiClient from "@/lib/axios";
-import type { DataResponse, ListData } from "@/types/api";
+import apiClient from '@/lib/axios';
+import type { DataResponse, ListData } from '@/types/api';
 import type {
   CreateCommentRequest,
   CreateWalkthroughRequest,
@@ -12,7 +12,7 @@ import type {
   Walkthrough,
   WalkthroughComment,
   WalkthroughSummary,
-} from "@/types/walkthrough";
+} from '@/types/walkthrough';
 
 interface ListWalkthroughsParams {
   owner: string;
@@ -27,13 +27,8 @@ interface GetVersionDiffParams {
 }
 
 export const walkthroughService = {
-  async create(
-    request: CreateWalkthroughRequest,
-  ): Promise<DataResponse<Walkthrough>> {
-    const { data } = await apiClient.post<DataResponse<Walkthrough>>(
-      "/v1/walkthroughs",
-      request,
-    );
+  async create(request: CreateWalkthroughRequest): Promise<DataResponse<Walkthrough>> {
+    const { data } = await apiClient.post<DataResponse<Walkthrough>>('/v1/walkthroughs', request);
     return data;
   },
 
@@ -41,36 +36,29 @@ export const walkthroughService = {
     owner,
     repo,
     prNumber,
-  }: ListWalkthroughsParams): Promise<
-    DataResponse<ListData<WalkthroughSummary>>
-  > {
-    const { data } = await apiClient.get<
-      DataResponse<ListData<WalkthroughSummary>>
-    >("/v1/walkthroughs", { params: { owner, repo, prNumber } });
-    return data;
-  },
-
-  async listRecent(): Promise<DataResponse<ListData<WalkthroughSummary>>> {
-    const { data } = await apiClient.get<
-      DataResponse<ListData<WalkthroughSummary>>
-    >("/v1/walkthroughs/recent");
-    return data;
-  },
-
-  async getById(id: string): Promise<DataResponse<Walkthrough>> {
-    const { data } = await apiClient.get<DataResponse<Walkthrough>>(
-      `/v1/walkthroughs/${id}`,
+  }: ListWalkthroughsParams): Promise<DataResponse<ListData<WalkthroughSummary>>> {
+    const { data } = await apiClient.get<DataResponse<ListData<WalkthroughSummary>>>(
+      '/v1/walkthroughs',
+      { params: { owner, repo, prNumber } }
     );
     return data;
   },
 
-  async update(
-    id: string,
-    request: UpdateWalkthroughRequest,
-  ): Promise<DataResponse<Walkthrough>> {
+  async listRecent(): Promise<DataResponse<ListData<WalkthroughSummary>>> {
+    const { data } =
+      await apiClient.get<DataResponse<ListData<WalkthroughSummary>>>('/v1/walkthroughs/recent');
+    return data;
+  },
+
+  async getById(id: string): Promise<DataResponse<Walkthrough>> {
+    const { data } = await apiClient.get<DataResponse<Walkthrough>>(`/v1/walkthroughs/${id}`);
+    return data;
+  },
+
+  async update(id: string, request: UpdateWalkthroughRequest): Promise<DataResponse<Walkthrough>> {
     const { data } = await apiClient.put<DataResponse<Walkthrough>>(
       `/v1/walkthroughs/${id}`,
-      request,
+      request
     );
     return data;
   },
@@ -83,105 +71,82 @@ export const walkthroughService = {
 
   async createComment(
     walkthroughId: string,
-    request: CreateCommentRequest,
+    request: CreateCommentRequest
   ): Promise<DataResponse<WalkthroughComment>> {
     const { data } = await apiClient.post<DataResponse<WalkthroughComment>>(
       `/v1/walkthroughs/${walkthroughId}/comments`,
-      request,
+      request
     );
     return data;
   },
 
-  async listComments(
-    walkthroughId: string,
-  ): Promise<DataResponse<ListData<WalkthroughComment>>> {
-    const { data } = await apiClient.get<
-      DataResponse<ListData<WalkthroughComment>>
-    >(`/v1/walkthroughs/${walkthroughId}/comments`);
+  async listComments(walkthroughId: string): Promise<DataResponse<ListData<WalkthroughComment>>> {
+    const { data } = await apiClient.get<DataResponse<ListData<WalkthroughComment>>>(
+      `/v1/walkthroughs/${walkthroughId}/comments`
+    );
     return data;
   },
 
   async deleteComment(walkthroughId: string, commentId: string): Promise<void> {
-    await apiClient.delete(
-      `/v1/walkthroughs/${walkthroughId}/comments/${commentId}`,
-    );
+    await apiClient.delete(`/v1/walkthroughs/${walkthroughId}/comments/${commentId}`);
   },
 
   async listFileComments(
     walkthroughId: string,
-    fileId: string,
+    fileId: string
   ): Promise<DataResponse<ListData<WalkthroughComment>>> {
-    const { data } = await apiClient.get<
-      DataResponse<ListData<WalkthroughComment>>
-    >(`/v1/walkthroughs/${walkthroughId}/files/${fileId}/comments`);
+    const { data } = await apiClient.get<DataResponse<ListData<WalkthroughComment>>>(
+      `/v1/walkthroughs/${walkthroughId}/files/${fileId}/comments`
+    );
     return data;
   },
 
   async listBatchFileComments(
     walkthroughId: string,
-    fileIds: string[],
+    fileIds: string[]
   ): Promise<DataResponse<Record<string, WalkthroughComment[]>>> {
-    const { data } = await apiClient.post<
-      DataResponse<Record<string, WalkthroughComment[]>>
-    >(`/v1/walkthroughs/${walkthroughId}/batch-file-comments`, fileIds);
+    const { data } = await apiClient.post<DataResponse<Record<string, WalkthroughComment[]>>>(
+      `/v1/walkthroughs/${walkthroughId}/batch-file-comments`,
+      fileIds
+    );
     return data;
   },
 
   async listChapterComments(
     walkthroughId: string,
-    chapterId: string,
+    chapterId: string
   ): Promise<DataResponse<ListData<WalkthroughComment>>> {
-    const { data } = await apiClient.get<
-      DataResponse<ListData<WalkthroughComment>>
-    >(`/v1/walkthroughs/${walkthroughId}/chapters/${chapterId}/comments`);
+    const { data } = await apiClient.get<DataResponse<ListData<WalkthroughComment>>>(
+      `/v1/walkthroughs/${walkthroughId}/chapters/${chapterId}/comments`
+    );
     return data;
   },
 
   // ── Reading Progress ──
 
-  async recordChapterView(
-    walkthroughId: string,
-    request: RecordChapterViewRequest,
-  ): Promise<void> {
-    await apiClient.post(
-      `/v1/walkthroughs/${walkthroughId}/chapter-view-events`,
-      request,
-    );
+  async recordChapterView(walkthroughId: string, request: RecordChapterViewRequest): Promise<void> {
+    await apiClient.post(`/v1/walkthroughs/${walkthroughId}/chapter-view-events`, request);
   },
 
-  async markChapterRead(
-    walkthroughId: string,
-    chapterId: string,
-  ): Promise<void> {
-    await apiClient.post(
-      `/v1/walkthroughs/${walkthroughId}/chapters/${chapterId}/read`,
-    );
+  async markChapterRead(walkthroughId: string, chapterId: string): Promise<void> {
+    await apiClient.post(`/v1/walkthroughs/${walkthroughId}/chapters/${chapterId}/read`);
   },
 
-  async unmarkChapterRead(
-    walkthroughId: string,
-    chapterId: string,
-  ): Promise<void> {
-    await apiClient.delete(
-      `/v1/walkthroughs/${walkthroughId}/chapters/${chapterId}/read`,
-    );
+  async unmarkChapterRead(walkthroughId: string, chapterId: string): Promise<void> {
+    await apiClient.delete(`/v1/walkthroughs/${walkthroughId}/chapters/${chapterId}/read`);
   },
 
-  async getReadProgress(
-    walkthroughId: string,
-  ): Promise<DataResponse<ReadProgress>> {
+  async getReadProgress(walkthroughId: string): Promise<DataResponse<ReadProgress>> {
     const { data } = await apiClient.get<DataResponse<ReadProgress>>(
-      `/v1/walkthroughs/${walkthroughId}/progress`,
+      `/v1/walkthroughs/${walkthroughId}/progress`
     );
     return data;
   },
 
-  async listRecentlyReviewed(): Promise<
-    DataResponse<ListData<RecentlyReviewedWalkthrough>>
-  > {
-    const { data } = await apiClient.get<
-      DataResponse<ListData<RecentlyReviewedWalkthrough>>
-    >("/v1/walkthroughs/recently-reviewed");
+  async listRecentlyReviewed(): Promise<DataResponse<ListData<RecentlyReviewedWalkthrough>>> {
+    const { data } = await apiClient.get<DataResponse<ListData<RecentlyReviewedWalkthrough>>>(
+      '/v1/walkthroughs/recently-reviewed'
+    );
     return data;
   },
 
@@ -189,14 +154,14 @@ export const walkthroughService = {
 
   async checkStaleness(id: string): Promise<DataResponse<StalenessResponse>> {
     const { data } = await apiClient.get<DataResponse<StalenessResponse>>(
-      `/v1/walkthroughs/${id}/staleness`,
+      `/v1/walkthroughs/${id}/staleness`
     );
     return data;
   },
 
   async createNewVersion(id: string): Promise<DataResponse<Walkthrough>> {
     const { data } = await apiClient.post<DataResponse<Walkthrough>>(
-      `/v1/walkthroughs/${id}/new-version`,
+      `/v1/walkthroughs/${id}/new-version`
     );
     return data;
   },
@@ -208,7 +173,7 @@ export const walkthroughService = {
   }: GetVersionDiffParams): Promise<DataResponse<VersionDiffResponse>> {
     const { data } = await apiClient.get<DataResponse<VersionDiffResponse>>(
       `/v1/walkthroughs/${id}/diff`,
-      { params: { fromVersion, toVersion } },
+      { params: { fromVersion, toVersion } }
     );
     return data;
   },

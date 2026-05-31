@@ -23,7 +23,7 @@ export interface Repository {
   owner: RepositoryOwner;
 }
 
-export type PullRequestState = "open" | "merged" | "closed";
+export type PullRequestState = 'open' | 'merged' | 'closed';
 
 export interface PullRequestAuthor {
   id: number;
@@ -58,13 +58,13 @@ export interface PullRequest {
 }
 
 export type PrFileStatus =
-  | "added"
-  | "removed"
-  | "modified"
-  | "renamed"
-  | "copied"
-  | "changed"
-  | "unchanged";
+  | 'added'
+  | 'removed'
+  | 'modified'
+  | 'renamed'
+  | 'copied'
+  | 'changed'
+  | 'unchanged';
 
 export interface PrFile {
   sha: string;

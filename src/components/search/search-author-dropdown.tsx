@@ -1,10 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { Search, User, ChevronDown, ChevronUp, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useUserSearch } from "@/hooks/use-search";
-import { UserAvatar } from "@/components/ui";
-import { Button } from "@/components/ui/button";
-import type { UserSearchResult } from "@/types/search";
+import { useEffect, useRef, useState } from 'react';
+
+import { cn } from '@/lib/utils';
+import type { UserSearchResult } from '@/types/search';
+import { ChevronDown, ChevronUp, Search, User, X } from 'lucide-react';
+
+import { UserAvatar } from '@/components/ui';
+import { Button } from '@/components/ui/button';
+
+import { useUserSearch } from '@/hooks/use-search';
 
 interface SearchAuthorDropdownProps {
   selectedAuthor: UserSearchResult | null;
@@ -18,7 +21,7 @@ export function SearchAuthorDropdown({
   onClear,
 }: SearchAuthorDropdownProps) {
   const [open, setOpen] = useState(false);
-  const [authorQuery, setAuthorQuery] = useState("");
+  const [authorQuery, setAuthorQuery] = useState('');
   const ref = useRef<HTMLDivElement>(null);
   const { data } = useUserSearch(authorQuery);
   const users = data?.data?.items ?? [];
@@ -29,8 +32,8 @@ export function SearchAuthorDropdown({
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, []);
 
   const isActive = selectedAuthor !== null;
@@ -42,25 +45,21 @@ export function SearchAuthorDropdown({
         size="none"
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "gap-1 px-2.5 py-1 text-xs font-normal",
+          'gap-1 px-2.5 py-1 text-xs font-normal',
           isActive
-            ? "bg-indigo-50 border-indigo-300 text-indigo-700 hover:bg-indigo-50"
-            : "text-gray-500 hover:bg-gray-100",
+            ? 'border-indigo-300 bg-indigo-50 text-indigo-700 hover:bg-indigo-50'
+            : 'text-gray-500 hover:bg-gray-100'
         )}
       >
-        <User className="w-3 h-3" />
+        <User className="h-3 w-3" />
         {selectedAuthor ? (
           <span className="max-w-20 truncate">
             {selectedAuthor.displayName ?? selectedAuthor.username}
           </span>
         ) : (
-          "Author"
+          'Author'
         )}
-        {open ? (
-          <ChevronUp className="w-3 h-3" />
-        ) : (
-          <ChevronDown className="w-3 h-3" />
-        )}
+        {open ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
         {isActive && (
           <span
             role="button"
@@ -70,36 +69,36 @@ export function SearchAuthorDropdown({
             }}
             className="ml-0.5 text-indigo-500 hover:text-indigo-700"
           >
-            <X className="w-3 h-3" />
+            <X className="h-3 w-3" />
           </span>
         )}
       </Button>
 
       {open && (
-        <div className="absolute top-full mt-1 left-0 z-60 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 overflow-hidden">
-          <div className="flex items-center gap-2 px-3 py-1.5 border-b border-gray-100">
-            <Search className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+        <div className="absolute top-full left-0 z-60 mt-1 w-64 overflow-hidden rounded-xl border border-gray-100 bg-white py-1.5 shadow-lg">
+          <div className="flex items-center gap-2 border-b border-gray-100 px-3 py-1.5">
+            <Search className="h-3.5 w-3.5 shrink-0 text-gray-400" />
             <input
               autoFocus
               value={authorQuery}
               onChange={(e) => setAuthorQuery(e.target.value)}
               placeholder="Search author..."
-              className="flex-1 text-xs text-gray-900 placeholder:text-gray-400 outline-none"
+              className="flex-1 text-xs text-gray-900 outline-none placeholder:text-gray-400"
             />
             {authorQuery && (
               <Button
                 variant="ghost"
                 size="none"
-                onClick={() => setAuthorQuery("")}
+                onClick={() => setAuthorQuery('')}
                 className="p-0 hover:bg-transparent"
               >
-                <X className="w-3 h-3 text-gray-400 hover:text-gray-600" />
+                <X className="h-3 w-3 text-gray-400 hover:text-gray-600" />
               </Button>
             )}
           </div>
 
           {users.length > 0 ? (
-            <div className="py-1 max-h-48 overflow-y-auto">
+            <div className="max-h-48 overflow-y-auto py-1">
               {users.map((user) => (
                 <Button
                   key={user.id}
@@ -108,12 +107,11 @@ export function SearchAuthorDropdown({
                   onClick={() => {
                     onSelect(user);
                     setOpen(false);
-                    setAuthorQuery("");
+                    setAuthorQuery('');
                   }}
                   className={cn(
-                    "w-full justify-start gap-2.5 px-3 py-2 rounded-none font-normal hover:bg-gray-50",
-                    selectedAuthor?.id === user.id &&
-                      "bg-indigo-50 hover:bg-indigo-50",
+                    'w-full justify-start gap-2.5 rounded-none px-3 py-2 font-normal hover:bg-gray-50',
+                    selectedAuthor?.id === user.id && 'bg-indigo-50 hover:bg-indigo-50'
                   )}
                 >
                   <UserAvatar
@@ -122,7 +120,7 @@ export function SearchAuthorDropdown({
                     displayName={user.displayName ?? undefined}
                     size="sm"
                   />
-                  <span className="text-sm text-gray-800 truncate">
+                  <span className="truncate text-sm text-gray-800">
                     {user.displayName ?? user.username}
                   </span>
                 </Button>
@@ -131,9 +129,7 @@ export function SearchAuthorDropdown({
           ) : authorQuery.trim() ? (
             <p className="px-3 py-3 text-xs text-gray-400">No users found</p>
           ) : (
-            <p className="px-3 py-3 text-xs text-gray-400">
-              Type to search users
-            </p>
+            <p className="px-3 py-3 text-xs text-gray-400">Type to search users</p>
           )}
         </div>
       )}

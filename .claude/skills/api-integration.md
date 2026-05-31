@@ -5,7 +5,7 @@
 ```tsx
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  headers: { "Content-Type": "application/json" },
+  headers: { 'Content-Type': 'application/json' },
   withCredentials: true, // sends httpOnly cookies
 });
 ```
@@ -29,11 +29,11 @@ export const githubService = {
     repo,
     state,
     page,
-    perPage,
+    perPage
   ): Promise<DataResponse<ListData<PullRequest>>> {
     const { data } = await apiClient.get<DataResponse<ListData<PullRequest>>>(
       `/v1/github/repos/${owner}/${repo}/pulls`,
-      { params: { state, page, perPage } },
+      { params: { state, page, perPage } }
     );
     return data;
   },

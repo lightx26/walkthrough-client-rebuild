@@ -1,6 +1,8 @@
-"use client";
+'use client';
 
-import Link from "next/link";
+import Link from 'next/link';
+
+import { cn } from '@/lib/utils';
 import {
   ArrowRight,
   ChevronRight,
@@ -9,15 +11,16 @@ import {
   GitPullRequestClosed,
   GitPullRequestDraft,
   Waypoints,
-} from "lucide-react";
-import { UserAvatar } from "@/components/ui";
-import { formatRelativeTime } from "@/utils/date-diff";
-import { cn } from "@/lib/utils";
+} from 'lucide-react';
+
+import { UserAvatar } from '@/components/ui';
+
+import { formatRelativeTime } from '@/utils/date-diff';
 
 export interface PrRowItem {
   number: number;
   title: string;
-  state: "open" | "merged" | "closed" | "draft";
+  state: 'open' | 'merged' | 'closed' | 'draft';
   updatedAt: string;
   author: {
     login: string;
@@ -28,59 +31,56 @@ export interface PrRowItem {
   walkthroughsCount?: number;
 }
 
-type PrState = PrRowItem["state"];
+type PrState = PrRowItem['state'];
 
 function PrStateIcon({ state }: { state: PrState }) {
-  const base = "w-9 h-9 rounded-full flex items-center justify-center shrink-0";
-  if (state === "open")
+  const base = 'w-9 h-9 rounded-full flex items-center justify-center shrink-0';
+  if (state === 'open')
     return (
-      <div className={cn(base, "bg-emerald-50")}>
-        <GitPullRequest className="w-4 h-4 text-emerald-600" strokeWidth={2} />
+      <div className={cn(base, 'bg-emerald-50')}>
+        <GitPullRequest className="h-4 w-4 text-emerald-600" strokeWidth={2} />
       </div>
     );
-  if (state === "merged")
+  if (state === 'merged')
     return (
-      <div className={cn(base, "bg-violet-50")}>
-        <GitMerge className="w-4 h-4 text-violet-600" strokeWidth={2} />
+      <div className={cn(base, 'bg-violet-50')}>
+        <GitMerge className="h-4 w-4 text-violet-600" strokeWidth={2} />
       </div>
     );
-  if (state === "draft")
+  if (state === 'draft')
     return (
-      <div className={cn(base, "bg-gray-100")}>
-        <GitPullRequestDraft
-          className="w-4 h-4 text-gray-400"
-          strokeWidth={2}
-        />
+      <div className={cn(base, 'bg-gray-100')}>
+        <GitPullRequestDraft className="h-4 w-4 text-gray-400" strokeWidth={2} />
       </div>
     );
   return (
-    <div className={cn(base, "bg-red-50")}>
-      <GitPullRequestClosed className="w-4 h-4 text-red-500" strokeWidth={2} />
+    <div className={cn(base, 'bg-red-50')}>
+      <GitPullRequestClosed className="h-4 w-4 text-red-500" strokeWidth={2} />
     </div>
   );
 }
 
 function StateBadge({ state }: { state: PrState }) {
-  if (state === "open")
+  if (state === 'open')
     return (
-      <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+      <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
         Open
       </span>
     );
-  if (state === "merged")
+  if (state === 'merged')
     return (
-      <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 border border-violet-200">
+      <span className="rounded-full border border-violet-200 bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700">
         Merged
       </span>
     );
-  if (state === "draft")
+  if (state === 'draft')
     return (
-      <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+      <span className="rounded-full border border-gray-200 bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-500">
         Draft
       </span>
     );
   return (
-    <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-200">
+    <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-600">
       Closed
     </span>
   );
@@ -97,39 +97,33 @@ export function PrRow({ pr, owner, repo, showRepoInfo }: PrRowProps) {
   return (
     <Link
       href={`/repos/${owner}/${repo}/pulls/${pr.number}`}
-      className="flex items-center gap-4 p-5 border-b border-gray-100 last:border-0 group cursor-pointer hover:bg-gray-100/50 -mx-5 transition-colors"
+      className="group -mx-5 flex cursor-pointer items-center gap-4 border-b border-gray-100 p-5 transition-colors last:border-0 hover:bg-gray-100/50"
     >
       <PrStateIcon state={pr.state} />
 
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex items-center gap-2">
           {showRepoInfo && (
-            <span className="text-xs text-gray-400 shrink-0">
+            <span className="shrink-0 text-xs text-gray-400">
               {owner}/{repo}
             </span>
           )}
-          <span className="text-sm font-semibold text-gray-900 truncate">
-            {pr.title}
-          </span>
-          <span className="text-sm text-gray-400 shrink-0">#{pr.number}</span>
+          <span className="truncate text-sm font-semibold text-gray-900">{pr.title}</span>
+          <span className="shrink-0 text-sm text-gray-400">#{pr.number}</span>
         </div>
         <div className="flex items-center gap-1.5 text-xs text-gray-400">
-          <UserAvatar
-            src={pr.author.avatarUrl}
-            username={pr.author.login}
-            size="sm"
-          />
+          <UserAvatar src={pr.author.avatarUrl} username={pr.author.login} size="sm" />
           <span className="font-medium text-gray-500">{pr.author.login}</span>
           {pr.head && (
             <>
               <span>·</span>
-              <code className="text-[11px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 font-mono">
+              <code className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[11px] text-gray-500">
                 {pr.head.ref}
               </code>
               {pr.base && (
                 <>
-                  <ArrowRight className="w-4 h-4" />
-                  <code className="text-[11px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 font-mono">
+                  <ArrowRight className="h-4 w-4" />
+                  <code className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[11px] text-gray-500">
                     {pr.base.ref}
                   </code>
                 </>
@@ -139,22 +133,20 @@ export function PrRow({ pr, owner, repo, showRepoInfo }: PrRowProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex shrink-0 items-center gap-3">
         {pr.walkthroughsCount != null && pr.walkthroughsCount > 0 ? (
-          <span className="flex items-center gap-1.5 text-xs text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
-            <Waypoints className="w-3.5 h-3.5 text-gray-400" />
-            {pr.walkthroughsCount === 1
-              ? "1 walkthrough"
-              : `${pr.walkthroughsCount} walkthroughs`}
+          <span className="flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600">
+            <Waypoints className="h-3.5 w-3.5 text-gray-400" />
+            {pr.walkthroughsCount === 1 ? '1 walkthrough' : `${pr.walkthroughsCount} walkthroughs`}
           </span>
         ) : pr.walkthroughsCount === 0 ? (
           <span className="text-xs text-gray-400">No walkthroughs</span>
         ) : null}
         <StateBadge state={pr.state} />
-        <span className="text-xs text-gray-400 w-12 text-right">
+        <span className="w-12 text-right text-xs text-gray-400">
           {formatRelativeTime(pr.updatedAt)}
         </span>
-        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-400 transition-colors" />
+        <ChevronRight className="h-4 w-4 text-gray-300 transition-colors group-hover:text-gray-400" />
       </div>
     </Link>
   );

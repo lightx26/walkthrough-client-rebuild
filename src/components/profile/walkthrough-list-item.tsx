@@ -1,8 +1,10 @@
-import Link from "next/link";
-import { MessageSquare, Waypoints } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { toDisplayStatus } from "@/utils/walkthrough";
-import type { WalkthroughSummary } from "@/types/walkthrough";
+import Link from 'next/link';
+
+import { cn } from '@/lib/utils';
+import type { WalkthroughSummary } from '@/types/walkthrough';
+import { MessageSquare, Waypoints } from 'lucide-react';
+
+import { toDisplayStatus } from '@/utils/walkthrough';
 
 function compactAge(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
@@ -15,15 +17,15 @@ function compactAge(iso: string): string {
 }
 
 const statusStyle: Record<string, string> = {
-  Published: "bg-green-50 text-green-700 border border-green-200",
-  Draft: "bg-amber-50 text-amber-700 border border-amber-200",
-  Outdated: "bg-orange-50 text-orange-700 border border-orange-200",
+  Published: 'bg-green-50 text-green-700 border border-green-200',
+  Draft: 'bg-amber-50 text-amber-700 border border-amber-200',
+  Outdated: 'bg-orange-50 text-orange-700 border border-orange-200',
 };
 
 const iconBg: Record<string, string> = {
-  Published: "bg-green-500",
-  Draft: "bg-amber-400",
-  Outdated: "bg-orange-400",
+  Published: 'bg-green-500',
+  Draft: 'bg-amber-400',
+  Outdated: 'bg-orange-400',
 };
 
 function isNew(updatedAt: string): boolean {
@@ -37,56 +39,54 @@ export function ProfileWalkthroughItem({ wt }: { wt: WalkthroughSummary }) {
   return (
     <Link
       href={`/walkthroughs/${wt.id}`}
-      className="flex items-center py-3.5 border-b border-gray-100 last:border-0 group"
+      className="group flex items-center border-b border-gray-100 py-3.5 last:border-0"
     >
       <div
         className={cn(
-          "w-7 h-7 rounded flex items-center justify-center mr-3 shrink-0",
-          iconBg[displayStatus],
+          'mr-3 flex h-7 w-7 shrink-0 items-center justify-center rounded',
+          iconBg[displayStatus]
         )}
       >
-        <Waypoints className="w-3.5 h-3.5 text-white" />
+        <Waypoints className="h-3.5 w-3.5 text-white" />
       </div>
 
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900 group-hover:text-violet-700 transition-colors truncate">
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium text-gray-900 transition-colors group-hover:text-violet-700">
           {wt.title}
         </p>
-        <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+        <div className="mt-1 flex flex-wrap items-center gap-1.5">
           <span
             className={cn(
-              "text-[11px] font-medium px-1.5 py-0.5 rounded-full",
-              statusStyle[displayStatus],
+              'rounded-full px-1.5 py-0.5 text-[11px] font-medium',
+              statusStyle[displayStatus]
             )}
           >
             {displayStatus}
           </span>
-          {displayStatus === "Published" && isNew(wt.updatedAt) && (
-            <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200">
+          {displayStatus === 'Published' && isNew(wt.updatedAt) && (
+            <span className="rounded-full border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[11px] font-semibold text-blue-600">
               NEW
             </span>
           )}
-          <span className="text-[11px] text-gray-400 truncate max-w-32">
+          <span className="max-w-32 truncate text-[11px] text-gray-400">
             {wt.owner}/{wt.repo}
           </span>
-          <span className="text-gray-200 text-xs">·</span>
+          <span className="text-xs text-gray-200">·</span>
           <span className="text-[11px] text-gray-400">#{wt.prNumber}</span>
           <span className="flex items-center gap-0.5 text-[11px] text-gray-400">
-            <Waypoints className="w-3 h-3" />
+            <Waypoints className="h-3 w-3" />
             {wt.chapterCount} ch
           </span>
           {(wt.commentCount ?? 0) > 0 && (
             <span className="flex items-center gap-0.5 text-[11px] text-gray-400">
-              <MessageSquare className="w-3 h-3" />
+              <MessageSquare className="h-3 w-3" />
               {wt.commentCount}
             </span>
           )}
         </div>
       </div>
 
-      <span className="text-xs text-gray-400 ml-3 shrink-0">
-        {compactAge(wt.updatedAt)}
-      </span>
+      <span className="ml-3 shrink-0 text-xs text-gray-400">{compactAge(wt.updatedAt)}</span>
     </Link>
   );
 }

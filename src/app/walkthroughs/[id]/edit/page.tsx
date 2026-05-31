@@ -1,38 +1,36 @@
-"use client";
+'use client';
 
-import { useMemo, useEffect, useState, startTransition } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { DashboardLayout } from "@/components/layout";
-import { Skeleton } from "@/components/ui";
-import { usePullRequestFiles } from "@/hooks/use-github";
-import { useWalkthrough, useUpdateWalkthrough } from "@/hooks/use-walkthrough";
+import { startTransition, useEffect, useMemo, useState } from 'react';
+
+import { useParams, useRouter } from 'next/navigation';
+
+import type { PrFile, PrFileStatus } from '@/types/github';
+import type { UpdateWalkthroughRequest, Walkthrough } from '@/types/walkthrough';
+
 import {
-  WalkthroughEditor,
   type ChapterDraft,
+  WalkthroughEditor,
   type WalkthroughFormData,
-} from "@/components/create-walkthrough";
-import type { PrFile, PrFileStatus } from "@/types/github";
-import type {
-  UpdateWalkthroughRequest,
-  Walkthrough,
-} from "@/types/walkthrough";
+} from '@/components/create-walkthrough';
+import { DashboardLayout } from '@/components/layout';
+import { Skeleton } from '@/components/ui';
+
+import { usePullRequestFiles } from '@/hooks/use-github';
+import { useUpdateWalkthrough, useWalkthrough } from '@/hooks/use-walkthrough';
 
 function normalizeStatus(fileStatus: string): PrFileStatus {
   const s = fileStatus.toLowerCase();
-  if (s === "added") return "added";
-  if (s === "removed" || s === "deleted") return "removed";
-  if (s === "renamed") return "renamed";
-  return "modified";
+  if (s === 'added') return 'added';
+  if (s === 'removed' || s === 'deleted') return 'removed';
+  if (s === 'renamed') return 'renamed';
+  return 'modified';
 }
 
-function walkthroughToChapters(
-  walkthrough: Walkthrough,
-  allFiles: PrFile[],
-): ChapterDraft[] {
+function walkthroughToChapters(walkthrough: Walkthrough, allFiles: PrFile[]): ChapterDraft[] {
   return walkthrough.chapters.map((ch) => ({
     id: ch.id,
     title: ch.title,
-    description: ch.description ?? "",
+    description: ch.description ?? '',
     files: ch.files.map((f) => {
       const match = allFiles.find((pf) => pf.filename === f.filename);
       if (match) return match;
@@ -51,17 +49,17 @@ function walkthroughToChapters(
 
 function EditSkeleton() {
   return (
-    <div className="flex flex-1 min-h-0 min-w-0">
+    <div className="flex min-h-0 min-w-0 flex-1">
       <div className="w-68 shrink-0 border-r border-gray-200 bg-white" />
-      <div className="flex-1 flex flex-col min-h-0">
-        <div className="flex items-center gap-3 px-5 py-3 border-b border-gray-200 bg-white shrink-0">
+      <div className="flex min-h-0 flex-1 flex-col">
+        <div className="flex shrink-0 items-center gap-3 border-b border-gray-200 bg-white px-5 py-3">
           <Skeleton className="h-4 w-12" />
           <Skeleton className="h-4 w-48 flex-1" />
           <Skeleton className="h-8 w-24" />
           <Skeleton className="h-8 w-20" />
         </div>
         <div className="flex-1 overflow-y-auto px-6 py-5">
-          <div className="max-w-2xl mx-auto space-y-5">
+          <div className="mx-auto max-w-2xl space-y-5">
             <Skeleton className="h-28 w-full rounded-xl" />
             <Skeleton className="h-48 w-full rounded-xl" />
             <Skeleton className="h-48 w-full rounded-xl" />
@@ -78,8 +76,8 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
   const { data: wtData, isLoading: wtLoading } = useWalkthrough(walkthroughId);
   const walkthrough = wtData?.data;
 
-  const owner = walkthrough?.owner ?? "";
-  const repo = walkthrough?.repo ?? "";
+  const owner = walkthrough?.owner ?? '';
+  const repo = walkthrough?.repo ?? '';
   const prNumber = walkthrough?.prNumber ?? 0;
 
   const { data: filesData, isLoading: filesLoading } = usePullRequestFiles({
@@ -88,10 +86,7 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
     prNumber,
   });
 
-  const allFiles = useMemo(
-    () => filesData?.data?.items ?? [],
-    [filesData?.data?.items],
-  );
+  const allFiles = useMemo(() => filesData?.data?.items ?? [], [filesData?.data?.items]);
 
   const [initialized, setInitialized] = useState(false);
   const [initialChapters, setInitialChapters] = useState<ChapterDraft[]>();
@@ -107,10 +102,7 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
     });
   }, [walkthrough, allFiles, filesLoading, initialized]);
 
-  const handleSave = (
-    data: WalkthroughFormData,
-    status: "DRAFT" | "PUBLISHED",
-  ) => {
+  const handleSave = (data: WalkthroughFormData, status: 'DRAFT' | 'PUBLISHED') => {
     const request: UpdateWalkthroughRequest = {
       title: data.title,
       description: data.description,
@@ -131,7 +123,7 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
 
   if (!walkthrough) {
     return (
-      <div className="flex-1 flex items-center justify-center text-sm text-gray-400">
+      <div className="flex flex-1 items-center justify-center text-sm text-gray-400">
         Walkthrough not found.
       </div>
     );
@@ -146,7 +138,7 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
       allFiles={allFiles}
       filesLoading={filesLoading && !initialized}
       initialTitle={walkthrough.title}
-      initialDescription={walkthrough.description ?? ""}
+      initialDescription={walkthrough.description ?? ''}
       initialChapters={initialChapters}
       onSave={handleSave}
       isSaving={updateWalkthrough.isPending}

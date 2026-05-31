@@ -50,7 +50,7 @@ export interface SearchWalkthroughResponse {
   facets: Record<string, FacetEntry[]>;
 }
 
-export type SearchTab = "all" | "walkthroughs" | "prs" | "repos";
+export type SearchTab = 'all' | 'walkthroughs' | 'prs' | 'repos';
 
 export interface SearchHistoryItem {
   id: string;

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { DashboardLayout } from "@/components/layout";
-import { TemplateForm } from "@/components/templates";
+import { DashboardLayout } from '@/components/layout';
+import { TemplateForm } from '@/components/templates';
 
 export default function NewTemplatePage() {
   return (
     <DashboardLayout>
-      <main className="flex-1 overflow-y-auto min-w-0">
+      <main className="min-w-0 flex-1 overflow-y-auto">
         <TemplateForm mode="create" />
       </main>
     </DashboardLayout>

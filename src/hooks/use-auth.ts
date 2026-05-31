@@ -1,15 +1,13 @@
-"use client";
+'use client';
 
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { useAppDispatch, useAppSelector } from "@/store";
-import {
-  setCredentials,
-  logout as logoutAction,
-} from "@/store/slices/auth.slice";
-import { authService } from "@/services/auth.service";
-import { getErrorMessage } from "@/lib/error";
+import { useRouter } from 'next/navigation';
+
+import { getErrorMessage } from '@/lib/error';
+import { authService } from '@/services/auth.service';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { logout as logoutAction, setCredentials } from '@/store/slices/auth.slice';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 export function useLoginWithGitHub() {
   const dispatch = useAppDispatch();
@@ -20,7 +18,7 @@ export function useLoginWithGitHub() {
       dispatch(setCredentials(data.data));
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, "Login failed. Please try again."));
+      toast.error(getErrorMessage(error, 'Login failed. Please try again.'));
     },
   });
 }
@@ -34,7 +32,7 @@ export function useLogout() {
     onSettled: () => {
       // Always clear local state, even if the API call fails
       dispatch(logoutAction());
-      router.push("/login");
+      router.push('/login');
     },
   });
 }

@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { Calendar, ChevronDown, ChevronUp, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from 'react';
+
+import { cn } from '@/lib/utils';
+import { Calendar, ChevronDown, ChevronUp, X } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 export interface SearchDateRange {
   from: string;
@@ -28,8 +30,8 @@ export function SearchDateRangeDropdown({
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, []);
 
   const isActive = !!(range.from || range.to);
@@ -39,8 +41,8 @@ export function SearchDateRangeDropdown({
     const from = new Date();
     from.setDate(from.getDate() - days);
     onChange({
-      from: from.toISOString().split("T")[0],
-      to: to.toISOString().split("T")[0],
+      from: from.toISOString().split('T')[0],
+      to: to.toISOString().split('T')[0],
     });
     setOpen(false);
   }
@@ -52,25 +54,21 @@ export function SearchDateRangeDropdown({
         size="none"
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "gap-1 px-2.5 py-1 text-xs font-normal",
+          'gap-1 px-2.5 py-1 text-xs font-normal',
           isActive
-            ? "bg-indigo-50 border-indigo-300 text-indigo-700 hover:bg-indigo-50"
-            : "text-gray-500 hover:bg-gray-100",
+            ? 'border-indigo-300 bg-indigo-50 text-indigo-700 hover:bg-indigo-50'
+            : 'text-gray-500 hover:bg-gray-100'
         )}
       >
-        <Calendar className="w-3 h-3" />
+        <Calendar className="h-3 w-3" />
         {isActive ? (
           <span>
-            {range.from || "..."} to {range.to || "..."}
+            {range.from || '...'} to {range.to || '...'}
           </span>
         ) : (
-          "Date range"
+          'Date range'
         )}
-        {open ? (
-          <ChevronUp className="w-3 h-3" />
-        ) : (
-          <ChevronDown className="w-3 h-3" />
-        )}
+        {open ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
         {isActive && (
           <span
             role="button"
@@ -80,40 +78,40 @@ export function SearchDateRangeDropdown({
             }}
             className="ml-0.5 text-indigo-500 hover:text-indigo-700"
           >
-            <X className="w-3 h-3" />
+            <X className="h-3 w-3" />
           </span>
         )}
       </Button>
 
       {open && (
-        <div className="absolute top-full mt-1 left-0 z-60 w-72 bg-white rounded-xl shadow-lg border border-gray-100 p-4">
+        <div className="absolute top-full left-0 z-60 mt-1 w-72 rounded-xl border border-gray-100 bg-white p-4 shadow-lg">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+              <p className="mb-1.5 text-[10px] font-semibold tracking-wider text-gray-400 uppercase">
                 From
               </p>
               <input
                 type="date"
                 value={range.from}
                 onChange={(e) => onChange({ ...range, from: e.target.value })}
-                className="w-full text-xs text-gray-700 border border-gray-200 rounded-lg px-2.5 py-1.5 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
+                className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-700 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
               />
             </div>
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+              <p className="mb-1.5 text-[10px] font-semibold tracking-wider text-gray-400 uppercase">
                 To
               </p>
               <input
                 type="date"
                 value={range.to}
                 onChange={(e) => onChange({ ...range, to: e.target.value })}
-                className="w-full text-xs text-gray-700 border border-gray-200 rounded-lg px-2.5 py-1.5 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
+                className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-700 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
               />
             </div>
           </div>
 
           <div className="mt-3">
-            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+            <p className="mb-1.5 text-[10px] font-semibold tracking-wider text-gray-400 uppercase">
               Quick select
             </p>
             <div className="grid grid-cols-2 gap-2">

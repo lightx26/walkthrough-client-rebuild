@@ -1,11 +1,11 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 export function MatrixLegendBadge({
   color,
   icon,
   children,
 }: {
-  color: "emerald" | "amber";
+  color: 'emerald' | 'amber';
   icon: React.ReactNode;
   children: React.ReactNode;
 }) {
@@ -13,10 +13,10 @@ export function MatrixLegendBadge({
     <span className="inline-flex items-center gap-1.5">
       <span
         className={cn(
-          "w-5 h-5 rounded-md border flex items-center justify-center",
-          color === "emerald"
-            ? "bg-emerald-50 border-emerald-200 text-emerald-600"
-            : "bg-amber-50 border-amber-200 text-amber-600",
+          'flex h-5 w-5 items-center justify-center rounded-md border',
+          color === 'emerald'
+            ? 'border-emerald-200 bg-emerald-50 text-emerald-600'
+            : 'border-amber-200 bg-amber-50 text-amber-600'
         )}
       >
         {icon}

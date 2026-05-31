@@ -1,34 +1,36 @@
-"use client";
+'use client';
 
-import { useEffect, type ReactNode } from "react";
-import { AlertTriangle, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { type ReactNode, useEffect } from 'react';
 
-export type ConfirmDialogTone = "warning" | "danger" | "info";
+import { cn } from '@/lib/utils';
+import { AlertTriangle, X } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+
+export type ConfirmDialogTone = 'warning' | 'danger' | 'info';
 
 const TONE_STYLES: Record<
   ConfirmDialogTone,
   {
     iconBg: string;
     iconColor: string;
-    confirmVariant: "primary" | "destructive";
+    confirmVariant: 'primary' | 'destructive';
   }
 > = {
   warning: {
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-500",
-    confirmVariant: "primary",
+    iconBg: 'bg-amber-50',
+    iconColor: 'text-amber-500',
+    confirmVariant: 'primary',
   },
   danger: {
-    iconBg: "bg-red-50",
-    iconColor: "text-red-500",
-    confirmVariant: "destructive",
+    iconBg: 'bg-red-50',
+    iconColor: 'text-red-500',
+    confirmVariant: 'destructive',
   },
   info: {
-    iconBg: "bg-violet-50",
-    iconColor: "text-violet-500",
-    confirmVariant: "primary",
+    iconBg: 'bg-violet-50',
+    iconColor: 'text-violet-500',
+    confirmVariant: 'primary',
   },
 };
 
@@ -47,19 +49,19 @@ export function ConfirmDialog({
   open,
   title,
   description,
-  tone = "warning",
-  confirmLabel = "Confirm",
-  cancelLabel = "Cancel",
+  tone = 'warning',
+  confirmLabel = 'Confirm',
+  cancelLabel = 'Cancel',
   onConfirm,
   onCancel,
 }: Props) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onCancel();
+      if (e.key === 'Escape') onCancel();
     };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
   }, [open, onCancel]);
 
   if (!open) return null;
@@ -72,24 +74,24 @@ export function ConfirmDialog({
       onClick={onCancel}
     >
       <div
-        className="bg-white rounded-2xl shadow-xl w-full max-w-md"
+        className="w-full max-w-md rounded-2xl bg-white shadow-xl"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
       >
-        <div className="flex items-start gap-3 px-5 py-4 border-b border-gray-100">
+        <div className="flex items-start gap-3 border-b border-gray-100 px-5 py-4">
           <div
             className={cn(
-              "w-9 h-9 rounded-lg flex items-center justify-center shrink-0",
-              styles.iconBg,
+              'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
+              styles.iconBg
             )}
           >
-            <AlertTriangle className={cn("w-4 h-4", styles.iconColor)} />
+            <AlertTriangle className={cn('h-4 w-4', styles.iconColor)} />
           </div>
           <h2
             id="confirm-dialog-title"
-            className="flex-1 font-semibold text-gray-900 text-base pt-1.5"
+            className="flex-1 pt-1.5 text-base font-semibold text-gray-900"
           >
             {title}
           </h2>
@@ -100,17 +102,15 @@ export function ConfirmDialog({
             className="text-muted-foreground"
             aria-label="Close"
           >
-            <X className="w-4 h-4" />
+            <X className="h-4 w-4" />
           </Button>
         </div>
 
         {description && (
-          <div className="px-5 py-4 text-sm text-gray-600 leading-relaxed">
-            {description}
-          </div>
+          <div className="px-5 py-4 text-sm leading-relaxed text-gray-600">{description}</div>
         )}
 
-        <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-gray-100">
+        <div className="flex items-center justify-end gap-2 border-t border-gray-100 px-5 py-3">
           <Button variant="outline" size="sm" onClick={onCancel}>
             {cancelLabel}
           </Button>

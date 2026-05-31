@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { RepositoriesPanel } from "./repositories-panel";
-import { RecentPrsPanel } from "./recent-prs-panel";
-import { useRepositories } from "@/hooks/use-github";
-import { useRecentPullRequests } from "@/hooks/use-profile";
+import { useState } from 'react';
+
+import { useRepositories } from '@/hooks/use-github';
+import { useRecentPullRequests } from '@/hooks/use-profile';
+
+import { RecentPrsPanel } from './recent-prs-panel';
+import { RepositoriesPanel } from './repositories-panel';
 
 const PER_PAGE = 6;
 
@@ -17,7 +19,7 @@ export function RepositoriesTab({ username }: RepositoriesTabProps) {
   const { data: reposData, isLoading: reposLoading } = useRepositories({
     page,
     perPage: PER_PAGE,
-    type: "owner",
+    type: 'owner',
   });
   const { data: prs, isLoading: prsLoading } = useRecentPullRequests(6);
 
@@ -27,12 +29,12 @@ export function RepositoriesTab({ username }: RepositoriesTabProps) {
 
   // Client-side filter: only repos owned by this user
   const userRepos = repositories.filter(
-    (r) => r.owner.login.toLowerCase() === username.toLowerCase(),
+    (r) => r.owner.login.toLowerCase() === username.toLowerCase()
   );
 
   return (
     <div className="flex gap-6">
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <RepositoriesPanel
           repositories={userRepos}
           total={totalElements}
@@ -42,7 +44,7 @@ export function RepositoriesTab({ username }: RepositoriesTabProps) {
           onPageChange={setPage}
         />
       </div>
-      <div className="w-96 xl:w-xl shrink-0">
+      <div className="w-96 shrink-0 xl:w-xl">
         <RecentPrsPanel pullRequests={prs} isLoading={prsLoading} />
       </div>
     </div>

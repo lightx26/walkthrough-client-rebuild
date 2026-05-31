@@ -1,7 +1,11 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import React from 'react';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { cn } from '@/lib/utils';
 import {
   BarChart2,
   Database,
@@ -11,44 +15,45 @@ import {
   LayoutTemplate,
   Pin,
   Waypoints,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Logo } from "@/components/ui";
-import { usePinnedRepos } from "@/hooks/use-starred";
-import { languageColor } from "@/utils/language-color";
-import React from "react";
+} from 'lucide-react';
+
+import { Logo } from '@/components/ui';
+
+import { usePinnedRepos } from '@/hooks/use-starred';
+
+import { languageColor } from '@/utils/language-color';
 
 const mainNav = [
-  { href: "/", icon: Home, label: "Home" },
+  { href: '/', icon: Home, label: 'Home' },
   {
-    href: "/walkthroughs",
+    href: '/walkthroughs',
     icon: Waypoints,
-    label: "Walkthroughs",
+    label: 'Walkthroughs',
     count: 23,
     disabled: true,
   },
   {
-    href: "/reviewing",
+    href: '/reviewing',
     icon: Eye,
-    label: "Reviewing",
+    label: 'Reviewing',
     count: 6,
     disabled: true,
   },
   {
-    href: "/pulls",
+    href: '/pulls',
     icon: GitPullRequest,
-    label: "Pull Requests",
+    label: 'Pull Requests',
     count: 11,
     disabled: true,
   },
 ];
 
 const workspaceNav = [
-  { href: "/repos", icon: Database, label: "Repositories", disabled: false },
+  { href: '/repos', icon: Database, label: 'Repositories', disabled: false },
   {
-    href: "/templates",
+    href: '/templates',
     icon: LayoutTemplate,
-    label: "Templates",
+    label: 'Templates',
     disabled: false,
   },
 ];
@@ -59,14 +64,14 @@ export function Sidebar() {
   const pinnedRepos = pinnedData?.data?.items ?? [];
 
   return (
-    <aside className="w-56 shrink-0 flex flex-col border-r border-gray-200 bg-white h-full">
-      <div className="flex items-center gap-2.5 px-4 py-4 shrink-0 cursor-pointer">
+    <aside className="flex h-full w-56 shrink-0 flex-col border-r border-gray-200 bg-white">
+      <div className="flex shrink-0 cursor-pointer items-center gap-2.5 px-4 py-4">
         <Logo size="sm" />
-        <span className="font-semibold text-gray-900 text-sm">Walkthrough</span>
+        <span className="text-sm font-semibold text-gray-900">Walkthrough</span>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-2 pb-4">
-        <div className="space-y-0.5 mb-5">
+        <div className="mb-5 space-y-0.5">
           {mainNav.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -74,10 +79,10 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors",
+                  'flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors',
                   isActive
-                    ? "bg-violet-50 text-violet-700 font-bold"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                    ? 'bg-violet-50 font-bold text-violet-700'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 )}
                 onClick={(e: React.MouseEvent) => {
                   if (item.disabled) {
@@ -87,18 +92,16 @@ export function Sidebar() {
               >
                 <item.icon
                   className={cn(
-                    "w-4 h-4 shrink-0",
-                    isActive ? "text-violet-600 stroke-2" : "text-gray-400",
+                    'h-4 w-4 shrink-0',
+                    isActive ? 'stroke-2 text-violet-600' : 'text-gray-400'
                   )}
                 />
                 <span className="flex-1">{item.label}</span>
                 {item.count !== undefined && (
                   <span
                     className={cn(
-                      "text-xs px-1.5 py-0.5 rounded-full font-medium",
-                      isActive
-                        ? "bg-violet-100 text-violet-700"
-                        : "bg-gray-100 text-gray-500",
+                      'rounded-full px-1.5 py-0.5 text-xs font-medium',
+                      isActive ? 'bg-violet-100 text-violet-700' : 'bg-gray-100 text-gray-500'
                     )}
                   >
                     {item.count}
@@ -110,7 +113,7 @@ export function Sidebar() {
         </div>
 
         <div className="mb-5">
-          <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+          <p className="mb-1.5 px-3 text-[10px] font-semibold tracking-wider text-gray-400 uppercase">
             Workspace
           </p>
           <div className="space-y-0.5">
@@ -121,10 +124,10 @@ export function Sidebar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors",
+                    'flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors',
                     isActive
-                      ? "bg-violet-50 text-violet-700 font-bold"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                      ? 'bg-violet-50 font-bold text-violet-700'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   )}
                   onClick={(e: React.MouseEvent) => {
                     if (item.disabled) {
@@ -134,8 +137,8 @@ export function Sidebar() {
                 >
                   <item.icon
                     className={cn(
-                      "w-4 h-4 shrink-0",
-                      isActive ? "text-violet-600 stroke-2" : "text-gray-400",
+                      'h-4 w-4 shrink-0',
+                      isActive ? 'stroke-2 text-violet-600' : 'text-gray-400'
                     )}
                   />
                   <span>{item.label}</span>
@@ -146,23 +149,23 @@ export function Sidebar() {
         </div>
 
         <div>
-          <div className="flex items-center px-3 mb-1.5">
-            <p className="flex-1 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+          <div className="mb-1.5 flex items-center px-3">
+            <p className="flex-1 text-[10px] font-semibold tracking-wider text-gray-400 uppercase">
               Pinned
             </p>
-            <Pin className="w-3 h-3 text-gray-300" />
+            <Pin className="h-3 w-3 text-gray-300" />
           </div>
           <div className="space-y-0.5">
             {pinnedRepos.map((repo) => (
               <Link
                 key={repo.repoFullName}
                 href={`/repos/${repo.repoFullName}`}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900"
               >
                 <span
                   className={cn(
-                    "w-2 h-2 rounded-full shrink-0",
-                    languageColor(repo.language ?? ""),
+                    'h-2 w-2 shrink-0 rounded-full',
+                    languageColor(repo.language ?? '')
                   )}
                 />
                 <span className="truncate">{repo.repoName}</span>

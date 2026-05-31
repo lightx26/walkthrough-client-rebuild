@@ -1,10 +1,4 @@
-export type TemplatePrType =
-  | "FEATURE"
-  | "REFACTOR"
-  | "HOTFIX"
-  | "BUGFIX"
-  | "MIGRATION"
-  | "OTHER";
+export type TemplatePrType = 'FEATURE' | 'REFACTOR' | 'HOTFIX' | 'BUGFIX' | 'MIGRATION' | 'OTHER';
 
 export interface TemplateChapter {
   id: string;

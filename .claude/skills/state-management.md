@@ -34,7 +34,7 @@ store/
 ```tsx
 export function useWalkthroughs(owner: string, repo: string, prNumber: number) {
   return useQuery({
-    queryKey: ["walkthroughs", owner, repo, prNumber],
+    queryKey: ['walkthroughs', owner, repo, prNumber],
     queryFn: () => walkthroughService.list(owner, repo, prNumber),
     enabled: !!owner && !!repo && !!prNumber,
   });
@@ -59,7 +59,7 @@ export function useCreateWalkthrough(owner, repo, prNumber) {
     mutationFn: (request) => walkthroughService.create(request),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["walkthroughs", owner, repo, prNumber],
+        queryKey: ['walkthroughs', owner, repo, prNumber],
       });
     },
   });

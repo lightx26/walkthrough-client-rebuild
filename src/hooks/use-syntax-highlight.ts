@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import type { ThemedToken } from "shiki";
-import { detectLanguage, highlightDiffBlock } from "@/lib/shiki";
+import { useEffect, useRef, useState } from 'react';
+
+import { detectLanguage, highlightDiffBlock } from '@/lib/shiki';
+import type { ThemedToken } from 'shiki';
 
 interface SyntaxHighlightResult {
   tokens: Map<number, ThemedToken[]> | null;
@@ -11,7 +12,7 @@ interface SyntaxHighlightResult {
 
 export function useSyntaxHighlight(
   rawPatch: string | undefined,
-  filename: string,
+  filename: string
 ): SyntaxHighlightResult {
   const [tokens, setTokens] = useState<Map<number, ThemedToken[]> | null>(null);
   const [isReady, setIsReady] = useState(false);

@@ -1,9 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import Link from "next/link";
-import { ServerCrash } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useEffect } from 'react';
+
+import Link from 'next/link';
+
+import { ServerCrash } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 export default function GlobalError({
   error,
@@ -17,16 +20,14 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <main className="flex-1 flex items-center justify-center px-6 py-16">
+    <main className="flex flex-1 items-center justify-center px-6 py-16">
       <div className="max-w-md text-center">
-        <div className="w-14 h-14 rounded-2xl bg-violet-100 flex items-center justify-center mx-auto mb-5">
-          <ServerCrash className="w-6 h-6 text-violet-600" />
+        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-100">
+          <ServerCrash className="h-6 w-6 text-violet-600" />
         </div>
-        <p className="text-sm font-medium text-violet-600 mb-2">500</p>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Something went wrong
-        </h1>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="mb-2 text-sm font-medium text-violet-600">500</p>
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">Something went wrong</h1>
+        <p className="mb-6 text-sm text-gray-500">
           An unexpected error occurred. Please try again.
         </p>
         <div className="flex items-center justify-center gap-2">

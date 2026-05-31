@@ -1,75 +1,69 @@
-"use client";
+'use client';
 
-import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { ArrowLeft, LayoutTemplate, Save } from "lucide-react";
-import { useCreateTemplate, useUpdateTemplate } from "@/hooks/use-templates";
+import { useCallback, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
 import type {
   CreateTemplateRequest,
   Template,
   TemplateChapterRequest,
   TemplatePrType,
-} from "@/types/template";
-import { Button } from "@/components/ui/button";
-import type { ChapterDraft } from "./template-form-types";
-import { newChapterKey } from "./template-form-types";
-import { TemplateFormFields } from "./template-form-fields";
-import { TemplateFormChapters } from "./template-form-chapters";
+} from '@/types/template';
+import { ArrowLeft, LayoutTemplate, Save } from 'lucide-react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
+import { Button } from '@/components/ui/button';
+
+import { useCreateTemplate, useUpdateTemplate } from '@/hooks/use-templates';
+
+import { TemplateFormChapters } from './template-form-chapters';
+import { TemplateFormFields } from './template-form-fields';
+import type { ChapterDraft } from './template-form-types';
+import { newChapterKey } from './template-form-types';
 
 interface Props {
-  mode: "create" | "edit";
+  mode: 'create' | 'edit';
   initial?: Template;
 }
 
 export function TemplateForm({ mode, initial }: Props) {
   const router = useRouter();
 
-  const [name, setName] = useState(initial?.name ?? "");
-  const [description, setDescription] = useState(initial?.description ?? "");
-  const [prType, setPrType] = useState<TemplatePrType | "">(
-    initial?.prType ?? "",
-  );
+  const [name, setName] = useState(initial?.name ?? '');
+  const [description, setDescription] = useState(initial?.description ?? '');
+  const [prType, setPrType] = useState<TemplatePrType | ''>(initial?.prType ?? '');
   const [chapters, setChapters] = useState<ChapterDraft[]>(() => {
     if (initial?.chapters?.length) {
       return initial.chapters.map((c) => ({
         key: newChapterKey(),
         title: c.title,
-        description: c.description ?? "",
+        description: c.description ?? '',
       }));
     }
     return [
-      { key: newChapterKey(), title: "", description: "" },
-      { key: newChapterKey(), title: "", description: "" },
+      { key: newChapterKey(), title: '', description: '' },
+      { key: newChapterKey(), title: '', description: '' },
     ];
   });
 
   const createTemplate = useCreateTemplate();
-  const updateTemplate = useUpdateTemplate(initial?.id ?? "");
+  const updateTemplate = useUpdateTemplate(initial?.id ?? '');
   const isSaving = createTemplate.isPending || updateTemplate.isPending;
 
   const isValid = name.trim().length > 0;
 
   const addChapter = () => {
-    setChapters((cs) => [
-      ...cs,
-      { key: newChapterKey(), title: "", description: "" },
-    ]);
+    setChapters((cs) => [...cs, { key: newChapterKey(), title: '', description: '' }]);
   };
 
   const removeChapter = (key: string) => {
     setChapters((cs) => cs.filter((c) => c.key !== key));
   };
 
-  const updateChapter = (
-    key: string,
-    field: "title" | "description",
-    value: string,
-  ) => {
-    setChapters((cs) =>
-      cs.map((c) => (c.key === key ? { ...c, [field]: value } : c)),
-    );
+  const updateChapter = (key: string, field: 'title' | 'description', value: string) => {
+    setChapters((cs) => cs.map((c) => (c.key === key ? { ...c, [field]: value } : c)));
   };
 
   const moveChapter = useCallback((fromIndex: number, toIndex: number) => {
@@ -96,13 +90,13 @@ export function TemplateForm({ mode, initial }: Props) {
         })),
     };
 
-    if (mode === "create") {
+    if (mode === 'create') {
       createTemplate.mutate(payload, {
-        onSuccess: () => router.push("/templates"),
+        onSuccess: () => router.push('/templates'),
       });
     } else {
       updateTemplate.mutate(payload, {
-        onSuccess: () => router.push("/templates"),
+        onSuccess: () => router.push('/templates'),
       });
     }
   };
@@ -110,34 +104,30 @@ export function TemplateForm({ mode, initial }: Props) {
   return (
     <DndProvider backend={HTML5Backend}>
       {/* Sub-Header */}
-      <div className="flex items-center gap-3 px-5 py-3 border-b border-gray-200 bg-white shrink-0">
+      <div className="flex shrink-0 items-center gap-3 border-b border-gray-200 bg-white px-5 py-3">
         <Button
           variant="muted"
           size="none"
-          onClick={() => router.push("/templates")}
-          className="gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent shrink-0"
+          onClick={() => router.push('/templates')}
+          className="shrink-0 gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="h-4 w-4" />
           Templates
         </Button>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-6">
-        <div className="flex items-start justify-between mb-6">
+      <div className="mx-auto max-w-3xl px-4 py-6">
+        <div className="mb-6 flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-violet-600 text-white flex items-center justify-center">
-              <LayoutTemplate className="w-5 h-5" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-600 text-white">
+              <LayoutTemplate className="h-5 w-5" />
             </div>
             <h1 className="text-[22px] font-bold text-gray-900">
-              {mode === "create" ? "Create template" : "Edit template"}
+              {mode === 'create' ? 'Create template' : 'Edit template'}
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => router.push("/templates")}
-            >
+            <Button variant="outline" size="sm" onClick={() => router.push('/templates')}>
               Cancel
             </Button>
             <Button
@@ -147,8 +137,8 @@ export function TemplateForm({ mode, initial }: Props) {
               disabled={!isValid || isSaving}
               className="gap-1.5"
             >
-              <Save className="w-3.5 h-3.5" />
-              {mode === "create" ? "Create template" : "Save changes"}
+              <Save className="h-3.5 w-3.5" />
+              {mode === 'create' ? 'Create template' : 'Save changes'}
             </Button>
           </div>
         </div>

@@ -1,12 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Bell, LogOut, Search } from "lucide-react";
-import { useCurrentUser, useLogout } from "@/hooks/use-auth";
-import { UserAvatar } from "@/components/ui";
-import { Button } from "@/components/ui/button";
-import { SearchModal } from "@/components/search";
+import { useEffect, useState } from 'react';
+
+import Link from 'next/link';
+
+import { Bell, LogOut, Search } from 'lucide-react';
+
+import { SearchModal } from '@/components/search';
+import { UserAvatar } from '@/components/ui';
+import { Button } from '@/components/ui/button';
+
+import { useCurrentUser, useLogout } from '@/hooks/use-auth';
 
 export function Navbar() {
   const user = useCurrentUser();
@@ -15,34 +19,34 @@ export function Navbar() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setSearchOpen((open) => !open);
       }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, []);
 
   return (
     <>
-      <header className="flex items-center gap-3 px-6 py-3 border-b border-gray-200 bg-white shrink-0">
+      <header className="flex shrink-0 items-center gap-3 border-b border-gray-200 bg-white px-6 py-3">
         {/* Search trigger */}
         <Button
           variant="outline"
           size="none"
           onClick={() => setSearchOpen(true)}
-          className="justify-start gap-2 px-3 py-1.5 bg-muted text-muted-foreground font-normal w-72"
+          className="bg-muted text-muted-foreground w-72 justify-start gap-2 px-3 py-1.5 font-normal"
         >
-          <Search className="w-4 h-4 shrink-0" />
-          <span className="flex-1 text-left text-xs truncate">
+          <Search className="h-4 w-4 shrink-0" />
+          <span className="flex-1 truncate text-left text-xs">
             Search walkthroughs, PRs, files...
           </span>
-          <span className="flex items-center gap-0.5 shrink-0">
-            <kbd className="text-[10px] bg-border text-muted-foreground px-1 py-0.5 rounded font-sans">
+          <span className="flex shrink-0 items-center gap-0.5">
+            <kbd className="bg-border text-muted-foreground rounded px-1 py-0.5 font-sans text-[10px]">
               ⌘
             </kbd>
-            <kbd className="text-[10px] bg-border text-muted-foreground px-1 py-0.5 rounded font-sans">
+            <kbd className="bg-border text-muted-foreground rounded px-1 py-0.5 font-sans text-[10px]">
               K
             </kbd>
           </span>
@@ -52,14 +56,14 @@ export function Navbar() {
 
         {/* Notification bell with badge */}
         <Button variant="ghost" size="iconSm" className="relative">
-          <Bell className="w-5 h-5 text-muted-foreground" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-destructive rounded-full" />
+          <Bell className="text-muted-foreground h-5 w-5" />
+          <span className="bg-destructive absolute top-1.5 right-1.5 h-2 w-2 rounded-full" />
         </Button>
 
         {/* User avatar and info */}
         <Link
-          href={user ? `/profile/${user.username}` : "#"}
-          className="flex items-center gap-2.5 p-2 rounded-md hover:bg-gray-100 transition-colors"
+          href={user ? `/profile/${user.username}` : '#'}
+          className="flex items-center gap-2.5 rounded-md p-2 transition-colors hover:bg-gray-100"
         >
           <UserAvatar
             src={user?.avatarUrl}
@@ -67,10 +71,8 @@ export function Navbar() {
             username={user?.username}
           />
           <div className="text-sm leading-tight">
-            <p className="font-semibold text-gray-900">
-              {user?.displayName || user?.username}
-            </p>
-            <p className="text-gray-400 text-xs">@{user?.username}</p>
+            <p className="font-semibold text-gray-900">{user?.displayName || user?.username}</p>
+            <p className="text-xs text-gray-400">@{user?.username}</p>
           </div>
         </Link>
 
@@ -81,7 +83,7 @@ export function Navbar() {
           onClick={() => logout.mutate()}
           title="Sign out"
         >
-          <LogOut className="w-4 h-4" />
+          <LogOut className="h-4 w-4" />
         </Button>
       </header>
 

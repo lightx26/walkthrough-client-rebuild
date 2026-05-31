@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { AuthoredWalkthroughsPanel } from "./authored-walkthroughs-panel";
-import { ReviewingPanel } from "./reviewing-panel";
-import { RecentActivityPanel } from "./recent-activity-panel";
-import type { WalkthroughSummary } from "@/types/walkthrough";
-import type { ProfileReviewingItem } from "@/types/profile";
+import type { ProfileReviewingItem } from '@/types/profile';
+import type { WalkthroughSummary } from '@/types/walkthrough';
+
+import { AuthoredWalkthroughsPanel } from './authored-walkthroughs-panel';
+import { RecentActivityPanel } from './recent-activity-panel';
+import { ReviewingPanel } from './reviewing-panel';
 
 interface OverviewTabProps {
   walkthroughs?: WalkthroughSummary[];
@@ -26,7 +27,7 @@ export function OverviewTab({
   return (
     <div className="flex gap-6">
       {/* Main column */}
-      <div className="flex-1 min-w-0 space-y-4">
+      <div className="min-w-0 flex-1 space-y-4">
         <AuthoredWalkthroughsPanel
           walkthroughs={walkthroughs}
           total={totalWalkthroughs}
@@ -37,7 +38,7 @@ export function OverviewTab({
       </div>
 
       {/* Sidebar */}
-      <div className="w-96 xl:w-xl shrink-0">
+      <div className="w-96 shrink-0 xl:w-xl">
         <RecentActivityPanel />
       </div>
     </div>

@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/ui";
+import { cn } from '@/lib/utils';
+
+import { UserAvatar } from '@/components/ui';
 
 interface Person {
   userId: string;
@@ -10,16 +11,16 @@ interface Person {
   avatarUrl: string | null;
 }
 
-const ringStyles = ["ring-2 ring-white"];
+const ringStyles = ['ring-2 ring-white'];
 
 export function ReviewerAvatars({
   reviewers,
   max = 5,
-  size = "md",
+  size = 'md',
 }: {
   reviewers: Person[];
   max?: number;
-  size?: "sm" | "md";
+  size?: 'sm' | 'md';
 }) {
   const visible = reviewers.slice(0, max);
   const overflow = reviewers.length - visible.length;
@@ -38,9 +39,9 @@ export function ReviewerAvatars({
       {overflow > 0 && (
         <span
           className={cn(
-            "rounded-full bg-gray-100 text-gray-600 text-[10px] flex items-center justify-center font-semibold",
-            size === "sm" ? "w-6 h-6" : "w-8 h-8",
-            ringStyles[0],
+            'flex items-center justify-center rounded-full bg-gray-100 text-[10px] font-semibold text-gray-600',
+            size === 'sm' ? 'h-6 w-6' : 'h-8 w-8',
+            ringStyles[0]
           )}
         >
           +{overflow}

@@ -1,20 +1,24 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { ArrowLeft, LayoutTemplate, Plus, Save, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import { ApplyTemplateDialog } from "./apply-template-dialog";
-import { ChangedFilesPanel } from "./changed-files-panel";
-import { ChapterCard, type ChapterDraft } from "./chapter-card";
-import { DiffFileModal } from "./diff-file-modal";
-import type { PrFile } from "@/types/github";
-import type { ChapterRequest } from "@/types/walkthrough";
-import type { Template } from "@/types/template";
-import { toast } from "sonner";
+import { useMemo, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
+import type { PrFile } from '@/types/github';
+import type { Template } from '@/types/template';
+import type { ChapterRequest } from '@/types/walkthrough';
+import { ArrowLeft, LayoutTemplate, Plus, Save, Send } from 'lucide-react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+
+import { ApplyTemplateDialog } from './apply-template-dialog';
+import { ChangedFilesPanel } from './changed-files-panel';
+import { ChapterCard, type ChapterDraft } from './chapter-card';
+import { DiffFileModal } from './diff-file-modal';
 
 export interface WalkthroughFormData {
   title: string;
@@ -31,7 +35,7 @@ export interface WalkthroughEditorProps {
   initialTitle?: string;
   initialDescription?: string;
   initialChapters?: ChapterDraft[];
-  onSave: (data: WalkthroughFormData, status: "DRAFT" | "PUBLISHED") => void;
+  onSave: (data: WalkthroughFormData, status: 'DRAFT' | 'PUBLISHED') => void;
   isSaving: boolean;
   requireAllFilesAssigned?: boolean;
   canDeleteChapters?: boolean;
@@ -41,7 +45,7 @@ function chaptersToRequest(chapters: ChapterDraft[]): ChapterRequest[] {
   return chapters
     .filter((ch) => ch.title.trim() || ch.files.length > 0)
     .map((ch) => ({
-      title: ch.title.trim() || "Chapter",
+      title: ch.title.trim() || 'Chapter',
       description: ch.description.trim() || undefined,
       files: ch.files.map((f) => ({
         filename: f.filename,
@@ -58,8 +62,8 @@ export function WalkthroughEditor({
   prNumber,
   allFiles,
   filesLoading,
-  initialTitle = "",
-  initialDescription = "",
+  initialTitle = '',
+  initialDescription = '',
   initialChapters,
   onSave,
   isSaving,
@@ -71,9 +75,7 @@ export function WalkthroughEditor({
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
   const [chapters, setChapters] = useState<ChapterDraft[]>(
-    initialChapters ?? [
-      { id: crypto.randomUUID(), title: "", description: "", files: [] },
-    ],
+    initialChapters ?? [{ id: crypto.randomUUID(), title: '', description: '', files: [] }]
   );
   const [activeFileDiff, setActiveFileDiff] = useState<PrFile | null>(null);
   const [showApplyTemplate, setShowApplyTemplate] = useState(false);
@@ -87,8 +89,7 @@ export function WalkthroughEditor({
     return set;
   }, [chapters]);
 
-  const allFilesAssigned =
-    allFiles.length > 0 && assignedFilenames.size === allFiles.length;
+  const allFilesAssigned = allFiles.length > 0 && assignedFilenames.size === allFiles.length;
 
   const handleChapterChange = (id: string, updated: ChapterDraft) => {
     setChapters((prev) => prev.map((ch) => (ch.id === id ? updated : ch)));
@@ -101,23 +102,21 @@ export function WalkthroughEditor({
   const handleAddChapter = () => {
     setChapters((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), title: "", description: "", files: [] },
+      { id: crypto.randomUUID(), title: '', description: '', files: [] },
     ]);
   };
 
   const applyTemplate = (template: Template) => {
-    const sorted = [...(template.chapters ?? [])].sort(
-      (a, b) => a.sortOrder - b.sortOrder,
-    );
+    const sorted = [...(template.chapters ?? [])].sort((a, b) => a.sortOrder - b.sortOrder);
     setChapters(
       sorted.length > 0
         ? sorted.map((ch) => ({
             id: crypto.randomUUID(),
             title: ch.title,
-            description: ch.description ?? "",
+            description: ch.description ?? '',
             files: [],
           }))
-        : [{ id: crypto.randomUUID(), title: "", description: "", files: [] }],
+        : [{ id: crypto.randomUUID(), title: '', description: '', files: [] }]
     );
     setShowApplyTemplate(false);
     setPendingTemplate(null);
@@ -131,9 +130,9 @@ export function WalkthroughEditor({
     applyTemplate(template);
   };
 
-  const handleSave = (status: "DRAFT" | "PUBLISHED") => {
+  const handleSave = (status: 'DRAFT' | 'PUBLISHED') => {
     if (!title.trim()) {
-      toast.error("Please enter a walkthrough title.");
+      toast.error('Please enter a walkthrough title.');
       return;
     }
 
@@ -143,16 +142,15 @@ export function WalkthroughEditor({
         description: description.trim() || undefined,
         chapters: chaptersToRequest(chapters),
       },
-      status,
+      status
     );
   };
 
-  const publishDisabled =
-    isSaving || (requireAllFilesAssigned && !allFilesAssigned);
+  const publishDisabled = isSaving || (requireAllFilesAssigned && !allFilesAssigned);
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex flex-1 min-h-0 min-w-0">
+      <div className="flex min-h-0 min-w-0 flex-1">
         {/* Left panel */}
         <ChangedFilesPanel
           files={allFiles}
@@ -163,54 +161,52 @@ export function WalkthroughEditor({
         />
 
         {/* Right panel */}
-        <div className="flex-1 flex flex-col min-h-0 min-w-0">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           {/* Sub-header */}
-          <div className="flex items-center gap-3 px-5 py-3 border-b border-gray-200 bg-white shrink-0">
+          <div className="flex shrink-0 items-center gap-3 border-b border-gray-200 bg-white px-5 py-3">
             <Button
               variant="muted"
               size="none"
               onClick={() => router.back()}
-              className="gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent shrink-0"
+              className="shrink-0 gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="h-4 w-4" />
               Back
             </Button>
 
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              <span className="text-sm font-semibold text-gray-900">
-                {headerTitle}
-              </span>
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <span className="text-sm font-semibold text-gray-900">{headerTitle}</span>
             </div>
 
             {/* Action buttons */}
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex shrink-0 items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setShowApplyTemplate(true)}
                 className="gap-1.5"
               >
-                <LayoutTemplate className="w-3.5 h-3.5" />
+                <LayoutTemplate className="h-3.5 w-3.5" />
                 Apply template
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleSave("DRAFT")}
+                onClick={() => handleSave('DRAFT')}
                 disabled={isSaving}
                 className="gap-1.5"
               >
-                <Save className="w-3.5 h-3.5" />
+                <Save className="h-3.5 w-3.5" />
                 Save draft
               </Button>
               <Button
                 variant="primary"
                 size="sm"
-                onClick={() => handleSave("PUBLISHED")}
+                onClick={() => handleSave('PUBLISHED')}
                 disabled={publishDisabled}
                 className="gap-1.5"
               >
-                <Send className="w-3.5 h-3.5" />
+                <Send className="h-3.5 w-3.5" />
                 Publish
               </Button>
             </div>
@@ -218,11 +214,11 @@ export function WalkthroughEditor({
 
           {/* Scrollable form */}
           <div className="flex-1 overflow-y-auto px-6 py-5">
-            <div className="max-w-2xl mx-auto space-y-5">
+            <div className="mx-auto max-w-2xl space-y-5">
               {/* Title & description card */}
-              <div className="bg-white rounded-xl border border-gray-200 px-5 py-4 space-y-3">
+              <div className="space-y-3 rounded-xl border border-gray-200 bg-white px-5 py-4">
                 <div>
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                  <p className="mb-2 text-[10px] font-semibold tracking-wider text-gray-400 uppercase">
                     Walkthrough title
                   </p>
                   <input
@@ -230,12 +226,12 @@ export function WalkthroughEditor({
                     placeholder="e.g. Snapshot versioning — full walkthrough"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full text-base text-gray-900 placeholder:text-gray-300 outline-none bg-transparent"
+                    className="w-full bg-transparent text-base text-gray-900 outline-none placeholder:text-gray-300"
                   />
                 </div>
                 <hr className="border-gray-100" />
                 <div>
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                  <p className="mb-2 text-[10px] font-semibold tracking-wider text-gray-400 uppercase">
                     Description
                   </p>
                   <textarea
@@ -243,19 +239,17 @@ export function WalkthroughEditor({
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
-                    className="w-full text-sm text-gray-700 placeholder:text-gray-300 outline-none bg-transparent resize-none leading-relaxed"
+                    className="w-full resize-none bg-transparent text-sm leading-relaxed text-gray-700 outline-none placeholder:text-gray-300"
                   />
                 </div>
               </div>
 
               {/* Chapters */}
               <div>
-                <div className="flex items-center justify-between mb-3">
+                <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <h2 className="text-sm font-semibold text-gray-900">
-                      Chapters
-                    </h2>
-                    <span className="text-xs bg-violet-100 text-violet-700 font-semibold rounded-full px-2 py-0.5">
+                    <h2 className="text-sm font-semibold text-gray-900">Chapters</h2>
+                    <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-semibold text-violet-700">
                       {chapters.length}
                     </span>
                   </div>
@@ -270,9 +264,7 @@ export function WalkthroughEditor({
                       key={chapter.id}
                       chapter={chapter}
                       index={i}
-                      onChange={(updated) =>
-                        handleChapterChange(chapter.id, updated)
-                      }
+                      onChange={(updated) => handleChapterChange(chapter.id, updated)}
                       onViewFileDiff={setActiveFileDiff}
                       onDelete={
                         canDeleteChapters && chapters.length > 1
@@ -287,9 +279,9 @@ export function WalkthroughEditor({
                   variant="dashed"
                   size="none"
                   onClick={handleAddChapter}
-                  className="mt-3 w-full gap-2 px-4 py-3 rounded-xl text-sm"
+                  className="mt-3 w-full gap-2 rounded-xl px-4 py-3 text-sm"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="h-4 w-4" />
                   Add chapter
                 </Button>
               </div>
@@ -299,10 +291,7 @@ export function WalkthroughEditor({
       </div>
 
       {activeFileDiff && (
-        <DiffFileModal
-          file={activeFileDiff}
-          onClose={() => setActiveFileDiff(null)}
-        />
+        <DiffFileModal file={activeFileDiff} onClose={() => setActiveFileDiff(null)} />
       )}
 
       <ApplyTemplateDialog
@@ -317,9 +306,9 @@ export function WalkthroughEditor({
         description={
           <>
             You have <strong>{assignedFilenames.size}</strong> file
-            {assignedFilenames.size === 1 ? "" : "s"} assigned to chapters.
-            Applying{pendingTemplate ? ` "${pendingTemplate.name}"` : ""} will
-            replace all chapters and unassign these files.
+            {assignedFilenames.size === 1 ? '' : 's'} assigned to chapters. Applying
+            {pendingTemplate ? ` "${pendingTemplate.name}"` : ''} will replace all chapters and
+            unassign these files.
           </>
         }
         tone="warning"

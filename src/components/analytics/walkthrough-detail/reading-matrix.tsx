@@ -1,14 +1,17 @@
-"use client";
+'use client';
 
-import { LoaderCircle, Check, Clock, MessageSquare, Users } from "lucide-react";
-import { UserAvatar } from "@/components/ui";
-import { formatRelativeTime } from "@/utils/date-diff";
-import type { ReviewProgress } from "@/types/analytics";
-import { MatrixCell } from "./matrix-cell";
-import { MatrixLegendBadge } from "./matrix-legend-badge";
+import type { ReviewProgress } from '@/types/analytics';
+import { Check, Clock, LoaderCircle, MessageSquare, Users } from 'lucide-react';
+
+import { UserAvatar } from '@/components/ui';
+
+import { formatRelativeTime } from '@/utils/date-diff';
+
+import { MatrixCell } from './matrix-cell';
+import { MatrixLegendBadge } from './matrix-legend-badge';
 
 function formatDuration(sec: number): string {
-  if (sec === null || sec === undefined) return "—";
+  if (sec === null || sec === undefined) return '—';
   if (sec < 60) return `${sec}s`;
   const m = Math.floor(sec / 60);
   const s = sec % 60;
@@ -21,10 +24,10 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
   const chapters = data.reviewers[0]?.chapters ?? [];
 
   return (
-    <section className="bg-white border border-gray-200 rounded-xl px-5 py-4">
+    <section className="rounded-xl border border-gray-200 bg-white px-5 py-4">
       <div className="mb-4">
         <h3 className="inline-flex items-center gap-2 text-sm font-semibold text-gray-900">
-          <Users className="w-4 h-4 text-violet-600" />
+          <Users className="h-4 w-4 text-violet-600" />
           Reading matrix
         </h3>
         <p className="text-xs text-gray-500">Who read which chapter</p>
@@ -33,31 +36,28 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
           <thead>
-            <tr className="text-[10px] uppercase tracking-wider text-gray-400">
-              <th className="text-left font-medium pb-3 pr-3">Reviewer</th>
+            <tr className="text-[10px] tracking-wider text-gray-400 uppercase">
+              <th className="pr-3 pb-3 text-left font-medium">Reviewer</th>
               {chapters.map((c, i) => (
-                <th
-                  key={c.chapterId}
-                  className="font-medium pb-3 px-1 w-16 text-center"
-                >
+                <th key={c.chapterId} className="w-16 px-1 pb-3 text-center font-medium">
                   <div className="flex flex-col items-center gap-0.5">
                     <span className="text-gray-500">{i + 1}</span>
-                    <span className="font-normal normal-case tracking-normal text-gray-400 truncate max-w-24 block">
+                    <span className="block max-w-24 truncate font-normal tracking-normal text-gray-400 normal-case">
                       {c.chapterTitle}
                     </span>
                   </div>
                 </th>
               ))}
-              <th className="font-medium pb-3 px-3">Progress</th>
-              <th className="font-medium pb-3 px-3">Time</th>
-              <th className="font-medium pb-3 pl-3">Last active</th>
+              <th className="px-3 pb-3 font-medium">Progress</th>
+              <th className="px-3 pb-3 font-medium">Time</th>
+              <th className="pb-3 pl-3 font-medium">Last active</th>
             </tr>
           </thead>
           <tbody>
             {data.reviewers.map((r) => (
               <tr key={r.userId} className="align-middle">
                 <td className="py-3 pr-3">
-                  <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex min-w-0 items-center gap-2.5">
                     <UserAvatar
                       src={r.avatarUrl}
                       username={r.username}
@@ -65,26 +65,19 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
                       size="sm"
                     />
                     <div className="min-w-0">
-                      <p className="text-gray-900 truncate">
-                        {r.displayName || r.username}
-                      </p>
-                      <p className="text-[11px] text-gray-400 truncate">
-                        @{r.username}
-                      </p>
+                      <p className="truncate text-gray-900">{r.displayName || r.username}</p>
+                      <p className="truncate text-[11px] text-gray-400">@{r.username}</p>
                     </div>
                   </div>
                 </td>
                 {r.chapters.map((c) => (
-                  <td
-                    key={c.chapterId}
-                    className="py-3 px-1 w-16 text-center align-middle"
-                  >
+                  <td key={c.chapterId} className="w-16 px-1 py-3 text-center align-middle">
                     <MatrixCell chapter={c} />
                   </td>
                 ))}
-                <td className="py-3 px-3 min-w-35">
+                <td className="min-w-35 px-3 py-3">
                   <div className="flex items-center gap-2">
-                    <div className="h-2 rounded-full bg-gray-100 flex-1 overflow-hidden">
+                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
                       <div
                         className="h-full bg-amber-400"
                         style={{
@@ -92,21 +85,19 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
                         }}
                       />
                     </div>
-                    <span className="text-xs text-gray-700 whitespace-nowrap">
+                    <span className="text-xs whitespace-nowrap text-gray-700">
                       {r.readChapters}/{r.totalChapters} ch
                     </span>
                   </div>
                 </td>
-                <td className="py-3 px-3 text-xs text-gray-600 whitespace-nowrap">
+                <td className="px-3 py-3 text-xs whitespace-nowrap text-gray-600">
                   <span className="inline-flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-gray-400" />
+                    <Clock className="h-3 w-3 text-gray-400" />
                     {formatDuration(r.totalTimeSpentSec)}
                   </span>
                 </td>
-                <td className="py-3 pl-3 text-xs text-gray-500 whitespace-nowrap">
-                  {r.lastActiveAt
-                    ? formatRelativeTime(r.lastActiveAt)
-                    : "Never"}
+                <td className="py-3 pl-3 text-xs whitespace-nowrap text-gray-500">
+                  {r.lastActiveAt ? formatRelativeTime(r.lastActiveAt) : 'Never'}
                 </td>
               </tr>
             ))}
@@ -124,28 +115,25 @@ export function ReadingMatrix({ data }: { data: ReviewProgress }) {
         </table>
       </div>
 
-      <div className="flex items-center gap-4 mt-4 pt-3 border-t border-gray-100 text-[11px] text-gray-500 flex-wrap">
-        <span className="font-medium text-gray-400 uppercase tracking-wider text-[10px]">
+      <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-gray-100 pt-3 text-[11px] text-gray-500">
+        <span className="text-[10px] font-medium tracking-wider text-gray-400 uppercase">
           Legend:
         </span>
-        <MatrixLegendBadge color="emerald" icon={<Check className="w-3 h-3" />}>
+        <MatrixLegendBadge color="emerald" icon={<Check className="h-3 w-3" />}>
           Read
         </MatrixLegendBadge>
-        <MatrixLegendBadge
-          color="amber"
-          icon={<LoaderCircle className="w-3 h-3" />}
-        >
+        <MatrixLegendBadge color="amber" icon={<LoaderCircle className="h-3 w-3" />}>
           Not finished yet
         </MatrixLegendBadge>
         <span className="inline-flex items-center gap-1.5">
-          <span className="w-5 h-5 rounded-md bg-gray-50 border border-gray-100 text-gray-300 text-xs flex items-center justify-center">
+          <span className="flex h-5 w-5 items-center justify-center rounded-md border border-gray-100 bg-gray-50 text-xs text-gray-300">
             —
           </span>
           Not visited
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="w-5 h-5 rounded-full bg-violet-600 text-white text-[9px] font-semibold flex items-center justify-center">
-            <MessageSquare className="w-2.5 h-2.5" />
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-600 text-[9px] font-semibold text-white">
+            <MessageSquare className="h-2.5 w-2.5" />
           </span>
           Comments left
         </span>

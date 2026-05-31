@@ -1,8 +1,4 @@
-export type WalkthroughStatus =
-  | "DRAFT"
-  | "PUBLISHED"
-  | "OUTDATED"
-  | "DEPRECATED";
+export type WalkthroughStatus = 'DRAFT' | 'PUBLISHED' | 'OUTDATED' | 'DEPRECATED';
 
 export interface WalkthroughAnnotation {
   id: string;
@@ -117,14 +113,14 @@ export interface StalenessResponse {
 }
 
 export interface VersionDiffFileDiff {
-  changeType: "ADDED" | "REMOVED" | "MODIFIED" | "UNCHANGED";
+  changeType: 'ADDED' | 'REMOVED' | 'MODIFIED' | 'UNCHANGED';
   filename: string;
   fromFilename: string;
   toFilename: string;
 }
 
 export interface VersionDiffChapterDiff {
-  changeType: "ADDED" | "REMOVED" | "MODIFIED" | "UNCHANGED";
+  changeType: 'ADDED' | 'REMOVED' | 'MODIFIED' | 'UNCHANGED';
   title: string;
   fromTitle: string;
   toTitle: string;
@@ -138,7 +134,7 @@ export interface VersionDiffAnnotationDiff {
   endLine: number;
   lineSide: string;
   content: string;
-  reason: "LINE_REMOVED" | "FILE_REMOVED" | "DIFF_CHANGED";
+  reason: 'LINE_REMOVED' | 'FILE_REMOVED' | 'DIFF_CHANGED';
 }
 
 export interface VersionDiffResponse {

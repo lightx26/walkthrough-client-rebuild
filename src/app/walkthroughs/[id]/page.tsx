@@ -1,21 +1,25 @@
-"use client";
+'use client';
 
-import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, BarChart2, Pencil, Waypoints } from "lucide-react";
-import { DashboardLayout } from "@/components/layout";
-import { ApiErrorState, UserAvatar, Skeleton } from "@/components/ui";
-import { Button } from "@/components/ui/button";
-import { useCurrentUser } from "@/hooks/use-auth";
-import { useWalkthrough, useReadProgress } from "@/hooks/use-walkthrough";
-import { formatRelativeTime } from "@/utils/date-diff";
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+
+import { ArrowLeft, BarChart2, Pencil, Waypoints } from 'lucide-react';
+
+import { DashboardLayout } from '@/components/layout';
+import { ApiErrorState, Skeleton, UserAvatar } from '@/components/ui';
+import { Button } from '@/components/ui/button';
 import {
   ChapterSection,
   CommentSection,
-  FilesPanel,
   FileTreePanel,
-} from "@/components/walkthrough-detail";
-import { ChapterExpandProvider } from "@/components/walkthrough-detail/chapter-expand-context";
+  FilesPanel,
+} from '@/components/walkthrough-detail';
+import { ChapterExpandProvider } from '@/components/walkthrough-detail/chapter-expand-context';
+
+import { useCurrentUser } from '@/hooks/use-auth';
+import { useReadProgress, useWalkthrough } from '@/hooks/use-walkthrough';
+
+import { formatRelativeTime } from '@/utils/date-diff';
 
 function DetailSkeleton() {
   return (
@@ -43,12 +47,8 @@ export default function WalkthroughDetailPage() {
   if (error) {
     return (
       <DashboardLayout>
-        <main className="flex-1 overflow-y-auto px-8 py-7 min-w-0">
-          <ApiErrorState
-            error={error}
-            resource="walkthrough"
-            onRetry={() => refetch()}
-          />
+        <main className="min-w-0 flex-1 overflow-y-auto px-8 py-7">
+          <ApiErrorState error={error} resource="walkthrough" onRetry={() => refetch()} />
         </main>
       </DashboardLayout>
     );
@@ -56,29 +56,29 @@ export default function WalkthroughDetailPage() {
 
   return (
     <DashboardLayout>
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex min-h-0 flex-1 flex-col">
         {/* Sub-header */}
-        <div className="flex items-center gap-4 px-6 py-3.5 border-b border-gray-200 bg-white shrink-0">
+        <div className="flex shrink-0 items-center gap-4 border-b border-gray-200 bg-white px-6 py-3.5">
           <Button
             variant="muted"
             size="none"
             onClick={() => router.back()}
-            className="gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent shrink-0"
+            className="shrink-0 gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
 
           {walkthrough ? (
             <>
-              <div className="flex items-center gap-2 flex-1 min-w-0">
-                <Waypoints className="w-4 h-4 text-gray-400 shrink-0" />
-                <h1 className="text-sm font-semibold text-gray-900 truncate">
+              <div className="flex min-w-0 flex-1 items-center gap-2">
+                <Waypoints className="h-4 w-4 shrink-0 text-gray-400" />
+                <h1 className="truncate text-sm font-semibold text-gray-900">
                   {walkthrough.title}
                 </h1>
               </div>
 
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex shrink-0 items-center gap-3">
                 <div className="flex items-center gap-2">
                   <UserAvatar
                     src={walkthrough.creatorAvatarUrl}
@@ -86,9 +86,8 @@ export default function WalkthroughDetailPage() {
                     username={walkthrough.creatorUsername}
                     size="sm"
                   />
-                  <span className="text-sm text-gray-700 font-medium">
-                    {walkthrough.creatorDisplayName ||
-                      walkthrough.creatorUsername}
+                  <span className="text-sm font-medium text-gray-700">
+                    {walkthrough.creatorDisplayName || walkthrough.creatorUsername}
                   </span>
                   <span className="text-xs text-gray-400">
                     {formatRelativeTime(walkthrough.updatedAt)}
@@ -97,27 +96,17 @@ export default function WalkthroughDetailPage() {
 
                 {isOwner && (
                   <>
-                    {walkthrough.status !== "DRAFT" && (
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="gap-1.5 rounded-xl"
-                      >
+                    {walkthrough.status !== 'DRAFT' && (
+                      <Button asChild variant="outline" size="sm" className="gap-1.5 rounded-xl">
                         <Link href={`/analytics/${walkthrough.id}`}>
-                          <BarChart2 className="w-3.5 h-3.5" />
+                          <BarChart2 className="h-3.5 w-3.5" />
                           Analytics
                         </Link>
                       </Button>
                     )}
-                    <Button
-                      asChild
-                      variant="primary"
-                      size="sm"
-                      className="gap-1.5 rounded-xl"
-                    >
+                    <Button asChild variant="primary" size="sm" className="gap-1.5 rounded-xl">
                       <Link href={`/walkthroughs/${walkthrough.id}/edit`}>
-                        <Pencil className="w-3.5 h-3.5" />
+                        <Pencil className="h-3.5 w-3.5" />
                         Edit
                       </Link>
                     </Button>
@@ -134,16 +123,16 @@ export default function WalkthroughDetailPage() {
         </div>
 
         {/* Scrollable content */}
-        <main className="flex-1 overflow-y-auto py-6 px-8 min-w-0">
-          <div className="max-w-4xl mx-auto space-y-4">
+        <main className="min-w-0 flex-1 overflow-y-auto px-8 py-6">
+          <div className="mx-auto max-w-4xl space-y-4">
             {isLoading ? (
               <DetailSkeleton />
             ) : walkthrough ? (
               <>
                 {/* Description */}
                 {walkthrough.description && (
-                  <div className="bg-white rounded-xl border border-gray-200 px-6 py-4">
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                  <div className="rounded-xl border border-gray-200 bg-white px-6 py-4">
+                    <p className="text-sm leading-relaxed text-gray-600">
                       {walkthrough.description}
                     </p>
                   </div>
@@ -151,19 +140,16 @@ export default function WalkthroughDetailPage() {
 
                 {/* Reading Progress */}
                 {progress && progress.totalChapters > 0 && !isOwner && (
-                  <div className="bg-white rounded-xl border border-gray-200 px-6 py-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">
-                        Review Progress
-                      </span>
+                  <div className="rounded-xl border border-gray-200 bg-white px-6 py-4">
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">Review Progress</span>
                       <span className="text-xs text-gray-500">
-                        {progress.readChapters}/{progress.totalChapters}{" "}
-                        chapters
+                        {progress.readChapters}/{progress.totalChapters} chapters
                       </span>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-2 overflow-hidden rounded-full bg-gray-100">
                       <div
-                        className="h-full bg-violet-500 rounded-full transition-all"
+                        className="h-full rounded-full bg-violet-500 transition-all"
                         style={{
                           width: `${Math.round((progress.readChapters / progress.totalChapters) * 100)}%`,
                         }}
@@ -181,9 +167,7 @@ export default function WalkthroughDetailPage() {
                       index={idx}
                       walkthroughId={walkthrough.id}
                       isOwner={isOwner}
-                      isRead={
-                        progress?.readChapterIds?.includes(chapter.id) ?? false
-                      }
+                      isRead={progress?.readChapterIds?.includes(chapter.id) ?? false}
                     />
                   ))}
 
@@ -198,9 +182,7 @@ export default function WalkthroughDetailPage() {
                 <CommentSection walkthroughId={walkthrough.id} />
               </>
             ) : (
-              <div className="text-center py-20 text-sm text-gray-400">
-                Walkthrough not found.
-              </div>
+              <div className="py-20 text-center text-sm text-gray-400">Walkthrough not found.</div>
             )}
           </div>
         </main>

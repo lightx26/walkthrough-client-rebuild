@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { UserAvatar, Skeleton } from "@/components/ui";
-import type { ProfileReviewingItem } from "@/types/profile";
+import Link from 'next/link';
+
+import { cn } from '@/lib/utils';
+import type { ProfileReviewingItem } from '@/types/profile';
+import { Clock } from 'lucide-react';
+
+import { Skeleton, UserAvatar } from '@/components/ui';
 
 interface ReviewingPanelProps {
   items?: ProfileReviewingItem[];
@@ -16,22 +18,20 @@ function reviewStatus(item: ProfileReviewingItem): {
   className: string;
 } {
   const pct =
-    item.totalChapters > 0
-      ? Math.round((item.readChapters / item.totalChapters) * 100)
-      : 0;
+    item.totalChapters > 0 ? Math.round((item.readChapters / item.totalChapters) * 100) : 0;
   if (pct >= 100)
     return {
-      label: "Done",
-      className: "bg-green-50 text-green-700 border border-green-200",
+      label: 'Done',
+      className: 'bg-green-50 text-green-700 border border-green-200',
     };
   if (pct > 0)
     return {
-      label: "In progress",
-      className: "bg-blue-50 text-blue-700 border border-blue-200",
+      label: 'In progress',
+      className: 'bg-blue-50 text-blue-700 border border-blue-200',
     };
   return {
-    label: "Not started",
-    className: "bg-gray-100 text-gray-500 border border-gray-200",
+    label: 'Not started',
+    className: 'bg-gray-100 text-gray-500 border border-gray-200',
   };
 }
 
@@ -41,7 +41,7 @@ function pct(item: ProfileReviewingItem): number {
 }
 
 function formatTime(sec: number): string {
-  if (sec < 60) return "—";
+  if (sec < 60) return '—';
   const m = Math.round(sec / 60);
   if (m < 60) return `${m}m`;
   return `${Math.round(m / 60)}h`;
@@ -51,21 +51,19 @@ export function ReviewingPanel({ items, isLoading }: ReviewingPanelProps) {
   const count = items?.length ?? 0;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5">
-      <h2 className="text-sm font-semibold text-gray-900 mb-1">
-        Reviewing <span className="text-gray-400 font-normal">{count}</span>
+    <div className="rounded-lg border border-gray-200 bg-white p-5">
+      <h2 className="mb-1 text-sm font-semibold text-gray-900">
+        Reviewing <span className="font-normal text-gray-400">{count}</span>
       </h2>
 
       {isLoading ? (
-        <div className="space-y-5 mt-3">
+        <div className="mt-3 space-y-5">
           {[0, 1, 2].map((i) => (
             <Skeleton key={i} className="h-16 w-full" />
           ))}
         </div>
       ) : !items || items.length === 0 ? (
-        <p className="text-sm text-gray-400 mt-4">
-          Not reviewing anything yet.
-        </p>
+        <p className="mt-4 text-sm text-gray-400">Not reviewing anything yet.</p>
       ) : (
         <div>
           {items.map((item) => {
@@ -73,55 +71,50 @@ export function ReviewingPanel({ items, isLoading }: ReviewingPanelProps) {
             const progress = pct(item);
 
             return (
-              <div
-                key={item.walkthroughId}
-                className="py-4 border-b border-gray-100 last:border-0"
-              >
+              <div key={item.walkthroughId} className="border-b border-gray-100 py-4 last:border-0">
                 <div className="flex items-start gap-3">
                   <UserAvatar
                     src={item.creatorAvatarUrl}
                     displayName={item.creatorDisplayName}
                     size="md"
                   />
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
                       <Link
                         href={`/walkthroughs/${item.walkthroughId}`}
-                        className="text-sm font-medium text-gray-900 hover:text-violet-700 transition-colors truncate"
+                        className="truncate text-sm font-medium text-gray-900 transition-colors hover:text-violet-700"
                       >
                         {item.title}
                       </Link>
                       <span
                         className={cn(
-                          "text-[11px] font-medium px-2 py-0.5 rounded-full shrink-0",
-                          className,
+                          'shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium',
+                          className
                         )}
                       >
                         {label}
                       </span>
                     </div>
-                    <p className="text-[11px] text-gray-400 mt-0.5">
-                      by {item.creatorDisplayName} &middot; {item.owner}/
-                      {item.repo} &middot; #{item.prNumber} &middot;{" "}
-                      {item.totalChapters} ch &middot;{" "}
-                      <Clock className="inline w-3 h-3" />{" "}
-                      {formatTime(item.timeSpentSec)}
+                    <p className="mt-0.5 text-[11px] text-gray-400">
+                      by {item.creatorDisplayName} &middot; {item.owner}/{item.repo} &middot; #
+                      {item.prNumber} &middot; {item.totalChapters} ch &middot;{' '}
+                      <Clock className="inline h-3 w-3" /> {formatTime(item.timeSpentSec)}
                     </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="mt-2 flex items-center gap-2">
+                      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
                         <div
                           className={cn(
-                            "h-full rounded-full transition-all",
+                            'h-full rounded-full transition-all',
                             progress >= 100
-                              ? "bg-green-500"
+                              ? 'bg-green-500'
                               : progress > 0
-                                ? "bg-violet-500"
-                                : "bg-gray-200",
+                                ? 'bg-violet-500'
+                                : 'bg-gray-200'
                           )}
                           style={{ width: `${progress}%` }}
                         />
                       </div>
-                      <span className="text-[11px] text-gray-400 shrink-0 w-8 text-right">
+                      <span className="w-8 shrink-0 text-right text-[11px] text-gray-400">
                         {progress}%
                       </span>
                     </div>

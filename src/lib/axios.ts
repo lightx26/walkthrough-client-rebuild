@@ -1,11 +1,11 @@
-import axios from "axios";
-import { toast } from "sonner";
-import { store } from "@/store";
-import { logout } from "@/store/slices/auth.slice";
+import { store } from '@/store';
+import { logout } from '@/store/slices/auth.slice';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  headers: { "Content-Type": "application/json" },
+  headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });
 
@@ -32,7 +32,7 @@ apiClient.interceptors.response.use(
     if (
       error.response?.status !== 401 ||
       originalRequest._retry ||
-      originalRequest.url === "/v1/auth/refresh"
+      originalRequest.url === '/v1/auth/refresh'
     ) {
       return Promise.reject(error);
     }
@@ -47,23 +47,21 @@ apiClient.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/auth/refresh`,
-        null,
-        { withCredentials: true },
-      );
+      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/auth/refresh`, null, {
+        withCredentials: true,
+      });
       processQueue(null);
       return apiClient(originalRequest);
     } catch (refreshError) {
       processQueue(refreshError);
       // Dispatch logout so AuthGuard redirects to /login.
       store.dispatch(logout());
-      toast.error("Session expired. Please log in again.");
+      toast.error('Session expired. Please log in again.');
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;
     }
-  },
+  }
 );
 
 export default apiClient;

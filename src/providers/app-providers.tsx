@@ -1,21 +1,18 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { usePathname } from "next/navigation";
-import { Provider } from "react-redux";
-import axios from "axios";
-import {
-  QueryClient,
-  QueryClientProvider,
-  QueryCache,
-  MutationCache,
-} from "@tanstack/react-query";
-import { toast, Toaster } from "sonner";
-import { store } from "@/store";
-import { useAppDispatch } from "@/store";
-import { setCredentials, logout } from "@/store/slices/auth.slice";
-import { authService } from "@/services/auth.service";
-import { getErrorMessage } from "@/lib/error";
+import { useEffect } from 'react';
+
+import { usePathname } from 'next/navigation';
+
+import { getErrorMessage } from '@/lib/error';
+import { authService } from '@/services/auth.service';
+import { store } from '@/store';
+import { useAppDispatch } from '@/store';
+import { logout, setCredentials } from '@/store/slices/auth.slice';
+import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import axios from 'axios';
+import { Provider } from 'react-redux';
+import { Toaster, toast } from 'sonner';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -61,7 +58,7 @@ function SessionRestorer() {
 
   useEffect(() => {
     // Skip session restore on auth pages — no cookies exist yet.
-    if (pathname.startsWith("/auth/") || pathname === "/login") {
+    if (pathname.startsWith('/auth/') || pathname === '/login') {
       dispatch(logout());
       return;
     }

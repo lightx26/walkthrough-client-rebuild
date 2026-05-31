@@ -1,6 +1,6 @@
-import apiClient from "@/lib/axios";
-import type { DataResponse, ListData, PageData } from "@/types/api";
-import type { PrFile, PullRequest, Repository } from "@/types/github";
+import apiClient from '@/lib/axios';
+import type { DataResponse, ListData, PageData } from '@/types/api';
+import type { PrFile, PullRequest, Repository } from '@/types/github';
 
 interface GetRepositoriesParams {
   page?: number;
@@ -21,43 +21,37 @@ export const githubService = {
   async getRepositories({
     page = 1,
     perPage = 20,
-    sort = "updated",
+    sort = 'updated',
     q,
     type,
     language,
   }: GetRepositoriesParams = {}): Promise<DataResponse<PageData<Repository>>> {
-    const { data } = await apiClient.get<DataResponse<PageData<Repository>>>(
-      "/v1/github/repos",
-      {
-        params: {
-          page,
-          perPage,
-          sort,
-          ...(q ? { q } : {}),
-          ...(type ? { type } : {}),
-          ...(language ? { language } : {}),
-        },
+    const { data } = await apiClient.get<DataResponse<PageData<Repository>>>('/v1/github/repos', {
+      params: {
+        page,
+        perPage,
+        sort,
+        ...(q ? { q } : {}),
+        ...(type ? { type } : {}),
+        ...(language ? { language } : {}),
       },
-    );
+    });
     return data;
   },
 
-  async getRepository(
-    owner: string,
-    repo: string,
-  ): Promise<DataResponse<Repository>> {
+  async getRepository(owner: string, repo: string): Promise<DataResponse<Repository>> {
     const { data } = await apiClient.get<DataResponse<Repository>>(
-      `/v1/github/repos/${owner}/${repo}`,
+      `/v1/github/repos/${owner}/${repo}`
     );
     return data;
   },
 
   async getRepositoryPullRequests(
     owner: string,
-    repo: string,
+    repo: string
   ): Promise<DataResponse<ListData<PullRequest>>> {
     const { data } = await apiClient.get<DataResponse<ListData<PullRequest>>>(
-      `/v1/github/repos/${owner}/${repo}/pulls`,
+      `/v1/github/repos/${owner}/${repo}/pulls`
     );
     return data;
   },
@@ -68,7 +62,7 @@ export const githubService = {
     prNumber,
   }: GetPullRequestParams): Promise<DataResponse<PullRequest>> {
     const { data } = await apiClient.get<DataResponse<PullRequest>>(
-      `/v1/github/repos/${owner}/${repo}/pulls/${prNumber}`,
+      `/v1/github/repos/${owner}/${repo}/pulls/${prNumber}`
     );
     return data;
   },
@@ -76,10 +70,10 @@ export const githubService = {
   async getPullRequestFiles(
     owner: string,
     repo: string,
-    prNumber: number,
+    prNumber: number
   ): Promise<DataResponse<ListData<PrFile>>> {
     const { data } = await apiClient.get<DataResponse<ListData<PrFile>>>(
-      `/v1/github/repos/${owner}/${repo}/pulls/${prNumber}/files`,
+      `/v1/github/repos/${owner}/${repo}/pulls/${prNumber}/files`
     );
     return data;
   },

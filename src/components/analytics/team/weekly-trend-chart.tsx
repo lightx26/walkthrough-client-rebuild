@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { useMemo } from "react";
-import type { RepoTrendPoint } from "@/types/analytics";
+import { useMemo } from 'react';
+
+import type { RepoTrendPoint } from '@/types/analytics';
 
 export function WeeklyTrendChart({ trend }: { trend: RepoTrendPoint[] }) {
   const chartHeight = 180;
@@ -24,33 +25,29 @@ export function WeeklyTrendChart({ trend }: { trend: RepoTrendPoint[] }) {
     }
     return trend.map((p, i) => ({
       x: padding.left + (innerW * i) / (trend.length - 1),
-      y:
-        padding.top +
-        innerH * (1 - Math.max(0, Math.min(1, p.avgCompletionRate))),
+      y: padding.top + innerH * (1 - Math.max(0, Math.min(1, p.avgCompletionRate))),
       week: p.week,
       rate: p.avgCompletionRate,
     }));
   }, [trend, innerH, innerW, padding.left, padding.top]);
 
   const path = points.length
-    ? points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ")
-    : "";
+    ? points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
+    : '';
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl px-5 py-4">
-      <h3 className="text-sm font-semibold text-gray-900">
-        Weekly completion rate trend
-      </h3>
-      <p className="text-xs text-gray-500 mb-3">
-        Meaningful signal across{" "}
-        {trend.reduce((s, p) => s + p.reviewsCompleted, 0)} cumulative sessions
+    <div className="rounded-xl border border-gray-200 bg-white px-5 py-4">
+      <h3 className="text-sm font-semibold text-gray-900">Weekly completion rate trend</h3>
+      <p className="mb-3 text-xs text-gray-500">
+        Meaningful signal across {trend.reduce((s, p) => s + p.reviewsCompleted, 0)} cumulative
+        sessions
       </p>
       {trend.length === 0 ? (
-        <div className="h-45 flex items-center justify-center text-xs text-gray-400">
+        <div className="flex h-45 items-center justify-center text-xs text-gray-400">
           Not enough data yet
         </div>
       ) : (
-        <svg viewBox={`0 0 ${width} ${chartHeight}`} className="w-full h-45">
+        <svg viewBox={`0 0 ${width} ${chartHeight}`} className="h-45 w-full">
           {[0, 0.5, 0.65, 0.8, 1].map((rate) => {
             const y = padding.top + innerH * (1 - rate);
             return (
@@ -95,7 +92,7 @@ export function WeeklyTrendChart({ trend }: { trend: RepoTrendPoint[] }) {
               className="fill-gray-400"
               fontSize="9"
             >
-              {p.week.replace(/^\d{4}-/, "")}
+              {p.week.replace(/^\d{4}-/, '')}
             </text>
           ))}
         </svg>

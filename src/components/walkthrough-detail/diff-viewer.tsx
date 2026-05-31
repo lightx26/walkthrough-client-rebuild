@@ -1,15 +1,18 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { cn } from "@/lib/utils";
-import type { WalkthroughComment } from "@/types/walkthrough";
-import { useSyntaxHighlight } from "@/hooks/use-syntax-highlight";
-import { parsePatch } from "../../utils/code-diff-utils";
-import { CommentThread } from "./comment-thread";
-import { AddCommentRow } from "./add-comment-row";
+import React, { useState } from 'react';
 
-export { parsePatch, computeDiffStats } from "../../utils/code-diff-utils";
-export type { DiffLineType, DiffLine } from "../../utils/code-diff-utils";
+import { cn } from '@/lib/utils';
+import type { WalkthroughComment } from '@/types/walkthrough';
+
+import { useSyntaxHighlight } from '@/hooks/use-syntax-highlight';
+
+import { parsePatch } from '../../utils/code-diff-utils';
+import { AddCommentRow } from './add-comment-row';
+import { CommentThread } from './comment-thread';
+
+export { parsePatch, computeDiffStats } from '../../utils/code-diff-utils';
+export type { DiffLineType, DiffLine } from '../../utils/code-diff-utils';
 
 // ── Main DiffViewer ──────────────────────────────────────────────────────────
 
@@ -44,34 +47,34 @@ export function DiffViewer({
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-[11px] font-mono border-collapse table-fixed">
+      <table className="w-full table-fixed border-collapse font-mono text-[11px]">
         <tbody>
           {lines.map((line, i) => {
             const lineComments = commentsByPosition.get(i) ?? [];
             const isAddingComment = activeLineIdx === i;
 
-            if (line.type === "hunk") {
+            if (line.type === 'hunk') {
               return (
                 <tr key={i} className="bg-blue-50">
-                  <td className="w-10 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200" />
-                  <td className="w-10 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-200" />
+                  <td className="w-10 border-r border-gray-200 px-2 py-0.5 text-right text-gray-400 select-none" />
+                  <td className="w-10 border-r border-gray-200 px-2 py-0.5 text-right text-gray-400 select-none" />
                   <td className="px-3 py-0.5 text-blue-500">{line.content}</td>
                 </tr>
               );
             }
 
             const rowBg = cn(
-              line.type === "add" && "bg-green-50",
-              line.type === "del" && "bg-red-50",
-              line.type === "ctx" && "bg-white",
+              line.type === 'add' && 'bg-green-50',
+              line.type === 'del' && 'bg-red-50',
+              line.type === 'ctx' && 'bg-white'
             );
             const lineTokens = tokens?.get(i);
             const textCls = lineTokens
               ? undefined
               : cn(
-                  line.type === "add" && "text-green-700",
-                  line.type === "del" && "text-red-700",
-                  line.type === "ctx" && "text-gray-800",
+                  line.type === 'add' && 'text-green-700',
+                  line.type === 'del' && 'text-red-700',
+                  line.type === 'ctx' && 'text-gray-800'
                 );
 
             return (
@@ -79,23 +82,19 @@ export function DiffViewer({
                 <tr
                   className={cn(
                     rowBg,
-                    "group cursor-pointer hover:brightness-95 transition-[filter]",
+                    'group cursor-pointer transition-[filter] hover:brightness-95'
                   )}
                   onClick={() => setActiveLineIdx(isAddingComment ? null : i)}
                 >
-                  <td className="w-10 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-100 min-w-10">
-                    {line.oldNo ?? ""}
+                  <td className="w-10 min-w-10 border-r border-gray-100 px-2 py-0.5 text-right text-gray-400 select-none">
+                    {line.oldNo ?? ''}
                   </td>
-                  <td className="w-10 px-2 py-0.5 text-right text-gray-400 select-none border-r border-gray-100 min-w-10">
-                    {line.newNo ?? ""}
+                  <td className="w-10 min-w-10 border-r border-gray-100 px-2 py-0.5 text-right text-gray-400 select-none">
+                    {line.newNo ?? ''}
                   </td>
-                  <td className={cn("px-3 py-0.5 whitespace-pre", textCls)}>
-                    <span className="select-none mr-1 text-gray-400">
-                      {line.type === "add"
-                        ? "+"
-                        : line.type === "del"
-                          ? "-"
-                          : " "}
+                  <td className={cn('px-3 py-0.5 whitespace-pre', textCls)}>
+                    <span className="mr-1 text-gray-400 select-none">
+                      {line.type === 'add' ? '+' : line.type === 'del' ? '-' : ' '}
                     </span>
                     {lineTokens
                       ? lineTokens.map((token, j) => (

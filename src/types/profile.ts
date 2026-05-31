@@ -48,7 +48,7 @@ export interface RecentPullRequest {
   id: number;
   number: number;
   title: string;
-  state: "open" | "merged" | "closed" | "draft";
+  state: 'open' | 'merged' | 'closed' | 'draft';
   htmlUrl: string;
   createdAt: string;
   updatedAt: string;

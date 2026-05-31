@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { templateService } from "@/services/template.service";
+import { templateService } from '@/services/template.service';
 import type {
   CreateTemplateRequest,
   DuplicateTemplateRequest,
   TemplatePrType,
   UpdateTemplateRequest,
-} from "@/types/template";
+} from '@/types/template';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-const TEMPLATES_KEY = ["templates"] as const;
+const TEMPLATES_KEY = ['templates'] as const;
 
 export function useTemplates(prType?: TemplatePrType) {
   return useQuery({
@@ -20,7 +20,7 @@ export function useTemplates(prType?: TemplatePrType) {
 
 export function useTemplate(id: string | null | undefined) {
   return useQuery({
-    queryKey: [...TEMPLATES_KEY, "detail", id],
+    queryKey: [...TEMPLATES_KEY, 'detail', id],
     queryFn: () => templateService.getById(id as string),
     enabled: !!id,
   });
@@ -29,8 +29,7 @@ export function useTemplate(id: string | null | undefined) {
 export function useCreateTemplate() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (request: CreateTemplateRequest) =>
-      templateService.create(request),
+    mutationFn: (request: CreateTemplateRequest) => templateService.create(request),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TEMPLATES_KEY });
     },
@@ -40,8 +39,7 @@ export function useCreateTemplate() {
 export function useUpdateTemplate(id: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (request: UpdateTemplateRequest) =>
-      templateService.update(id, request),
+    mutationFn: (request: UpdateTemplateRequest) => templateService.update(id, request),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TEMPLATES_KEY });
     },
@@ -60,7 +58,7 @@ export function useDeleteTemplate() {
 
 export function useTopDuplicatedTemplates(limit = 5) {
   return useQuery({
-    queryKey: [...TEMPLATES_KEY, "stats", "top-duplicated", { limit }],
+    queryKey: [...TEMPLATES_KEY, 'stats', 'top-duplicated', { limit }],
     queryFn: () => templateService.topDuplicated(limit),
   });
 }
@@ -68,13 +66,8 @@ export function useTopDuplicatedTemplates(limit = 5) {
 export function useDuplicateTemplate() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      id,
-      request,
-    }: {
-      id: string;
-      request?: DuplicateTemplateRequest;
-    }) => templateService.duplicate(id, request),
+    mutationFn: ({ id, request }: { id: string; request?: DuplicateTemplateRequest }) =>
+      templateService.duplicate(id, request),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TEMPLATES_KEY });
     },
