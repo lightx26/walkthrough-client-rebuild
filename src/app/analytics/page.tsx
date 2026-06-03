@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -14,7 +14,7 @@ import { useRepository } from '@/hooks/use-github';
 
 type Tab = 'author' | 'team';
 
-export default function AnalyticsPage() {
+function AnalyticsContent() {
   const [tab, setTab] = useState<Tab>('author');
   const searchParams = useSearchParams();
   const owner = searchParams.get('owner') ?? undefined;
@@ -79,5 +79,13 @@ export default function AnalyticsPage() {
         )}
       </main>
     </DashboardLayout>
+  );
+}
+
+export default function AnalyticsPage() {
+  return (
+    <Suspense>
+      <AnalyticsContent />
+    </Suspense>
   );
 }
