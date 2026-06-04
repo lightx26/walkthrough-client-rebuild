@@ -2,102 +2,12 @@
 
 import Link from 'next/link';
 
-
-
 import { ArrowRight, ChevronRight, Waypoints } from 'lucide-react';
-
-
 
 import { PrStateBadge, PrStateIcon } from '@/components/repos/pr-state-badge';
 import { UserAvatar } from '@/components/ui';
 
-
-
 import { formatRelativeTime } from '@/utils/date-diff';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export interface PrRowItem {
   number: number;

@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 
+import Link from 'next/link';
+
 import { cn } from '@/lib/utils';
 import type { PullRequest, PullRequestState } from '@/types/github';
+import { Plus } from 'lucide-react';
 
 import { Skeleton } from '@/components/ui';
 import { Button } from '@/components/ui/button';
@@ -57,6 +60,9 @@ export function PrList({ prs, isLoading, owner, repo }: PrListProps) {
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white shadow-[0_1px_3px_rgba(0,0,0,.04)]">
+      <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+        <h2 className="text-sm font-semibold text-gray-900">Pull requests</h2>
+      </div>
       <div className="flex items-center border-b border-gray-100 px-5">
         <div className="flex items-center gap-0.5">
           {tabs.map((tab) => (
