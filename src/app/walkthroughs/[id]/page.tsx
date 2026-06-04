@@ -5,6 +5,10 @@ import { useParams, useRouter } from 'next/navigation';
 
 import { ArrowLeft, BarChart2, Pencil, Waypoints } from 'lucide-react';
 
+import { RiskAnalysisPanel } from '@/components/walkthrough-detail/risk/risk-analysis-panel';
+import { ScanRisksButton } from '@/components/walkthrough-detail/risk/scan-risks-button';
+import { useRiskScan } from '@/hooks/use-risk';
+
 import { DashboardLayout } from '@/components/layout';
 import { ApiErrorState, Skeleton, UserAvatar } from '@/components/ui';
 import { Button } from '@/components/ui/button';
@@ -39,6 +43,15 @@ export default function WalkthroughDetailPage() {
 
   const { data, isLoading, error, refetch } = useWalkthrough(params.id);
   const { data: progressData } = useReadProgress(params.id);
+  const { data: riskScan } = useRiskScan(params.id);
+
+  // group completed risks by walkthroughFileId for per-file badges
+  const risksByFileId = riskScan?.status === 'COMPLETED'
+    ? riskScan.risks.reduce<Record<string, import('@/types/risk').RiskZone[]>>((acc, r) => {
+        acc[r.walkthroughFileId] = [...(acc[r.walkthroughFileId] ?? []), r];
+        return acc;
+      }, {})
+    : {};
 
   const walkthrough = data?.data;
   const progress = progressData?.data;
@@ -94,6 +107,8 @@ export default function WalkthroughDetailPage() {
                   </span>
                 </div>
 
+                <ScanRisksButton walkthroughId={walkthrough.id} />
+
                 {isOwner && (
                   <>
                     {walkthrough.status !== 'DRAFT' && (
@@ -138,6 +153,11 @@ export default function WalkthroughDetailPage() {
                   </div>
                 )}
 
+                {/* Risk Analysis */}
+                {riskScan && (
+                  <RiskAnalysisPanel walkthroughId={walkthrough.id} scan={riskScan} />
+                )}
+
                 {/* Reading Progress */}
                 {progress && progress.totalChapters > 0 && !isOwner && (
                   <div className="rounded-xl border border-gray-200 bg-white px-6 py-4">
@@ -168,6 +188,7 @@ export default function WalkthroughDetailPage() {
                       walkthroughId={walkthrough.id}
                       isOwner={isOwner}
                       isRead={progress?.readChapterIds?.includes(chapter.id) ?? false}
+                      risksByFileId={risksByFileId}
                     />
                   ))}
 

@@ -3,20 +3,23 @@
 import { useState } from 'react';
 
 import type { WalkthroughComment, WalkthroughFile } from '@/types/walkthrough';
+import type { RiskZone } from '@/types/risk';
 import { ChevronDown, ChevronUp, FileText } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
 import { computeDiffStats } from '../../utils/code-diff-utils';
 import { DiffViewer } from './diff-viewer';
+import { FileRiskBadge } from './risk/file-risk-badge';
 
 interface FileSectionProps {
   file: WalkthroughFile;
   walkthroughId: string;
   comments: WalkthroughComment[];
+  risks?: RiskZone[];
 }
 
-export function FileSection({ file, walkthroughId, comments }: FileSectionProps) {
+export function FileSection({ file, walkthroughId, comments, risks = [] }: FileSectionProps) {
   const [expanded, setExpanded] = useState(true);
   const stats = file.rawPatch ? computeDiffStats(file.rawPatch) : null;
 
@@ -36,6 +39,7 @@ export function FileSection({ file, walkthroughId, comments }: FileSectionProps)
         >
           {file.filename}
         </span>
+        {risks.length > 0 && <FileRiskBadge risks={risks} />}
         {stats && (
           <span className="shrink-0 font-mono text-xs font-medium">
             <span className="text-green-600">+{stats.added}</span>{' '}

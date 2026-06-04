@@ -23,6 +23,7 @@ interface ChapterSectionProps {
   walkthroughId: string;
   isOwner: boolean;
   isRead: boolean;
+  risksByFileId?: Record<string, import('@/types/risk').RiskZone[]>;
 }
 
 export function ChapterSection({
@@ -31,6 +32,7 @@ export function ChapterSection({
   walkthroughId,
   isOwner,
   isRead,
+  risksByFileId = {},
 }: ChapterSectionProps) {
   const [expanded, setExpanded] = useState(index === 0);
   const markChapterRead = useMarkChapterRead(walkthroughId);
@@ -181,6 +183,7 @@ export function ChapterSection({
                 file={file}
                 walkthroughId={walkthroughId}
                 comments={commentsByFile[file.id] ?? []}
+                risks={risksByFileId[file.id] ?? []}
               />
             ))}
           </div>
