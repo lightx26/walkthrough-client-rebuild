@@ -47,9 +47,9 @@ export function ScanRisksButton({ walkthroughId }: ScanRisksButtonProps) {
       variant="outline"
       onClick={() => trigger.mutate()}
       disabled={trigger.isPending}
-      className="gap-2"
+      className="gap-1.5 rounded-xl"
     >
-      <Zap className="h-4 w-4" />
+      <Zap className="size-3.5" />
       Scan Risks
     </Button>
   );
