@@ -32,10 +32,10 @@ export function ScanRisksButton({ walkthroughId }: ScanRisksButtonProps) {
     return (
       <Button
         variant="outline"
-        onClick={() => trigger.mutate()}
-        className={`gap-2 ${hasCritical ? 'border-red-200 text-red-600 hover:bg-red-50' : 'border-orange-200 text-orange-600 hover:bg-orange-50'}`}
+        size='sm'
+        className={`gap-1.5 rounded-xl ${hasCritical ? 'border-red-200 text-red-600 hover:bg-red-50' : 'border-orange-200 text-orange-600 hover:bg-orange-50'}`}
       >
-        <ShieldAlert className="h-4 w-4" />
+        <ShieldAlert className="size-3.5" />
         {totalRisks} {totalRisks === 1 ? 'risk' : 'risks'}
         {hasCritical && <span className="text-xs font-semibold">· {scan.counts.critical} critical</span>}
       </Button>

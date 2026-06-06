@@ -2,10 +2,18 @@
 
 import { riskService } from '@/services/risk.service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 
-const POLLING_INTERVAL_MS = 1500;
+const POLLING_INTERVAL_MS = 5000;
+const MAX_POLLING_DURATION_MS = 5 * 60 * 1000; // 5 minutes max
 
 export function useRiskScan(walkthroughId: string) {
+  const startTimeRef = useRef<number>(Date.now());
+
+  useEffect(() => {
+    startTimeRef.current = Date.now();
+  }, [walkthroughId]);
+
   return useQuery({
     queryKey: ['risk', 'scan', walkthroughId],
     queryFn: async () => {
@@ -19,7 +27,13 @@ export function useRiskScan(walkthroughId: string) {
     enabled: !!walkthroughId,
     refetchInterval: (query) => {
       const status = query.state.data?.status;
-      return status === 'PENDING' || status === 'ANALYZING' ? POLLING_INTERVAL_MS : false;
+      const isProcessing = status === 'PENDING' || status === 'ANALYZING';
+      const isTimedOut = Date.now() - startTimeRef.current > MAX_POLLING_DURATION_MS;
+
+      if (isProcessing && !isTimedOut) {
+        return POLLING_INTERVAL_MS;
+      }
+      return false;
     },
   });
 }
