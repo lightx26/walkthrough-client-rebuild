@@ -153,11 +153,6 @@ export default function WalkthroughDetailPage() {
                   </div>
                 )}
 
-                {/* Risk Analysis */}
-                {riskScan && (
-                  <RiskAnalysisPanel walkthroughId={walkthrough.id} scan={riskScan} />
-                )}
-
                 {/* Reading Progress */}
                 {progress && progress.totalChapters > 0 && !isOwner && (
                   <div className="rounded-xl border border-gray-200 bg-white px-6 py-4">
@@ -179,6 +174,15 @@ export default function WalkthroughDetailPage() {
                 )}
 
                 <ChapterExpandProvider>
+                  {/* Risk Analysis */}
+                  {riskScan && (
+                    <RiskAnalysisPanel
+                      walkthroughId={walkthrough.id}
+                      scan={riskScan}
+                      chapters={walkthrough.chapters}
+                    />
+                  )}
+
                   {/* Chapters */}
                   {walkthrough.chapters.map((chapter, idx) => (
                     <ChapterSection

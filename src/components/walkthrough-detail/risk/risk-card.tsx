@@ -15,9 +15,10 @@ const LEVEL_STYLES: Record<RiskLevel, { border: string; levelBg: string; levelTe
 interface RiskCardProps {
   risk: RiskZone;
   walkthroughId: string;
+  onFileClick?: (walkthroughFileId: string) => void;
 }
 
-export function RiskCard({ risk, walkthroughId }: RiskCardProps) {
+export function RiskCard({ risk, walkthroughId, onFileClick }: RiskCardProps) {
   const styles = LEVEL_STYLES[risk.level];
   const markReviewed = useMarkReviewed(walkthroughId);
   const isReviewed = risk.reviewStatus === 'REVIEWED';
@@ -57,8 +58,19 @@ export function RiskCard({ risk, walkthroughId }: RiskCardProps) {
       )}
 
       <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-400">
-        <FileCode className="h-3.5 w-3.5" />
-        <span>{risk.filename}</span>
+        <FileCode className="h-3.5 w-3.5 shrink-0" />
+        {onFileClick ? (
+          <button
+            type="button"
+            onClick={() => onFileClick(risk.walkthroughFileId)}
+            className="truncate font-mono hover:text-violet-600 hover:underline cursor-pointer transition-colors"
+            title={`Go to ${risk.filename}`}
+          >
+            {risk.filename}
+          </button>
+        ) : (
+          <span className="truncate font-mono">{risk.filename}</span>
+        )}
       </div>
     </div>
   );

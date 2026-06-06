@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { RefreshCw, ShieldCheck } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { ChevronDown, ChevronUp, RefreshCw, ShieldCheck } from 'lucide-react';
 import type { RiskLevel, RiskScan } from '@/types/risk';
+import type { Chapter } from '@/types/walkthrough';
 import { useTriggerScan } from '@/hooks/use-risk';
 import { Button } from '@/components/ui/button';
+import { useChapterExpand } from '../chapter-expand-context';
 import { AnalyzingProgress } from './analyzing-progress';
 import { RiskCard } from './risk-card';
 import { RiskFilterTabs, filterRisks } from './risk-filter-tabs';
@@ -14,13 +16,37 @@ type FilterLevel = 'ALL' | RiskLevel;
 interface RiskAnalysisPanelProps {
   walkthroughId: string;
   scan: RiskScan;
+  chapters?: Chapter[];
 }
 
-export function RiskAnalysisPanel({ walkthroughId, scan }: RiskAnalysisPanelProps) {
+export function RiskAnalysisPanel({ walkthroughId, scan, chapters = [] }: RiskAnalysisPanelProps) {
   const [activeFilter, setActiveFilter] = useState<FilterLevel>('ALL');
+  const [resultsOpen, setResultsOpen] = useState(true);
   const trigger = useTriggerScan(walkthroughId);
+  const chapterExpand = useChapterExpand();
+
+  const fileIdToChapterId = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const ch of chapters) {
+      for (const f of ch.files) {
+        map[f.id] = ch.id;
+      }
+    }
+    return map;
+  }, [chapters]);
+
+  const handleFileClick = (walkthroughFileId: string) => {
+    const chapterId = fileIdToChapterId[walkthroughFileId];
+    if (chapterId && chapterExpand) {
+      chapterExpand.expandAndScrollToFile(chapterId, walkthroughFileId);
+    } else {
+      const el = document.getElementById(`file-${walkthroughFileId}`);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   const isScanning = scan.status === 'PENDING' || scan.status === 'ANALYZING';
+  const hasResults = scan.status === 'COMPLETED' && scan.risks.length > 0;
   const visibleRisks = filterRisks(scan.risks, activeFilter);
 
   const modelLabel = [scan.provider, scan.model].filter(Boolean).join(' · ');
@@ -57,18 +83,35 @@ export function RiskAnalysisPanel({ walkthroughId, scan }: RiskAnalysisPanelProp
               </div>
             )}
           </div>
-          {!isScanning && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="gap-1.5 text-gray-500"
-              onClick={() => trigger.mutate()}
-              disabled={trigger.isPending}
-            >
-              <RefreshCw className="h-3.5 w-3.5" />
-              Re-scan
-            </Button>
-          )}
+          <div className="flex items-center gap-1">
+            {!isScanning && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 text-gray-500"
+                onClick={() => trigger.mutate()}
+                disabled={trigger.isPending}
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                Re-scan
+              </Button>
+            )}
+            {hasResults && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-400 hover:text-gray-600"
+                onClick={() => setResultsOpen((v) => !v)}
+                aria-label={resultsOpen ? 'Collapse results' : 'Expand results'}
+              >
+                {resultsOpen ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -77,13 +120,18 @@ export function RiskAnalysisPanel({ walkthroughId, scan }: RiskAnalysisPanelProp
         <AnalyzingProgress fileProgress={scan.fileProgress} />
       )}
 
-      {/* Results */}
-      {scan.status === 'COMPLETED' && scan.risks.length > 0 && (
+      {/* Results — collapsible */}
+      {hasResults && resultsOpen && (
         <div className="space-y-3">
           <RiskFilterTabs risks={scan.risks} active={activeFilter} onChange={setActiveFilter} />
           <div className="space-y-3">
             {visibleRisks.map((risk) => (
-              <RiskCard key={risk.id} risk={risk} walkthroughId={walkthroughId} />
+              <RiskCard
+                key={risk.id}
+                risk={risk}
+                walkthroughId={walkthroughId}
+                onFileClick={handleFileClick}
+              />
             ))}
           </div>
         </div>
