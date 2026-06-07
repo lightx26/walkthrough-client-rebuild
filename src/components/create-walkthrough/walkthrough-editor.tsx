@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import type { PrFile } from '@/types/github';
 import type { Template } from '@/types/template';
 import type { ChapterRequest } from '@/types/walkthrough';
-import { ArrowLeft, LayoutTemplate, Plus, Save, Send } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, LayoutTemplate, Plus, Save, Send } from 'lucide-react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { toast } from 'sonner';
@@ -39,6 +39,7 @@ export interface WalkthroughEditorProps {
   isSaving: boolean;
   requireAllFilesAssigned?: boolean;
   canDeleteChapters?: boolean;
+  publishError?: string;
 }
 
 function chaptersToRequest(chapters: ChapterDraft[]): ChapterRequest[] {
@@ -69,6 +70,7 @@ export function WalkthroughEditor({
   isSaving,
   requireAllFilesAssigned = false,
   canDeleteChapters = false,
+  publishError,
 }: WalkthroughEditorProps) {
   const router = useRouter();
 
@@ -97,6 +99,15 @@ export function WalkthroughEditor({
 
   const handleDeleteChapter = (id: string) => {
     setChapters((prev) => prev.filter((ch) => ch.id !== id));
+  };
+
+  const handleChapterReorder = (fromIndex: number, toIndex: number) => {
+    setChapters((prev) => {
+      const updated = [...prev];
+      const [moved] = updated.splice(fromIndex, 1);
+      updated.splice(toIndex, 0, moved);
+      return updated;
+    });
   };
 
   const handleAddChapter = () => {
@@ -215,6 +226,19 @@ export function WalkthroughEditor({
           {/* Scrollable form */}
           <div className="flex-1 overflow-y-auto px-6 py-5">
             <div className="mx-auto max-w-2xl space-y-5">
+              {/* Publish validation error */}
+              {publishError && (
+                <div className="flex gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+                  <div className="min-w-0">
+                    <p className="mb-1 text-sm font-semibold text-red-800">Cannot publish</p>
+                    <p className="whitespace-pre-line text-xs leading-relaxed text-red-700">
+                      {publishError}
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Title & description card */}
               <div className="space-y-3 rounded-xl border border-gray-200 bg-white px-5 py-4">
                 <div>
@@ -266,6 +290,7 @@ export function WalkthroughEditor({
                       index={i}
                       onChange={(updated) => handleChapterChange(chapter.id, updated)}
                       onViewFileDiff={setActiveFileDiff}
+                      onReorder={handleChapterReorder}
                       onDelete={
                         canDeleteChapters && chapters.length > 1
                           ? () => handleDeleteChapter(chapter.id)
