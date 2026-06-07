@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
-import { ArrowLeft, BarChart2, Pencil, Waypoints } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, BarChart2, Pencil, Waypoints } from 'lucide-react';
 
 import { RiskAnalysisPanel } from '@/components/walkthrough-detail/risk/risk-analysis-panel';
 import { ScanRisksButton } from '@/components/walkthrough-detail/risk/scan-risks-button';
@@ -21,7 +22,7 @@ import {
 import { ChapterExpandProvider } from '@/components/walkthrough-detail/chapter-expand-context';
 
 import { useCurrentUser } from '@/hooks/use-auth';
-import { useReadProgress, useWalkthrough } from '@/hooks/use-walkthrough';
+import { useReadProgress, useSyncCheck, useWalkthrough } from '@/hooks/use-walkthrough';
 
 import { formatRelativeTime } from '@/utils/date-diff';
 
@@ -44,6 +45,21 @@ export default function WalkthroughDetailPage() {
   const { data, isLoading, error, refetch } = useWalkthrough(params.id);
   const { data: progressData } = useReadProgress(params.id);
   const { data: riskScan } = useRiskScan(params.id);
+  const syncCheck = useSyncCheck(params.id);
+  const hasSyncedRef = useRef(false);
+
+  const walkthrough = data?.data;
+
+  // Fire a sync-check once per page load for PUBLISHED walkthroughs.
+  // The server's GITHUB_PR_FILES cache (10-min TTL) absorbs repeated calls.
+  useEffect(() => {
+    if (!walkthrough || hasSyncedRef.current) return;
+    if (walkthrough.status === 'PUBLISHED') {
+      hasSyncedRef.current = true;
+      syncCheck.mutate();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [walkthrough?.id, walkthrough?.status]);
 
   // group completed risks by walkthroughFileId for per-file badges
   const risksByFileId = riskScan?.status === 'COMPLETED'
@@ -52,8 +68,6 @@ export default function WalkthroughDetailPage() {
         return acc;
       }, {})
     : {};
-
-  const walkthrough = data?.data;
   const progress = progressData?.data;
   const isOwner = !!user && !!walkthrough && user.id === walkthrough.userId;
 
@@ -144,6 +158,28 @@ export default function WalkthroughDetailPage() {
               <DetailSkeleton />
             ) : walkthrough ? (
               <>
+                {/* Outdated banner */}
+                {walkthrough.status === 'OUTDATED' && (
+                  <div className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
+                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
+                    <div className="min-w-0">
+                      <p className="mb-1 text-sm font-semibold text-amber-800">
+                        This walkthrough is out of date
+                      </p>
+                      {walkthrough.outdatedReason && (
+                        <p className="whitespace-pre-line text-xs leading-relaxed text-amber-700">
+                          {walkthrough.outdatedReason}
+                        </p>
+                      )}
+                      {isOwner && (
+                        <p className="mt-2 text-xs text-amber-600">
+                          Edit the walkthrough to fix the file set, then re-publish.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Description */}
                 {walkthrough.description && (
                   <div className="rounded-xl border border-gray-200 bg-white px-6 py-4">
