@@ -21,7 +21,7 @@ interface RiskAnalysisPanelProps {
 
 export function RiskAnalysisPanel({ walkthroughId, scan, chapters = [] }: RiskAnalysisPanelProps) {
   const [activeFilter, setActiveFilter] = useState<FilterLevel>('ALL');
-  const [resultsOpen, setResultsOpen] = useState(true);
+  const [resultsOpen, setResultsOpen] = useState(false);
   const trigger = useTriggerScan(walkthroughId);
   const chapterExpand = useChapterExpand();
 
