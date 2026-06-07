@@ -2,8 +2,7 @@
 
 import type { RecentPullRequest } from '@/types/profile';
 
-import { PrRow } from '@/components/repos';
-import type { PrRowItem } from '@/components/repos';
+import { PrRow, PrRowItem } from '@/components/profile/pr-row';
 import { Skeleton } from '@/components/ui';
 
 interface RecentPrsPanelProps {
@@ -19,7 +18,6 @@ function toPrRowItem(pr: RecentPullRequest): PrRowItem {
     state: pr.state,
     updatedAt: pr.updatedAt,
     author: pr.author,
-    head: pr.headRef ? { ref: pr.headRef } : undefined,
   };
 }
 
