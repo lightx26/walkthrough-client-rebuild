@@ -250,6 +250,7 @@ export function WalkthroughEditor({
                     placeholder="e.g. Snapshot versioning — full walkthrough"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    maxLength={200}
                     className="w-full bg-transparent text-base text-gray-900 outline-none placeholder:text-gray-300"
                   />
                 </div>
@@ -263,6 +264,7 @@ export function WalkthroughEditor({
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
+                    maxLength={1000}
                     className="w-full resize-none bg-transparent text-sm leading-relaxed text-gray-700 outline-none placeholder:text-gray-300"
                   />
                 </div>

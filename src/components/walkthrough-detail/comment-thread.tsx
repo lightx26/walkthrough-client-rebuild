@@ -113,6 +113,7 @@ export function CommentThread({
                     placeholder="Write a reply..."
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
+                    maxLength={1000}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey && replyText.trim()) {
                         e.preventDefault();

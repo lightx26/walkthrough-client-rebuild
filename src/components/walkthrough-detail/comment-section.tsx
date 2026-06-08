@@ -65,6 +65,7 @@ export function CommentSection({ walkthroughId }: CommentSectionProps) {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             onKeyDown={handleKeyDown}
+            maxLength={1000}
           />
           <Button
             variant="primarySoft"

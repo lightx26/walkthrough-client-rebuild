@@ -45,6 +45,7 @@ export function AddCommentRow({
             placeholder="Add a comment..."
             value={text}
             onChange={(e) => setText(e.target.value)}
+            maxLength={1000}
             onKeyDown={(e) => {
               if (e.key === 'Escape') onClose();
               if (e.key === 'Enter' && !e.shiftKey && text.trim()) {

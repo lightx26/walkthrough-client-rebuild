@@ -85,6 +85,7 @@ export function DraggableChapter({
           value={chapter.title}
           onChange={(e) => onUpdate('title', e.target.value)}
           placeholder="Chapter title"
+          maxLength={200}
           className="flex-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
         />
         <Button
@@ -102,6 +103,7 @@ export function DraggableChapter({
           onChange={(e) => onUpdate('description', e.target.value)}
           placeholder="Guidance for the author — what should this chapter cover? (optional)"
           rows={2}
+          maxLength={1000}
           className="w-full resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
         />
       </div>

@@ -148,6 +148,7 @@ export function ChapterCard({
           placeholder="Chapter title..."
           value={chapter.title}
           onChange={(e) => onChange({ ...chapter, title: e.target.value })}
+          maxLength={200}
           className="w-full border-b border-transparent bg-transparent pb-1 text-sm font-medium text-gray-900 transition-colors outline-none placeholder:text-gray-400 focus:border-gray-200"
         />
         <textarea
@@ -155,6 +156,7 @@ export function ChapterCard({
           value={chapter.description}
           onChange={(e) => onChange({ ...chapter, description: e.target.value })}
           rows={2}
+          maxLength={1000}
           className="w-full resize-none bg-transparent text-sm leading-relaxed text-gray-600 outline-none placeholder:text-gray-400"
         />
       </div>

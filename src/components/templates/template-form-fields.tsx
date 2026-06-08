@@ -33,6 +33,7 @@ export function TemplateFormFields({
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
           placeholder="e.g. Full-stack feature with frontend"
+          maxLength={100}
           className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
         />
       </div>
@@ -46,6 +47,7 @@ export function TemplateFormFields({
           onChange={(e) => onDescriptionChange(e.target.value)}
           placeholder="What kind of PR is this template designed for? When should an author use it?"
           rows={3}
+          maxLength={1000}
           className="w-full resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 outline-none focus:border-violet-300 focus:ring-2 focus:ring-violet-100"
         />
       </div>
