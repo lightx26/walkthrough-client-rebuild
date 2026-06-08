@@ -55,7 +55,7 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
       </Link>
 
       {wt.status === 'OUTDATED' && wt.outdatedReason && (
-        <div className="mx-5 mb-3 flex gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
+        <div className="mb-4 flex gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
           <p className="whitespace-pre-line text-xs leading-relaxed text-amber-700">
             {wt.outdatedReason}

@@ -112,6 +112,20 @@ export function useUpdateWalkthrough(id: string) {
   });
 }
 
+export function useDeleteWalkthrough(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => walkthroughService.delete(id),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ['walkthrough', id] });
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, 'Failed to delete walkthrough.'));
+    },
+  });
+}
+
 export function useCreateWalkthroughComment(walkthroughId: string) {
   const queryClient = useQueryClient();
 

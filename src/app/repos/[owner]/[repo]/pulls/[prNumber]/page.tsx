@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 import { useAppSelector } from '@/store';
-import { ArrowRight, FileText, GitCommitHorizontal, Plus } from 'lucide-react';
+import { ArrowRight, ExternalLink, FileText, GitCommitHorizontal, Plus } from 'lucide-react';
 
 import { DashboardLayout } from '@/components/layout';
 import {
@@ -119,9 +119,17 @@ export default function PrDetailPage() {
             <PrHeaderSkeleton />
           ) : pr ? (
             <div className="rounded-xl border border-gray-200 bg-white p-6">
-              <div className="mb-3 flex items-center gap-2.5">
-                <PrStateBadge state={pr.state} />
-                <span className="text-sm text-gray-400">#{pr.number}</span>
+              <div className="flex items-center justify-between">
+                <div className="mb-3 flex items-center gap-2.5">
+                  <PrStateBadge state={pr.state} />
+                  <span className="text-sm text-gray-400">#{pr.number}</span>
+                </div>
+                <Button asChild variant="outline" size="sm" className="gap-1.5 rounded-xl">
+                  <a href={pr.htmlUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    Open in GitHub
+                  </a>
+                </Button>
               </div>
 
               <h1 className="mb-3 text-xl font-bold text-gray-900">{pr.title}</h1>

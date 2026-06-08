@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
-import { AlertTriangle, ArrowLeft, BarChart2, Pencil, Waypoints } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, BarChart2, Pencil, Trash2, Waypoints } from 'lucide-react';
 
 import { RiskAnalysisPanel } from '@/components/walkthrough-detail/risk/risk-analysis-panel';
 import { ScanRisksButton } from '@/components/walkthrough-detail/risk/scan-risks-button';
@@ -13,6 +13,7 @@ import { useRiskScan } from '@/hooks/use-risk';
 import { DashboardLayout } from '@/components/layout';
 import { ApiErrorState, Skeleton, UserAvatar } from '@/components/ui';
 import { Button } from '@/components/ui/button';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import {
   ChapterSection,
   CommentSection,
@@ -22,7 +23,7 @@ import {
 import { ChapterExpandProvider } from '@/components/walkthrough-detail/chapter-expand-context';
 
 import { useCurrentUser } from '@/hooks/use-auth';
-import { useReadProgress, useSyncCheck, useWalkthrough } from '@/hooks/use-walkthrough';
+import { useDeleteWalkthrough, useReadProgress, useSyncCheck, useWalkthrough } from '@/hooks/use-walkthrough';
 
 import { formatRelativeTime } from '@/utils/date-diff';
 
@@ -46,7 +47,9 @@ export default function WalkthroughDetailPage() {
   const { data: progressData } = useReadProgress(params.id);
   const { data: riskScan } = useRiskScan(params.id);
   const syncCheck = useSyncCheck(params.id);
+  const deleteWalkthrough = useDeleteWalkthrough(params.id);
   const hasSyncedRef = useRef(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const walkthrough = data?.data;
 
@@ -89,7 +92,11 @@ export default function WalkthroughDetailPage() {
           <Button
             variant="muted"
             size="none"
-            onClick={() => router.back()}
+            onClick={() =>
+              walkthrough
+                ? router.push(`/repos/${walkthrough.owner}/${walkthrough.repo}/pulls/${walkthrough.prNumber}`)
+                : router.back()
+            }
             className="shrink-0 gap-1.5 px-1 py-1 text-sm font-normal hover:bg-transparent"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -98,11 +105,9 @@ export default function WalkthroughDetailPage() {
 
           {walkthrough ? (
             <>
-              <div className="flex min-w-0 flex-1 items-center gap-2">
+              <div className="flex min-w-0 flex-1 items-center gap-3">
                 <Waypoints className="h-4 w-4 shrink-0 text-gray-400" />
-                <h1 className="truncate text-sm font-semibold text-gray-900">
-                  {walkthrough.title}
-                </h1>
+                <span className="text-sm font-semibold text-gray-900">{walkthrough.title}</span>
               </div>
 
               <div className="flex shrink-0 items-center gap-3">
@@ -138,6 +143,14 @@ export default function WalkthroughDetailPage() {
                         <Pencil className="h-3.5 w-3.5" />
                         Edit
                       </Link>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-1.5 rounded-xl text-red-600 border-none hover:border-red-300 hover:bg-red-50 hover:text-red-700"
+                      onClick={() => setShowDeleteDialog(true)}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                   </>
                 )}
@@ -248,6 +261,29 @@ export default function WalkthroughDetailPage() {
           </div>
         </main>
       </div>
+
+      <ConfirmDialog
+        open={showDeleteDialog}
+        tone="danger"
+        title="Delete walkthrough"
+        description="This will permanently delete the walkthrough and all its comments. This action cannot be undone."
+        confirmLabel="Delete"
+        onCancel={() => setShowDeleteDialog(false)}
+        onConfirm={() => {
+          setShowDeleteDialog(false);
+          deleteWalkthrough.mutate(undefined, {
+            onSuccess: () => {
+              if (walkthrough) {
+                router.push(
+                  `/repos/${walkthrough.owner}/${walkthrough.repo}/pulls/${walkthrough.prNumber}`
+                );
+              } else {
+                router.back();
+              }
+            },
+          });
+        }}
+      />
     </DashboardLayout>
   );
 }
