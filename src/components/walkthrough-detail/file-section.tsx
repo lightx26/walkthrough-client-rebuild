@@ -8,9 +8,10 @@ import { ChevronDown, ChevronUp, FileText } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
-import { computeDiffStats } from '../../utils/code-diff-utils';
+import { computeDiffStats } from '@/utils/code-diff-utils';
 import { DiffViewer } from './diff-viewer';
 import { FileRiskBadge } from './risk/file-risk-badge';
+import { FileRisksPopup } from './risk/file-risks-popup';
 
 interface FileSectionProps {
   file: WalkthroughFile;
@@ -21,6 +22,7 @@ interface FileSectionProps {
 
 export function FileSection({ file, walkthroughId, comments, risks = [] }: FileSectionProps) {
   const [expanded, setExpanded] = useState(true);
+  const [risksPopupOpen, setRisksPopupOpen] = useState(false);
   const stats = file.rawPatch ? computeDiffStats(file.rawPatch) : null;
 
   return (
@@ -39,7 +41,7 @@ export function FileSection({ file, walkthroughId, comments, risks = [] }: FileS
         >
           {file.filename}
         </span>
-        {risks.length > 0 && <FileRiskBadge risks={risks} />}
+        {risks.length > 0 && <FileRiskBadge risks={risks} onClick={() => setRisksPopupOpen(true)} />}
         {stats && (
           <span className="shrink-0 font-mono text-xs font-medium">
             <span className="text-green-600">+{stats.added}</span>{' '}
@@ -75,6 +77,14 @@ export function FileSection({ file, walkthroughId, comments, risks = [] }: FileS
           )}
         </div>
       </div>
+
+      <FileRisksPopup
+        open={risksPopupOpen}
+        filename={file.filename}
+        risks={risks}
+        walkthroughId={walkthroughId}
+        onClose={() => setRisksPopupOpen(false)}
+      />
     </div>
   );
 }
