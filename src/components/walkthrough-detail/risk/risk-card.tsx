@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, FileCode, Lightbulb } from 'lucide-react';
 import type { RiskLevel, RiskZone } from '@/types/risk';
 import { useMarkReviewed } from '@/hooks/use-risk';
@@ -25,12 +25,18 @@ export function RiskCard({ risk, walkthroughId, onFileClick }: RiskCardProps) {
   const markReviewed = useMarkReviewed(walkthroughId);
   const isReviewed = risk.reviewStatus === 'REVIEWED';
 
+  const handleMarkReviewed = (e: React.MouseEvent): void => {
+    e.stopPropagation();
+    markReviewed.mutate({ riskId: risk.id, reviewed: !isReviewed })
+  }
+
   return (
     <div className={`rounded-xl border ${styles.border} bg-white`}>
       {/* Header — always visible, click to toggle */}
-      <button
+      <Button
+        variant="outline"
         type="button"
-        className="flex w-full items-center gap-3 px-4 py-3 text-left"
+        className="flex w-full items-center gap-3 px-4 py-3 text-left border-none rounded-b-none hover:bg-white"
         onClick={() => setExpanded((v) => !v)}
       >
         <div className="flex min-w-0 flex-1 items-center gap-2 flex-wrap">
@@ -42,27 +48,25 @@ export function RiskCard({ risk, walkthroughId, onFileClick }: RiskCardProps) {
           </span>
           <span className="min-w-0 truncate text-sm font-semibold text-gray-900">{risk.title}</span>
         </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-xs text-gray-500 hover:text-gray-700"
+          onClick={handleMarkReviewed}
+          disabled={markReviewed.isPending}
+        >
+          {isReviewed ? '✓ Reviewed' : 'Mark reviewed'}
+        </Button>
         {expanded
           ? <ChevronUp className="h-4 w-4 shrink-0 text-gray-400" />
           : <ChevronDown className="h-4 w-4 shrink-0 text-gray-400" />
         }
-      </button>
+      </Button>
 
       {/* Body — collapsible */}
       <div className={`grid transition-all duration-200 ease-in-out ${expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
         <div className="overflow-hidden">
           <div className="border-t border-gray-100 px-4 pb-4 pt-3">
-            <div className="flex items-center justify-end">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-xs text-gray-500 hover:text-gray-700"
-                onClick={() => markReviewed.mutate({ riskId: risk.id, reviewed: !isReviewed })}
-                disabled={markReviewed.isPending}
-              >
-                {isReviewed ? '✓ Reviewed' : 'Mark reviewed'}
-              </Button>
-            </div>
 
             <p className="mt-1 text-sm text-gray-600 leading-relaxed">{risk.description}</p>
 
