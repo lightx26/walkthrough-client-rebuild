@@ -1,7 +1,7 @@
 'use client';
 
-import { pinnedRepoService } from '@/services/starred.service';
-import type { PinRepoRequest } from '@/types/starred';
+import { pinnedRepoService } from '@/services/pinned-repo.service';
+import type { PinRepoRequest } from '@/types/pinned-repo';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function usePinnedRepos() {

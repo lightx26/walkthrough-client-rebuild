@@ -19,7 +19,7 @@ import {
 
 import { Logo } from '@/components/ui';
 
-import { usePinnedRepos } from '@/hooks/use-starred';
+import { usePinnedRepos } from '@/hooks/use-pinned-repo';
 
 import { languageColor } from '@/utils/language-color';
 

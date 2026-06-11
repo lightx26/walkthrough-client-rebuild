@@ -17,7 +17,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 
-import { usePinRepo, useUnpinRepo } from '@/hooks/use-starred';
+import { usePinRepo, useUnpinRepo } from '@/hooks/use-pinned-repo';
 
 import { formatRelativeTime } from '@/utils/date-diff';
 import { languageColor } from '@/utils/language-color';

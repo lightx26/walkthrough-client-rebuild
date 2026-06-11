@@ -86,7 +86,7 @@ export function AuthorWalkthroughCard({ walkthrough }: { walkthrough: AuthorWalk
           )}
         </div>
 
-        <div className="flex shrink-0 items-end gap-1 text-[11px] text-gray-400">
+        <div className="flex shrink-0 items-end gap-2 text-[11px] text-gray-400">
           <span className="inline-flex items-center gap-1">
             <Waypoints className="h-3 w-3" />
             {walkthrough.totalChapters} ch

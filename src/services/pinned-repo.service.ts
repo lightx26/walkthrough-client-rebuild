@@ -1,6 +1,6 @@
 import apiClient from '@/lib/axios';
 import type { DataResponse, ListData } from '@/types/api';
-import type { PinRepoRequest, PinnedRepo } from '@/types/starred';
+import type { PinRepoRequest, PinnedRepo } from '@/types/pinned-repo';
 
 export const pinnedRepoService = {
   async getPinnedRepos(): Promise<DataResponse<ListData<PinnedRepo>>> {

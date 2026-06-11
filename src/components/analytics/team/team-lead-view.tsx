@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
 import { useRepoMetrics } from '@/hooks/use-analytics';
-import { usePinnedRepos } from '@/hooks/use-starred';
+import { usePinnedRepos } from '@/hooks/use-pinned-repo';
 
 import { MemberActivityTable } from './member-activity-table';
 import { ReviewsPerMemberChart } from './reviews-per-member-chart';
