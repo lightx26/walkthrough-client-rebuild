@@ -20,9 +20,10 @@ function getFileIcon(filename: string) {
 interface PanelFileRowProps {
   file: PrFile;
   assigned: boolean;
+  onClick?: (file: PrFile) => void;
 }
 
-export function PanelFileRow({ file, assigned }: PanelFileRowProps) {
+export function PanelFileRow({ file, assigned, onClick }: PanelFileRowProps) {
   const badge = statusBadge(file.status);
   const nodeRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +39,8 @@ export function PanelFileRow({ file, assigned }: PanelFileRowProps) {
   return (
     <div
       ref={nodeRef}
+      title={file.filename}
+      onClick={() => onClick?.(file)}
       className={cn(
         'flex items-center gap-2 rounded-md px-3 py-1.5 transition-colors',
         assigned ? 'opacity-50' : 'cursor-grab hover:bg-gray-100 active:cursor-grabbing',

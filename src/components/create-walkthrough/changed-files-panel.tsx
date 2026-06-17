@@ -7,6 +7,7 @@ import type { PrFile } from '@/types/github';
 import { ChevronDown, ChevronRight, Folder } from 'lucide-react';
 import { useDrag } from 'react-dnd';
 
+import { DiffFileModal } from './diff-file-modal';
 import { DirGroup } from './dir-group';
 import { DRAG_TYPE_PR_DIR } from './file-utils';
 import { PanelFileRow } from './panel-file-row';
@@ -31,6 +32,7 @@ export function ChangedFilesPanel({
   prNumber,
   isLoading,
 }: ChangedFilesPanelProps) {
+  const [previewFile, setPreviewFile] = useState<PrFile | null>(null);
   const assignedCount = assignedFilenames.size;
   const totalCount = files.length;
   const progressPct = totalCount === 0 ? 0 : Math.round((assignedCount / totalCount) * 100);
@@ -90,9 +92,14 @@ export function ChangedFilesPanel({
             rootFiles={rootFiles}
             sortedDirs={sortedDirs}
             assignedFilenames={assignedFilenames}
+            onClick={setPreviewFile}
           />
         )}
       </div>
+
+      {previewFile && (
+        <DiffFileModal file={previewFile} onClose={() => setPreviewFile(null)} />
+      )}
     </div>
   );
 }
@@ -102,9 +109,10 @@ interface RootGroupProps {
   rootFiles: PrFile[];
   sortedDirs: [string, PrFile[]][];
   assignedFilenames: Set<string>;
+  onClick?: (file: PrFile) => void;
 }
 
-function RootGroup({ allFiles, rootFiles, sortedDirs, assignedFilenames }: RootGroupProps) {
+function RootGroup({ allFiles, rootFiles, sortedDirs, assignedFilenames, onClick }: RootGroupProps) {
   const [expanded, setExpanded] = useState(true);
   const dragRef = useRef<HTMLDivElement>(null);
 
@@ -154,10 +162,17 @@ function RootGroup({ allFiles, rootFiles, sortedDirs, assignedFilenames }: RootG
               key={file.filename}
               file={file}
               assigned={assignedFilenames.has(file.filename)}
+              onClick={onClick}
             />
           ))}
           {sortedDirs.map(([dir, dirFiles]) => (
-            <DirGroup key={dir} dir={dir} files={dirFiles} assignedFilenames={assignedFilenames} />
+            <DirGroup
+              key={dir}
+              dir={dir}
+              files={dirFiles}
+              assignedFilenames={assignedFilenames}
+              onClick={onClick}
+            />
           ))}
         </div>
       )}

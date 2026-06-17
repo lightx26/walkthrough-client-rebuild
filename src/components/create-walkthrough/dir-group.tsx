@@ -14,9 +14,10 @@ interface DirGroupProps {
   dir: string;
   files: PrFile[];
   assignedFilenames: Set<string>;
+  onClick?: (file: PrFile) => void;
 }
 
-export function DirGroup({ dir, files, assignedFilenames }: DirGroupProps) {
+export function DirGroup({ dir, files, assignedFilenames, onClick }: DirGroupProps) {
   const [expanded, setExpanded] = useState(true);
   const dragRef = useRef<HTMLDivElement>(null);
 
@@ -67,6 +68,7 @@ export function DirGroup({ dir, files, assignedFilenames }: DirGroupProps) {
               key={file.filename}
               file={file}
               assigned={assignedFilenames.has(file.filename)}
+              onClick={onClick}
             />
           ))}
         </div>
