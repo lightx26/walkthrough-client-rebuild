@@ -38,7 +38,6 @@ export interface WalkthroughEditorProps {
   onSave: (data: WalkthroughFormData, status: 'DRAFT' | 'PUBLISHED') => void;
   isSaving: boolean;
   requireAllFilesAssigned?: boolean;
-  canDeleteChapters?: boolean;
   publishError?: string;
 }
 
@@ -69,7 +68,6 @@ export function WalkthroughEditor({
   onSave,
   isSaving,
   requireAllFilesAssigned = false,
-  canDeleteChapters = false,
   publishError,
 }: WalkthroughEditorProps) {
   const router = useRouter();
@@ -294,7 +292,7 @@ export function WalkthroughEditor({
                       onViewFileDiff={setActiveFileDiff}
                       onReorder={handleChapterReorder}
                       onDelete={
-                        canDeleteChapters && chapters.length > 1
+                        chapters.length > 1 && chapter.files.length === 0
                           ? () => handleDeleteChapter(chapter.id)
                           : undefined
                       }

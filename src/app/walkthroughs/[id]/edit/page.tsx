@@ -151,7 +151,6 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
       onSave={handleSave}
       isSaving={updateWalkthrough.isPending}
       requireAllFilesAssigned
-      canDeleteChapters
       publishError={publishError}
     />
   );
