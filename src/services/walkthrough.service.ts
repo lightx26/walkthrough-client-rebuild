@@ -6,9 +6,7 @@ import type {
   ReadProgress,
   RecentlyReviewedWalkthrough,
   RecordChapterViewRequest,
-  StalenessResponse,
   UpdateWalkthroughRequest,
-  VersionDiffResponse,
   Walkthrough,
   WalkthroughComment,
   WalkthroughSummary,
@@ -18,12 +16,6 @@ interface ListWalkthroughsParams {
   owner: string;
   repo: string;
   prNumber: number;
-}
-
-interface GetVersionDiffParams {
-  id: string;
-  fromVersion: number;
-  toVersion: number;
 }
 
 export const walkthroughService = {
@@ -52,6 +44,13 @@ export const walkthroughService = {
 
   async getById(id: string): Promise<DataResponse<Walkthrough>> {
     const { data } = await apiClient.get<DataResponse<Walkthrough>>(`/v1/walkthroughs/${id}`);
+    return data;
+  },
+
+  async syncCheck(id: string): Promise<DataResponse<Walkthrough>> {
+    const { data } = await apiClient.post<DataResponse<Walkthrough>>(
+      `/v1/walkthroughs/${id}/sync-check`
+    );
     return data;
   },
 
@@ -146,34 +145,6 @@ export const walkthroughService = {
   async listRecentlyReviewed(): Promise<DataResponse<ListData<RecentlyReviewedWalkthrough>>> {
     const { data } = await apiClient.get<DataResponse<ListData<RecentlyReviewedWalkthrough>>>(
       '/v1/walkthroughs/recently-reviewed'
-    );
-    return data;
-  },
-
-  // ── Versioning ──
-
-  async checkStaleness(id: string): Promise<DataResponse<StalenessResponse>> {
-    const { data } = await apiClient.get<DataResponse<StalenessResponse>>(
-      `/v1/walkthroughs/${id}/staleness`
-    );
-    return data;
-  },
-
-  async createNewVersion(id: string): Promise<DataResponse<Walkthrough>> {
-    const { data } = await apiClient.post<DataResponse<Walkthrough>>(
-      `/v1/walkthroughs/${id}/new-version`
-    );
-    return data;
-  },
-
-  async getVersionDiff({
-    id,
-    fromVersion,
-    toVersion,
-  }: GetVersionDiffParams): Promise<DataResponse<VersionDiffResponse>> {
-    const { data } = await apiClient.get<DataResponse<VersionDiffResponse>>(
-      `/v1/walkthroughs/${id}/diff`,
-      { params: { fromVersion, toVersion } }
     );
     return data;
   },

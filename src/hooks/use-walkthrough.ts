@@ -1,6 +1,6 @@
 'use client';
 
-import { getErrorMessage } from '@/lib/error';
+import { getErrorMessage, isPublishValidationError } from '@/lib/error';
 import { walkthroughService } from '@/services/walkthrough.service';
 import type {
   CreateCommentRequest,
@@ -30,6 +30,16 @@ export function useWalkthrough(id: string) {
     queryKey: ['walkthrough', id],
     queryFn: () => walkthroughService.getById(id),
     enabled: !!id,
+  });
+}
+
+export function useSyncCheck(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => walkthroughService.syncCheck(id),
+    onSuccess: (result) => {
+      queryClient.setQueryData(['walkthrough', id], result);
+    },
   });
 }
 
@@ -96,6 +106,7 @@ export function useUpdateWalkthrough(id: string) {
       queryClient.invalidateQueries({ queryKey: ['walkthrough', id] });
     },
     onError: (error) => {
+      if (isPublishValidationError(error)) return; // edit page shows this inline
       toast.error(getErrorMessage(error, 'Failed to update walkthrough.'));
     },
   });

@@ -56,9 +56,6 @@ export function WalkthroughCard({ wt }: { wt: WalkthroughSummary }) {
           </span>
           <span className="text-gray-200">·</span>
           <span>#{wt.prNumber}</span>
-          <span className="inline-flex items-center rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[11px] font-medium text-gray-500">
-            v{wt.version}
-          </span>
           <span className="flex items-center gap-1">
             <Waypoints className="h-3 w-3" />
             {wt.chapterCount} ch

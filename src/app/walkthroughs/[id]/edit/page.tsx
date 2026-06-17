@@ -15,6 +15,7 @@ import {
 import { DashboardLayout } from '@/components/layout';
 import { Skeleton } from '@/components/ui';
 
+import { getErrorMessage, isPublishValidationError } from '@/lib/error';
 import { usePullRequestFiles } from '@/hooks/use-github';
 import { useUpdateWalkthrough, useWalkthrough } from '@/hooks/use-walkthrough';
 
@@ -90,6 +91,7 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
 
   const [initialized, setInitialized] = useState(false);
   const [initialChapters, setInitialChapters] = useState<ChapterDraft[]>();
+  const [publishError, setPublishError] = useState<string | undefined>();
 
   const updateWalkthrough = useUpdateWalkthrough(walkthroughId);
 
@@ -103,6 +105,7 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
   }, [walkthrough, allFiles, filesLoading, initialized]);
 
   const handleSave = (data: WalkthroughFormData, status: 'DRAFT' | 'PUBLISHED') => {
+    setPublishError(undefined);
     const request: UpdateWalkthroughRequest = {
       title: data.title,
       description: data.description,
@@ -114,10 +117,15 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
       onSuccess: () => {
         router.push(`/walkthroughs/${walkthroughId}`);
       },
+      onError: (error) => {
+        if (isPublishValidationError(error)) {
+          setPublishError(getErrorMessage(error));
+        }
+      },
     });
   };
 
-  if (wtLoading || (walkthrough && filesLoading && !initialized)) {
+  if (wtLoading || !initialized) {
     return <EditSkeleton />;
   }
 
@@ -142,7 +150,9 @@ function EditWalkthroughContent({ walkthroughId }: { walkthroughId: string }) {
       initialChapters={initialChapters}
       onSave={handleSave}
       isSaving={updateWalkthrough.isPending}
+      requireAllFilesAssigned
       canDeleteChapters
+      publishError={publishError}
     />
   );
 }

@@ -4,13 +4,15 @@ import { useRef } from 'react';
 
 import { cn } from '@/lib/utils';
 import type { PrFile } from '@/types/github';
-import { FileText, Plus, Trash2 } from 'lucide-react';
-import { useDrop } from 'react-dnd';
+import { FileText, GripVertical, Plus, Trash2 } from 'lucide-react';
+import { useDrag, useDrop } from 'react-dnd';
 
 import { Button } from '@/components/ui/button';
 
 import { ChapterFileRow, DRAG_TYPE_CHAPTER_FILE, type DragItem } from './chapter-file-row';
 import { DRAG_TYPE_PR_DIR, DRAG_TYPE_PR_FILE } from './file-utils';
+
+export const DRAG_TYPE_CHAPTER = 'CHAPTER';
 
 export interface ChapterDraft {
   id: string;
@@ -19,12 +21,19 @@ export interface ChapterDraft {
   files: PrFile[];
 }
 
+interface ChapterDragItem {
+  type: typeof DRAG_TYPE_CHAPTER;
+  chapterId: string;
+  index: number;
+}
+
 interface ChapterCardProps {
   chapter: ChapterDraft;
   index: number;
   onChange: (updated: ChapterDraft) => void;
   onViewFileDiff: (file: PrFile) => void;
   onDelete?: () => void;
+  onReorder: (fromIndex: number, toIndex: number) => void;
 }
 
 export function ChapterCard({
@@ -33,10 +42,31 @@ export function ChapterCard({
   onChange,
   onViewFileDiff,
   onDelete,
+  onReorder,
 }: ChapterCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const gripRef = useRef<HTMLDivElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
 
-  const [{ isOver }, drop] = useDrop<DragItem, void, { isOver: boolean }>({
+  // Chapter-level drag
+  const [{ isDragging }, drag, dragPreview] = useDrag<ChapterDragItem, void, { isDragging: boolean }>({
+    type: DRAG_TYPE_CHAPTER,
+    item: { type: DRAG_TYPE_CHAPTER, chapterId: chapter.id, index },
+    collect: (monitor) => ({ isDragging: monitor.isDragging() }),
+  });
+
+  // Chapter-level drop (for reordering chapters)
+  const [, dropChapter] = useDrop<ChapterDragItem, void>({
+    accept: DRAG_TYPE_CHAPTER,
+    hover(item) {
+      if (item.chapterId === chapter.id) return;
+      onReorder(item.index, index);
+      item.index = index;
+    },
+  });
+
+  // File drop zone
+  const [{ isOver }, dropFiles] = useDrop<DragItem, void, { isOver: boolean }>({
     accept: [DRAG_TYPE_PR_FILE, DRAG_TYPE_PR_DIR, DRAG_TYPE_CHAPTER_FILE],
     drop(item) {
       if (item.type === DRAG_TYPE_PR_FILE) {
@@ -55,7 +85,9 @@ export function ChapterCard({
     collect: (monitor) => ({ isOver: monitor.isOver() }),
   });
 
-  drop(dropRef);
+  dropChapter(dragPreview(cardRef));
+  drag(gripRef);
+  dropFiles(dropRef);
 
   const handleReorder = (fromIndex: number, toIndex: number) => {
     const updated = [...chapter.files];
@@ -72,9 +104,18 @@ export function ChapterCard({
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+    <div
+      ref={cardRef}
+      className={cn(
+        'overflow-hidden rounded-xl border border-gray-200 bg-white transition-opacity',
+        isDragging && 'opacity-40'
+      )}
+    >
       {/* Chapter header */}
       <div className="flex items-center gap-3 border-b border-gray-100 px-4 py-3.5">
+        <div ref={gripRef} className="shrink-0 cursor-grab p-0.5 active:cursor-grabbing">
+          <GripVertical className="h-4 w-4 text-gray-300 hover:text-gray-500" />
+        </div>
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-600 text-sm font-bold text-white">
           {index + 1}
         </span>
@@ -141,7 +182,7 @@ export function ChapterCard({
           </div>
         )}
 
-        {/* Drop zone */}
+        {/* Drop zone for files */}
         <div
           ref={dropRef}
           className={cn(

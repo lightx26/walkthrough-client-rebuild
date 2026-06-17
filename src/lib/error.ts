@@ -14,10 +14,22 @@ export function getErrorMessage(error: unknown, fallback = 'An error occurred'):
   return fallback;
 }
 
+export function getErrorCode(error: unknown): string | undefined {
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data as ErrorResponse | undefined;
+    return data?.errorCode;
+  }
+  return undefined;
+}
+
 export function isHttpStatusError(error: unknown, status: number): boolean {
   return axios.isAxiosError(error) && error.response?.status === status;
 }
 
 export function isNotFoundError(error: unknown): boolean {
   return isHttpStatusError(error, 404);
+}
+
+export function isPublishValidationError(error: unknown): boolean {
+  return getErrorCode(error) === 'WALKTHROUGH_INVALID_FOR_PUBLISH';
 }
