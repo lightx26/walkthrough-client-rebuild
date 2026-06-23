@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 
-import { MessageSquare, Send } from 'lucide-react';
+import { MessageSquare, Send, Trash2 } from 'lucide-react';
 
 import { UserAvatar } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 
 import { useCurrentUser } from '@/hooks/use-auth';
-import { useCreateWalkthroughComment, useWalkthroughComments } from '@/hooks/use-walkthrough';
+import { useCreateWalkthroughComment, useDeleteComment, useWalkthroughComments } from '@/hooks/use-walkthrough';
 
 import { formatRelativeTime } from '@/utils/date-diff';
 
@@ -27,6 +27,7 @@ export function CommentSection({ walkthroughId }: CommentSectionProps) {
   );
 
   const addComment = useCreateWalkthroughComment(walkthroughId);
+  const deleteComment = useDeleteComment(walkthroughId);
 
   const handleSubmit = () => {
     if (!content.trim()) return;
@@ -83,7 +84,7 @@ export function CommentSection({ walkthroughId }: CommentSectionProps) {
       {comments.length > 0 && (
         <div className="divide-y divide-gray-100">
           {comments.map((comment) => (
-            <div key={comment.id} className="flex gap-3 px-6 py-3.5">
+            <div key={comment.id} className="group flex gap-3 px-6 py-3.5">
               <UserAvatar
                 src={comment.avatarUrl}
                 displayName={comment.username}
@@ -97,6 +98,17 @@ export function CommentSection({ walkthroughId }: CommentSectionProps) {
                   <span className="text-xs text-gray-400">
                     {formatRelativeTime(comment.createdAt)}
                   </span>
+                  {user?.id === comment.userId && (
+                    <Button
+                      variant="ghost"
+                      size="none"
+                      onClick={() => deleteComment.mutate(comment.id)}
+                      disabled={deleteComment.isPending}
+                      className="ml-auto opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:bg-transparent hover:text-red-500"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
                 </div>
                 <p className="text-sm leading-relaxed wrap-break-word text-gray-700">
                   {comment.content}

@@ -9,7 +9,7 @@ import type { CreateWalkthroughRequest } from '@/types/walkthrough';
 import { WalkthroughEditor, type WalkthroughFormData } from '@/components/create-walkthrough';
 import { DashboardLayout } from '@/components/layout';
 
-import { usePullRequestFiles } from '@/hooks/use-github';
+import { usePullRequest, usePullRequestFiles } from '@/hooks/use-github';
 import { useCreateWalkthrough } from '@/hooks/use-walkthrough';
 
 function CreateWalkthroughContent() {
@@ -20,12 +20,14 @@ function CreateWalkthroughContent() {
   const repo = searchParams.get('repo') ?? '';
   const prNumber = Number(searchParams.get('prNumber'));
 
+  const { data: prData } = usePullRequest({ owner, repo, prNumber });
   const { data: filesData, isLoading: filesLoading } = usePullRequestFiles({
     owner,
     repo,
     prNumber,
   });
 
+  const pr = prData?.data;
   const allFiles = filesData?.data?.items ?? [];
   const createWalkthrough = useCreateWalkthrough();
 
@@ -54,6 +56,8 @@ function CreateWalkthroughContent() {
       prNumber={prNumber}
       allFiles={allFiles}
       filesLoading={filesLoading}
+      initialTitle={pr?.title ?? ''}
+      initialDescription={pr?.body ?? ''}
       onSave={handleSave}
       isSaving={createWalkthrough.isPending}
       requireAllFilesAssigned

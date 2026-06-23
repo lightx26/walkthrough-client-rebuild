@@ -6,6 +6,8 @@ import type {
   ReadProgress,
   RecentlyReviewedWalkthrough,
   RecordChapterViewRequest,
+  ReviewDecision,
+  SubmitReviewDecisionRequest,
   UpdateWalkthroughRequest,
   Walkthrough,
   WalkthroughComment,
@@ -147,5 +149,40 @@ export const walkthroughService = {
       '/v1/walkthroughs/recently-reviewed'
     );
     return data;
+  },
+
+  // ── Review Decisions ──
+
+  async submitReviewDecision(
+    walkthroughId: string,
+    request: SubmitReviewDecisionRequest
+  ): Promise<DataResponse<ReviewDecision>> {
+    const { data } = await apiClient.post<DataResponse<ReviewDecision>>(
+      `/v1/walkthroughs/${walkthroughId}/review-decision`,
+      request
+    );
+    return data;
+  },
+
+  async listReviewDecisions(walkthroughId: string): Promise<DataResponse<ListData<ReviewDecision>>> {
+    const { data } = await apiClient.get<DataResponse<ListData<ReviewDecision>>>(
+      `/v1/walkthroughs/${walkthroughId}/review-decisions`
+    );
+    return data;
+  },
+
+  async getMyReviewDecision(walkthroughId: string): Promise<DataResponse<ReviewDecision> | null> {
+    try {
+      const { data } = await apiClient.get<DataResponse<ReviewDecision>>(
+        `/v1/walkthroughs/${walkthroughId}/review-decision/me`
+      );
+      return data;
+    } catch {
+      return null;
+    }
+  },
+
+  async withdrawReviewDecision(walkthroughId: string): Promise<void> {
+    await apiClient.delete(`/v1/walkthroughs/${walkthroughId}/review-decision`);
   },
 };

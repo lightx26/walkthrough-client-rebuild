@@ -14,3 +14,4 @@ export { FileSection } from './file-section';
 export { FileTreePanel } from './file-tree-panel';
 export { FilesPanel } from './files-panel';
 export { SyncStatusIcon } from './sync-status-icon';
+export { ReviewDecisionSection } from './review-decision-section';

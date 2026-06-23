@@ -54,9 +54,13 @@ apiClient.interceptors.response.use(
       return apiClient(originalRequest);
     } catch (refreshError) {
       processQueue(refreshError);
+      const wasAuthenticated = store.getState().auth.isAuthenticated;
       // Dispatch logout so AuthGuard redirects to /login.
       store.dispatch(logout());
-      toast.error('Session expired. Please log in again.');
+      // Only toast if the user had an active session — not on initial page load with no cookies.
+      if (wasAuthenticated) {
+        toast.error('Session expired. Please log in again.');
+      }
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;

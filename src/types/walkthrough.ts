@@ -146,3 +146,22 @@ export interface RecordChapterViewRequest {
   chapterId: string;
   timeSpentSec?: number;
 }
+
+export type ReviewDecisionType = 'APPROVED' | 'REJECTED';
+
+export interface ReviewDecision {
+  id: string;
+  walkthroughId: string;
+  userId: string;
+  username: string;
+  avatarUrl: string;
+  decision: ReviewDecisionType;
+  comment: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SubmitReviewDecisionRequest {
+  decision: ReviewDecisionType;
+  comment?: string;
+}

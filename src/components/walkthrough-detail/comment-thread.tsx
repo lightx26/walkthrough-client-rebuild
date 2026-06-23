@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 
 import type { WalkthroughComment } from '@/types/walkthrough';
-import { CornerDownLeft, Send } from 'lucide-react';
+import { CornerDownLeft, Send, Trash2 } from 'lucide-react';
 
 import { UserAvatar } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 
 import { useCurrentUser } from '@/hooks/use-auth';
-import { useCreateFileComment } from '@/hooks/use-walkthrough';
+import { useCreateFileComment, useDeleteComment } from '@/hooks/use-walkthrough';
 
 import { formatRelativeTime } from '@/utils/date-diff';
 
@@ -33,6 +33,7 @@ export function CommentThread({
   const [replyText, setReplyText] = useState('');
 
   const addReply = useCreateFileComment(walkthroughId, fileId);
+  const deleteComment = useDeleteComment(walkthroughId);
 
   return (
     <>
@@ -40,7 +41,7 @@ export function CommentThread({
         <React.Fragment key={c.id}>
           <tr>
             <td colSpan={3} className="px-0 py-0">
-              <div className="min-w-0 border-l-4 border-violet-400 bg-white px-4 py-3">
+              <div className="group/comment min-w-0 border-l-4 border-violet-400 bg-white px-4 py-3">
                 <div className="mb-1 flex items-center gap-2">
                   <UserAvatar
                     src={c.avatarUrl}
@@ -53,6 +54,17 @@ export function CommentThread({
                     {formatRelativeTime(c.createdAt)}
                   </span>
                   <SyncStatusIcon status={c.syncStatus} />
+                  {user?.id === c.userId && (
+                    <Button
+                      variant="ghost"
+                      size="none"
+                      onClick={() => deleteComment.mutate(c.id)}
+                      disabled={deleteComment.isPending}
+                      className="ml-auto opacity-0 group-hover/comment:opacity-100 p-1 text-gray-400 hover:bg-transparent hover:text-red-500"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  )}
                 </div>
                 <p className="ml-8 text-xs leading-relaxed wrap-break-word whitespace-pre-wrap text-gray-700">
                   {c.content}
@@ -70,7 +82,7 @@ export function CommentThread({
                 {c.replies.length > 0 && (
                   <div className="mt-2 ml-8 space-y-2 border-l border-gray-200 pl-3">
                     {c.replies.map((r) => (
-                      <div key={r.id}>
+                      <div key={r.id} className="group/reply">
                         <div className="mb-0.5 flex items-center gap-2">
                           <UserAvatar
                             src={r.avatarUrl}
@@ -84,6 +96,17 @@ export function CommentThread({
                           <span className="text-[10px] text-gray-400">
                             {formatRelativeTime(r.createdAt)}
                           </span>
+                          {user?.id === r.userId && (
+                            <Button
+                              variant="ghost"
+                              size="none"
+                              onClick={() => deleteComment.mutate(r.id)}
+                              disabled={deleteComment.isPending}
+                              className="ml-auto opacity-0 group-hover/reply:opacity-100 p-1 text-gray-400 hover:bg-transparent hover:text-red-500"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          )}
                         </div>
                         <p className="ml-8 text-xs leading-relaxed wrap-break-word whitespace-pre-wrap text-gray-700">
                           {r.content}

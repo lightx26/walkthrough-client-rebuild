@@ -6,6 +6,7 @@ import type {
   CreateCommentRequest,
   CreateWalkthroughRequest,
   RecordChapterViewRequest,
+  SubmitReviewDecisionRequest,
   UpdateWalkthroughRequest,
 } from '@/types/walkthrough';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -214,6 +215,68 @@ export function useUnmarkChapterRead(walkthroughId: string) {
       queryClient.invalidateQueries({
         queryKey: ['walkthroughs', 'recently-reviewed'],
       });
+    },
+  });
+}
+
+export function useDeleteComment(walkthroughId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (commentId: string) => walkthroughService.deleteComment(walkthroughId, commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['walkthrough-comments', walkthroughId] });
+      queryClient.invalidateQueries({ queryKey: ['batch-file-comments', walkthroughId] });
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, 'Failed to delete comment.'));
+    },
+  });
+}
+
+export function useReviewDecisions(walkthroughId: string) {
+  return useQuery({
+    queryKey: ['review-decisions', walkthroughId],
+    queryFn: () => walkthroughService.listReviewDecisions(walkthroughId),
+    enabled: !!walkthroughId,
+  });
+}
+
+export function useMyReviewDecision(walkthroughId: string) {
+  return useQuery({
+    queryKey: ['review-decision-me', walkthroughId],
+    queryFn: () => walkthroughService.getMyReviewDecision(walkthroughId),
+    enabled: !!walkthroughId,
+  });
+}
+
+export function useSubmitReviewDecision(walkthroughId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: SubmitReviewDecisionRequest) =>
+      walkthroughService.submitReviewDecision(walkthroughId, request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['review-decisions', walkthroughId] });
+      queryClient.invalidateQueries({ queryKey: ['review-decision-me', walkthroughId] });
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, 'Failed to submit review decision.'));
+    },
+  });
+}
+
+export function useWithdrawReviewDecision(walkthroughId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => walkthroughService.withdrawReviewDecision(walkthroughId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['review-decisions', walkthroughId] });
+      queryClient.invalidateQueries({ queryKey: ['review-decision-me', walkthroughId] });
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, 'Failed to withdraw review decision.'));
     },
   });
 }
