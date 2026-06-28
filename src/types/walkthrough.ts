@@ -91,6 +91,12 @@ export interface ReadProgress {
   readChapterIds: string[];
 }
 
+export interface ActivitySummary {
+  walkthroughCount: number;
+  commentCount: number;
+  since: string;
+}
+
 export interface RecentlyReviewedWalkthrough {
   walkthroughId: string;
   title: string;

@@ -58,6 +58,13 @@ export function useRecentlyReviewedWalkthroughs() {
   });
 }
 
+export function useActivitySummary() {
+  return useQuery({
+    queryKey: ['walkthroughs', 'activity-summary'],
+    queryFn: () => walkthroughService.getActivitySummary(),
+  });
+}
+
 export function useWalkthroughComments(walkthroughId: string) {
   return useQuery({
     queryKey: ['walkthrough-comments', walkthroughId],

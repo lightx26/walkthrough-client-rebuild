@@ -1,6 +1,7 @@
 import apiClient from '@/lib/axios';
 import type { DataResponse, ListData } from '@/types/api';
 import type {
+  ActivitySummary,
   CreateCommentRequest,
   CreateWalkthroughRequest,
   ReadProgress,
@@ -41,6 +42,13 @@ export const walkthroughService = {
   async listRecent(): Promise<DataResponse<ListData<WalkthroughSummary>>> {
     const { data } =
       await apiClient.get<DataResponse<ListData<WalkthroughSummary>>>('/v1/walkthroughs/recent');
+    return data;
+  },
+
+  async getActivitySummary(): Promise<DataResponse<ActivitySummary>> {
+    const { data } = await apiClient.get<DataResponse<ActivitySummary>>(
+      '/v1/walkthroughs/activity-summary'
+    );
     return data;
   },
 

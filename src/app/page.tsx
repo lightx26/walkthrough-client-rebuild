@@ -13,7 +13,11 @@ import {
 import { DashboardLayout } from '@/components/layout';
 
 import { useCurrentUser } from '@/hooks/use-auth';
-import { useRecentWalkthroughs, useRecentlyReviewedWalkthroughs } from '@/hooks/use-walkthrough';
+import {
+  useActivitySummary,
+  useRecentWalkthroughs,
+  useRecentlyReviewedWalkthroughs,
+} from '@/hooks/use-walkthrough';
 
 function getGreeting(name: string) {
   const h = new Date().getHours();
@@ -29,6 +33,8 @@ export default function HomePage() {
   const { data: recentData, isLoading: isLoadingRecent } = useRecentWalkthroughs();
 
   const { data: reviewedData } = useRecentlyReviewedWalkthroughs();
+
+  const { data: activityData } = useActivitySummary();
 
   const walkthroughs = recentData?.data?.items ?? [];
   const resumeReading = reviewedData?.data?.items?.[0] ?? null;
@@ -79,8 +85,8 @@ export default function HomePage() {
       </main>
 
       <WeekSummaryPanel
-        walkthroughCount={walkthroughs.length}
-        commentCount={walkthroughs.reduce((sum, w) => sum + (w.commentCount ?? 0), 0)}
+        walkthroughCount={activityData?.data?.walkthroughCount ?? 0}
+        commentCount={activityData?.data?.commentCount ?? 0}
         recentlyReviewed={recentlyReviewed}
       />
     </DashboardLayout>
