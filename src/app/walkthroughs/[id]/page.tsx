@@ -16,10 +16,9 @@ import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import {
   ChapterSection,
-  CommentSection,
+  ConversationSection,
   FileTreePanel,
   FilesPanel,
-  ReviewDecisionSection,
 } from '@/components/walkthrough-detail';
 import { ChapterExpandProvider } from '@/components/walkthrough-detail/chapter-expand-context';
 
@@ -253,13 +252,12 @@ export default function WalkthroughDetailPage() {
                   <FileTreePanel walkthrough={walkthrough} />
                 </ChapterExpandProvider>
 
-                {/* General Discussion */}
-                <CommentSection walkthroughId={walkthrough.id} />
-
-                {/* Review Decision */}
-                {walkthrough.status === 'PUBLISHED' && (
-                  <ReviewDecisionSection walkthroughId={walkthrough.id} isOwner={isOwner} />
-                )}
+                {/* Conversation: comments + reviews */}
+                <ConversationSection
+                  walkthroughId={walkthrough.id}
+                  authorUserId={walkthrough.userId}
+                  canReview={walkthrough.status === 'PUBLISHED' && !isOwner}
+                />
               </>
             ) : (
               <div className="py-20 text-center text-sm text-gray-400">Walkthrough not found.</div>
