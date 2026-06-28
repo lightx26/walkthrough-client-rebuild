@@ -57,8 +57,8 @@ function SessionRestorer() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Skip session restore on auth pages — no cookies exist yet.
-    if (pathname.startsWith('/auth/') || pathname === '/login') {
+    // Skip session restore on OAuth callback — no cookies exist yet.
+    if (pathname.startsWith('/auth/')) {
       dispatch(logout());
       return;
     }
