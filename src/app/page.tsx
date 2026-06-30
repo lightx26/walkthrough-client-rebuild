@@ -28,7 +28,7 @@ function getGreeting(name: string) {
 
 export default function HomePage() {
   const user = useCurrentUser();
-  const [showAiBanner, setShowAiBanner] = useState(true);
+  const [showAiBanner, setShowAiBanner] = useState(false);
 
   const { data: recentData, isLoading: isLoadingRecent } = useRecentWalkthroughs();
 

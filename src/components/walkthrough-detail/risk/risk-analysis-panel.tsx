@@ -10,6 +10,7 @@ import { useChapterExpand } from '../chapter-expand-context';
 import { AnalyzingProgress } from './analyzing-progress';
 import { RiskCard } from './risk-card';
 import { RiskFilterTabs, filterRisks } from './risk-filter-tabs';
+import { SkippedFilesNotice } from './skipped-files-notice';
 
 type FilterLevel = 'ALL' | RiskLevel;
 
@@ -48,6 +49,7 @@ export function RiskAnalysisPanel({ walkthroughId, scan, chapters = [] }: RiskAn
   const isScanning = scan.status === 'PENDING' || scan.status === 'ANALYZING';
   const hasResults = scan.status === 'COMPLETED' && scan.risks.length > 0;
   const visibleRisks = filterRisks(scan.risks, activeFilter);
+  const skippedFiles = scan.fileProgress.filter((f) => f.status === 'skipped');
 
   const modelLabel = [scan.provider, scan.model].filter(Boolean).join(' · ');
 
@@ -119,6 +121,9 @@ export function RiskAnalysisPanel({ walkthroughId, scan, chapters = [] }: RiskAn
       {isScanning && scan.fileProgress.length > 0 && (
         <AnalyzingProgress fileProgress={scan.fileProgress} />
       )}
+
+      {/* Files excluded from analysis — shown once scanning settles (the progress list covers them while scanning) */}
+      {!isScanning && <SkippedFilesNotice files={skippedFiles} />}
 
       {/* Results — collapsible */}
       {hasResults && resultsOpen && (

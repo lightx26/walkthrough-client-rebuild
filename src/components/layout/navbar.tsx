@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 
-import { Bell, LogOut, Search } from 'lucide-react';
+import { LogOut, Search } from 'lucide-react';
 
 import { SearchModal } from '@/components/search';
 import { UserAvatar } from '@/components/ui';
@@ -55,10 +55,10 @@ export function Navbar() {
         <div className="flex-1" />
 
         {/* Notification bell with badge */}
-        <Button variant="ghost" size="iconSm" className="relative">
-          <Bell className="text-muted-foreground h-5 w-5" />
-          <span className="bg-destructive absolute top-1.5 right-1.5 h-2 w-2 rounded-full" />
-        </Button>
+        {/*<Button variant="ghost" size="iconSm" className="relative">*/}
+        {/*  <Bell className="text-muted-foreground h-5 w-5" />*/}
+        {/*  <span className="bg-destructive absolute top-1.5 right-1.5 h-2 w-2 rounded-full" />*/}
+        {/*</Button>*/}
 
         {/* User avatar and info */}
         <Link

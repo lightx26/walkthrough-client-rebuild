@@ -3,7 +3,8 @@ export type RiskScanStatus = 'PENDING' | 'ANALYZING' | 'COMPLETED' | 'FAILED';
 
 export interface RiskFileProgress {
   filename: string;
-  status: 'pending' | 'analyzing' | 'done' | 'failed';
+  status: 'pending' | 'analyzing' | 'done' | 'failed' | 'skipped';
+  reason?: string;
 }
 
 export interface RiskCounts {
