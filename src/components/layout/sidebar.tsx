@@ -7,10 +7,8 @@ import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 import {
-  BarChart2,
   Database,
   Eye,
-  GitPullRequest,
   Home,
   LayoutTemplate,
   Pin,
@@ -29,21 +27,14 @@ const mainNav = [
     href: '/walkthroughs',
     icon: Waypoints,
     label: 'Walkthroughs',
-    count: 23,
+    count: undefined,
     disabled: true,
   },
   {
     href: '/reviewing',
     icon: Eye,
     label: 'Reviewing',
-    count: 6,
-    disabled: true,
-  },
-  {
-    href: '/pulls',
-    icon: GitPullRequest,
-    label: 'Pull Requests',
-    count: 11,
+    count: undefined,
     disabled: true,
   },
 ];
